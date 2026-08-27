@@ -8,6 +8,8 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
+# Build: 2026-08-27-small-text-gray-outer-v2
+
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -127,15 +129,46 @@ def forecast_icon(kind, width = 11, height = 11):
         src = base64.decode(FORECAST_ICONS[kind]),
     )
 
-def temperature_text(value, temperature_color = BLUE, glow_color = BLUE_GLOW):
+def temperature_text(value, temperature_color = FORECAST_ORANGE, glow_color = FORECAST_OUTLINE):
     content = str(round_temp(value)) + "°"
     return render.Stack(
         children = [
             render.Padding(
-                pad = (1, 1, 0, 0),
+                pad = (0, 2, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (4, 2, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (2, 0, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (2, 4, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (1, 2, 0, 0),
                 child = render.Text(content = content, font = FONT_TEMP, color = glow_color),
             ),
-            render.Text(content = content, font = FONT_TEMP, color = temperature_color),
+            render.Padding(
+                pad = (3, 2, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = glow_color),
+            ),
+            render.Padding(
+                pad = (2, 1, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = glow_color),
+            ),
+            render.Padding(
+                pad = (2, 3, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = glow_color),
+            ),
+            render.Padding(
+                pad = (2, 2, 0, 0),
+                child = render.Text(content = content, font = FONT_TEMP, color = temperature_color),
+            ),
         ],
     )
 
@@ -195,6 +228,21 @@ def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
                 pad = (2, 2, 0, 0),
                 child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = temperature_color),
             ),
+        ],
+    )
+
+def small_outlined_text(content, color = OFF_WHITE):
+    return render.Stack(
+        children = [
+            render.Padding(pad = (0, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = FORECAST_OUTLINE)),
+            render.Padding(pad = (2, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = FORECAST_OUTLINE)),
+            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = FORECAST_OUTLINE)),
+            render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = FORECAST_OUTLINE)),
+            render.Padding(pad = (1, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (0, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (2, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (1, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = color)),
         ],
     )
 
@@ -265,7 +313,7 @@ def forecast_day(daily, timezone, index, width, temperature_color = FORECAST_ORA
         ),
     )
 
-def current_screen(current, daily, temperature_color = BLUE, text_color = OFF_WHITE, wind_suffix = "KT"):
+def current_screen(current, daily, temperature_color = FORECAST_ORANGE, text_color = OFF_WHITE, wind_suffix = "KT"):
     kind = weather_kind(
         int(current["weather_code"]),
         int(current["is_day"]) == 1,
@@ -285,12 +333,12 @@ def current_screen(current, daily, temperature_color = BLUE, text_color = OFF_WH
                 render.Padding(pad = (0, 0, 0, 0), child = current_icon(kind, 30, 27)),
                 render.Padding(
                     pad = (20, 14, 0, 0),
-                    child = temperature_text(current["temperature_2m"], temperature_color, darker_color(temperature_color)),
+                    child = temperature_text(current["temperature_2m"], temperature_color, FORECAST_OUTLINE),
                 ),
                 render.Padding(
-                    pad = (33, 0, 0, 0),
+                    pad = (32, 0, 0, 0),
                     child = render.Box(
-                        width = 31,
+                        width = 32,
                         height = 32,
                         child = render.Column(
                             expanded = True,
@@ -299,16 +347,22 @@ def current_screen(current, daily, temperature_color = BLUE, text_color = OFF_WH
                             children = [
                                 render.Row(
                                     children = [
-                                        render.Text(content = low, font = FONT_TINY, color = temperature_color),
+                                        small_outlined_text(low, temperature_color),
                                         render.Padding(
-                                            pad = (2, 0, 2, 0),
-                                            child = render.Text(content = "/", font = FONT_TINY, color = MUTED),
+                                            pad = (0, 0, 0, 0),
+                                            child = small_outlined_text("/", MUTED),
                                         ),
-                                        render.Text(content = high, font = FONT_TINY, color = text_color),
+                                        small_outlined_text(high, text_color),
                                     ],
                                 ),
-                                render.Text(content = humidity + "%", font = FONT_TINY, color = text_color),
-                                render.Text(content = wind + wind_suffix + " " + direction, font = FONT_TINY, color = text_color),
+                                small_outlined_text(humidity + "%", text_color),
+                                render.Row(
+                                    cross_align = "center",
+                                    children = [
+                                        small_outlined_text(wind, temperature_color),
+                                        small_outlined_text(wind_suffix + " " + direction, text_color),
+                                    ],
+                                ),
                             ],
                         ),
                     ),
@@ -354,7 +408,7 @@ def main(config):
     wind_units = config.get("wind_units", "Knots")
     wind_parameter = "mph" if wind_units == "Miles per hour" else "kn"
     wind_suffix = "MPH" if wind_units == "Miles per hour" else "KT"
-    current_temperature_color = selected_color(config, "current_temperature_color", "Electric Blue")
+    current_temperature_color = selected_color(config, "current_temperature_color", "Warm Orange")
     forecast_temperature_color = selected_color(config, "forecast_temperature_color", "Warm Orange")
     text_color = selected_color(config, "text_color", "Soft White")
     request_url = (
@@ -436,7 +490,7 @@ def get_schema():
                 name = "Current Temperature Color",
                 desc = "Color of the large current temperature",
                 icon = "palette",
-                default = "Electric Blue",
+                default = "Warm Orange",
                 options = color_options(),
             ),
             schema.Dropdown(
