@@ -7,8 +7,7 @@ knots and direction, and a three-day forecast. Weather data is provided by
 Open-Meteo.
 Author: Greg Worthing
 """
-# Build: 2026-08-27-three-drop-halo-temp-left-v3
-    "rainy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAApVJREFUSIntlU1rE1EUhp+bpMnMZJJO2prE1hq1i/oRqYqgiIkKuisoVHQhuFBx0dpK1bYIblxqEQyCunDhVgVd6C+ILkQU20VxI5RCLa0ViTGfpMlxUZU0aWqpFFx4YBg473vuO8/lckeJCKtZtlVd/X/AvxPgjsQ63ZFY56+meTB2xIzcOfynYaPj8l5jx8CJJQNU+LpTM82YL+C/rw491JRCaYbvjuapv6fU9SUJRamLInLXDA8Ga3kc7karN7i+dZPb6yUx86ZbRWOfjIYt7QD5aOI48HixQX3XlRDQ5WpoqRMpPQEiixOI6l67MYQv4Ecpeuy6ecPlsXB5LBy6ebMmhXBN2Z112/YdwNfavt+1c+jYogECWjaVJpVIIGC569eEfomGzx8yolZn5ZC+s38DwummtjDhresIrmtG9619oDYPeaoCSsKF0firqdH4qyngo8vj+y1qpg+bqDPVX2+/arM7nOHdu3DYbQT9XoxAW6NmFPurAjIv+56l4n0tqXhfC9BafnJFQGBP+UB9+FIDcMppNdMcsABoajSxu9y4vMGBSoqq/U1Oj1MsFCgWCiSnxwFK5XqhznYOcDutAMXivFScm387G1pMXS+dLfc7FpALT3PJrz255Nfy3rMKz1EAh+bl9btxAmu8zMwmAajTLUSkC7i9aEAmqw0aRl4UchJAUI8yWddQBeR2AJSQSudJpWcrN6GjNsHb8xmg9+dTqxRAPjGD3hRaIOS/TVeZV3AXyXuAzNQHsl8mkLk8Mpcn+2WCzNQHQEZqEixrebENKyX7pVRS6ckx0pNjC2W4+VcEudHh56K4AOQqpKyI9ORGbr0ob6qV/pM9HQP+IhJFEUKYsKPi30eHP1f6Vhyw3PoB7WvddEkmoHgAAAAASUVORK5CYII=",
+# Build: 2026-08-27-three-drop-halo-temp-left-v4
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
