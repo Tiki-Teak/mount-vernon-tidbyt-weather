@@ -1,0 +1,8 @@
+---
+id: mount-vernon-weather
+name: Mount Vernon WX
+summary: Local weather at a glance
+desc: A black two-screen weather app with a large current icon, blue temperature, today's high and low, humidity, wind in knots and direction, and a three-day forecast. Uses Open-Meteo with no API key required.
+author: Greg Worthing
+fileName: mount_vernon_weather.star
+packageName: mountvernonweather
