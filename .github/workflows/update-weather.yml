@@ -1,0 +1,48 @@
+name: Update Tidbyt weather
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mount-vernon-weather-update
+  cancel-in-progress: true
+
+jobs:
+  render-and-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Download weather app
+        uses: actions/checkout@v4
+
+      - name: Install Pixlet
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libwebp-dev
+          curl --fail --location --retry 3 \
+            --output pixlet.tar.gz \
+            https://github.com/tidbyt/pixlet/releases/download/v0.34.0/pixlet_0.34.0_linux_amd64.tar.gz
+          tar --extract --gzip --file pixlet.tar.gz
+          chmod +x pixlet
+
+      - name: Render current weather
+        shell: bash
+        run: ./pixlet render mount_vernon_weather.star
+
+      - name: Update Tidbyt installation
+        env:
+          TIDBYT_DEVICE_ID: ${{ secrets.TIDBYT_DEVICE_ID }}
+          TIDBYT_API_TOKEN: ${{ secrets.TIDBYT_API_TOKEN }}
+        shell: bash
+        run: |
+          ./pixlet push \
+            --api-token "$TIDBYT_API_TOKEN" \
+            --installation-id mount-vernon-weather \
+            "$TIDBYT_DEVICE_ID" \
+            mount_vernon_weather.webp
