@@ -8,7 +8,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-27-scenic-mostly-cloudy-trial-v1
+# Build: 2026-08-27-realistic-partly-cloudy-full-scene-v3
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -92,8 +92,8 @@ CURRENT_ICONS["rainy"] = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWX
 # consistent visual style across both screens.
 FORECAST_ICONS = CURRENT_ICONS
 
-# Trial-only 64x32 scenic background: mostly cloudy over the Skagit Valley.
-SCENIC_MOSTLY_CLOUDY_BACKGROUND = "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAABP1JREFUaIHdmetOG0cUx39z8WKwwTghl4YQlKTql1ZRb0/QL32APkQfps/Sr5X6BK1UVW1oE2guBAipI1+5GfDuXPphbWM7u+C1Ao76l0banTkz5zJzzpyzK777/gfPFPHklx/Zff16avy1lCLThC8+vZ+ZyR9PXqWOiW6bFrQQGdlPIO25PKZsAS2lHIvw60fxzt+9fT1xfGu3njr3y88epI49/VWhtQLAGDuWLO8TY7tAfxdTdjPrQfpQoL96lNGnUxRdXbkBwFKpkDhebx4m9ksJSgqsm04s1iKjA/77tnnuuCJZkd1KI7HfO3DOT+X4wyRB8AKkGfQiNrluHEjDZRlIP954v3ewsy55QIwXbFNxSUFGX1sIJpq4dxQl9mdMK6aOzDGgB5myI09eVjKtY5zDpJ2aK4Ce9GQtFnOZ5xwcTyfQnQd9lRe4+AD9Q7c74x2/zWd/X4oAR+1jrPeoKWVSY6fCSdflSfuAXE6ig+LEAvRKgWllklIIwSSt1aqTk4ab5QKNRnWiNd53DjKRAaQUjNOEoN9azRrNZo2layXKpXkEYdcIDDVw1KoVatVKf5ffpZkOvPcYY8Z3gR5do16l0ayhpGSxNA/Ax/eW+W1tAyEEN27cAqATdqi82aETdgCITMjynRWk0gmrx5ZwzsWGkpJLq5G9xzqLc3Hs03pE/zCKePFigyiKWF29z2KpDMQJTr1epd6oAlBenKfe2GNjc4eF4hwPV5cpFedodw6ptfbYbx1i3VmAPT5us72zycrdVYJgZlQqjLEoKZFSEBmDUgpxYfboscbi8WPQe5x1WDd8FWs9cDVVa1X+eb5OGMVZ3t5ai/JimfurD2jUq9Tq1T7tQrHA+sttwshQa+7T3D8kP6uRKl4vX9CctqOhKi8MQ7a2Nlm5e49iodAVy2OtReCRUiIEaCVjI0iFUsk1gnMOY03/3RiDEAKlFHLEENZZrE3OQXROQRhGPH22ztvqmYK5QDFXyOHEKX+tPx5SHqDe3COMYgGCQDOTV0OnVkrB7HxA58QQhWfMrbNs72yx/NFtELJfOygpQYCxFu89WseKeG9ByLOA6T3Gnh3hQfT8WgiBVnFdarvrpUHX6lX+3linE0ZDiueCM18tlRXtg4DOqcGamPHB0TFSQn4uQKmUChDIz2qUlnSOo36h7PHsVoZTZiEFxpztqHMO621sBAxS9r4aGZLQD6g+NkSUQjc6R/++tjageEAuSD5ySgnmCjms8XQ6BilhJp8bK5LnchJVDDg5jnADLqG07N4GInFHhRA4PDiPce8qJLpXy5AIfUN40ja+xxNAX6T4KJQWzOnsdYBUgrliQOc0wjmYmdEoLTi6INoLiCPwgEKJio/OESJ+GJk3mnvoUnk2szKTQgjIz2Y3XjxXZM4beoY4b55uhFt9ywwlKwNMBRCKVt/ig0mMVgELxVvkZ+ZHGJ8vmHURJydVqsJBrwGjX9R86stIt08nOicGkpSVjAnJfOE6xbmljCmt5/i0yelpg1SNrhD6809KYxG+6pz0n5UqkNNLCJHtOFvbxpg6WkUUC7Htp10OaIA7N+cvomOvMvhZ29E62L4sma4U+s9n+zx+vn9hDGi8SY4Bve/AolvXil5P/3mgv/dvpbs24nz/vApoG1nCk5CwHfHtN+f8JHlYzrz4Tz8/v5CmWMiz15ziN8H9yn7/ZRyB/2/4D1M/8rfBL9wWAAAAAElFTkSuQmCC"
+# Trial-only 64x32 scenic background: partly cloudy over the Skagit Valley.
+SCENIC_MOSTLY_CLOUDY_BACKGROUND = "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"
 
 def round_temp(value):
     return int(float(value) + (0.5 if float(value) >= 0 else -0.5))
@@ -258,6 +258,24 @@ def small_outlined_text(content, color = OFF_WHITE):
         ],
     )
 
+def scenic_metric_text(content, color = OFF_WHITE):
+    # Compact 3x5 lettering with a complete one-pixel black halo. Keeping the
+    # halo black (instead of adding the usual gray outer ring) makes the
+    # readings smaller while preserving contrast over every part of the scene.
+    return render.Stack(
+        children = [
+            render.Padding(pad = (0, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (1, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (2, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (0, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (2, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (1, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = BLACK)),
+            render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = color)),
+        ],
+    )
+
 def today_temps(daily):
     high = str(round_temp(daily["temperature_2m_max"][0])) + "°"
     low = str(round_temp(daily["temperature_2m_min"][0])) + "°"
@@ -344,9 +362,9 @@ def current_screen(current, daily, temperature_color = FORECAST_ORANGE, text_col
                     child = temperature_text(current["temperature_2m"], temperature_color, FORECAST_OUTLINE),
                 ),
                 render.Padding(
-                    pad = (32, 0, 0, 0),
+                    pad = (34, 0, 0, 0),
                     child = render.Box(
-                        width = 32,
+                        width = 30,
                         height = 32,
                         child = render.Column(
                             expanded = True,
@@ -355,20 +373,20 @@ def current_screen(current, daily, temperature_color = FORECAST_ORANGE, text_col
                             children = [
                                 render.Row(
                                     children = [
-                                        small_outlined_text(low, temperature_color),
+                                        scenic_metric_text(low, temperature_color),
                                         render.Padding(
                                             pad = (0, 0, 0, 0),
-                                            child = small_outlined_text("/", MUTED),
+                                            child = scenic_metric_text("/", MUTED),
                                         ),
-                                        small_outlined_text(high, text_color),
+                                        scenic_metric_text(high, text_color),
                                     ],
                                 ),
-                                small_outlined_text(humidity + "%", text_color),
+                                scenic_metric_text(humidity + "%", text_color),
                                 render.Row(
                                     cross_align = "center",
                                     children = [
-                                        small_outlined_text(wind, temperature_color),
-                                        small_outlined_text(wind_suffix + " " + direction, text_color),
+                                        scenic_metric_text(wind, temperature_color),
+                                        scenic_metric_text(wind_suffix + " " + direction, text_color),
                                     ],
                                 ),
                             ],
