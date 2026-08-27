@@ -36,28 +36,21 @@ DIVIDER = "#34434C"
 # Greg's photorealistic icon set, cropped and palette-optimized specifically
 # for the Tidbyt's 64x32 canvas. Separate sources keep forecast icons crisp.
 CURRENT_ICONS = {
-    "cloudy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAM1BMVEUAAADQ0dLLy82IiYzz8/SfoKLg4OKvr7KRkpVfYGN+foFwcXSpqatRUVScnaK9vcNxcnWsdo7BAAAAAXRSTlMAQObYZgAAAJRJREFUKM+1UUEOgzAMwySNU0IL/3/tsk1i0HHFqnqwFTtup+kJYL6lRYEiN4KRXheZRk0A9yUcikFa3SNaFJY+CMBCbbVVv0TNxuaaQErnCKaJmqmp9tOABKFqyCvPevBevswHdt4rLfjmkGYKHiMwupNb95I1/eDnrXenmUVkx+CloTCje9v3/+cS/rwH5ZHPTLwAYegEUX+31sEAAAAASUVORK5CYII=",
-    "foggy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAKlBMVEUAAACZmJmysrNzc3Osq6yWlZbh4eLR0dLu7u+gn6B1dHViYmPd3N2Qj5D82+KxAAAAAXRSTlMAQObYZgAAAIZJREFUKM+9T8sOwzAIKw7gkHb//7uDalKodq8lOGDhx3G8CckBxt8d0GFw0rSTSvp0dwKwTYhaRORpFc5NXBpkmKF2tI8RPhMlxBzV7THOtVIr1Wx1bymt+QNVNvMp7wxggeh5Rd3BcomHVsa16kGwqui186ZIVsFdsVvcsSyetXs4OV7FF2ECBBPEJVN5AAAAAElFTkSuQmCC",
+    "cloudy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWBAMAAAAoU0G7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAqUExURSYmJv///7q7vtPU1uXl6MTFyI6Pkq+vs6ChpN7e4H5+gtDR1vT0+qGipcydtY0AAAABdFJOUwBA5thmAAAAAWJLR0QB/wIt3gAAAAd0SU1FB+oIGwMgL/BwrrkAAAB+SURBVBjTY2AgAQgisRUFjRAcEdd0BQUom0kwtCJQEMabGtHV7LwBypko7rhsWTBEilFkqaCg2DKIhEqzo6Cg4CaI/hZBEJAEc4IFIQCsh1EQpEpQZALYLa4hPltNXCPBEqe3Ogp2hHc4QV3gKLjrLswBDEwuE5CcrcBACgAAsMgX5doDQpgAAAAASUVORK5CYII=",
+    "foggy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAyVJREFUSInVlU1slGUUhZ/7zgxlSir2JxCLMrUSkg5oaWuQpD8mlqAkaFVg1YULVixIUPfK7E2EGI2JujUxNenK+Be0loq4gFptoGrTaZWh1o79sTpD25n3uJhvyFCmGBYkepbve757znfuvd9nkribcHe1+v9CIJ3J1C8uLjdOwsZy9xb0wP74M7vXmX8C2AzMIxvNr2QG6+rqltaaWljKPO3xLxi2H6gKzlcxfjDxpZf7sOae6LeATBLzS5khUHsZAzmwC6ALQNpgi+AwECvh/AZkgQeAcIn3oeqqys7igYCkQb/gd6AObB9oH6gD6CiSgofHTXozH3F9tdFoCmB6mspo1V+PIuuRcaRIttuNaTqdrgptqOzCtBuoBha93BczV5PDK66yPhRadV5ajuRys/F4fKVcDRse+/moZN2G1ZqUlnHJvM43x3dcATzA8E/JZrwOmtQF7MSI3RwHAL8A35nsvA/ZJy07HxwpCFwZL/8KxgLYJNL9hchuQh5IATkK07PlFkExtKfpoc6woTGZe1v4lOG2Ib8XrB0RA+0J6CmMj0GfOULfh/PZ5JpI3MjYxA4vtTpn+yU9dcPnej0YHU1uXYmwVd7NtjXFpsuSgIGBgfBcxm8LV+j6M93dM7cEUSrQf/ZsrVdkuzP3dyQbvXroUFumXNFEAvfIY4PPmtMxQTdQEVxNgD4X7v3nD3Sdo7gHAP2ffnUOK4xjgDzGj0jDYCMmm8IpJGkXWC/QEPA8hX5sAmpKvH/93IGujrWTMA9MAVGgEREHiwO9MgWLYAAIxp10ZtWHPjh6sHM2kcDtbh9sdnkdwdGLDz4R6/Wgr+/yhsjmmYe9WYuT2wX+PmHCNOW8fdTz5ONDlO7eOrjtopVD4vTpe8ltbMWpHqzGo6jDsqA5vF0jfP3SqydPLtwQeOW1t06Y8RLQYJCX2bRJUxK/Gkp5s1mHNslck0ktHhqtmFMZCORgwosziZePvxEGMOwbj3/XIIIsJmO7iRbMegyiwnLIj0tcxOwdc1xEmoSKuVMvHps/9fp71bBcg1mDPG2SWose7jiiO8V//4/2b/gHuHZocX87TbEAAAAASUVORK5CYII=",
     "moon": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAJFBMVEX///8AAAD776UkIxjf9f//8qj+8adjXkHbz5B7dVEdGxPWy43isZI7AAAAAXRSTlMAQObYZgAAAHFJREFUKM+NkdsOwCAIQ0Gl0+3//3dzMSqCiX3sCZQL0Ym4amNbFCIbkogEF7MlBOTZ59R9FAVaiXwgeuDzwQ4I2FTUTm5G9ZepRja8Pf4MlTLWUzV331saySVyLM90QMxSp138RKab2DcFgYSjP+/0AilxA1HpkOdPAAAAAElFTkSuQmCC",
-    "partly_cloudy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAV1BMVEUAAAD9rgf91ij9yy79+0j88tT39/b883P97yn77qH96hP80wn49vP8tgTe3uCgoabj39n8eADQ0NPJs5+3t7vz7fC/vsKRkpadnaFqbHJgYWZ8fYJucHYa4zQmAAAAAXRSTlMAQObYZgAAAKtJREFUKM+9j8kOgzAMRMtiQxYMmBQnlP//zpqqlKVceumTcnmjGcW32//I8ry48nkJWNXZly9qY0xl3TnJrKvL0jrw54Jz1roGkLxvD41moULoiHDfylzfA4JRz4S830L1AAMhctiSe+sRDarUhzSSrAliNwB+IH4nXvsjMXMIvCBx8ymJhChREVmXQgxqdEKmR5qmJPtvyWtEkiLz8fo5EunVJ7vQXrifeAJrIAp4yt/X1QAAAABJRU5ErkJggg==",
-    "rainy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAASFBMVEUAAADNzdHHx8q+vsKwsLSQkJWfn6Te3uLDw8dNTVLr6++Kio++vsFub3NgYWZeX2R+foI8PUEzNDggISQxMjdvb3QuLzRISU5fL4hZAAAAAXRSTlMAQObYZgAAAIpJREFUKM+1j8EOgzAMQ+vOSZeWlFIY+/8/HQfGpIkTEj4+y04cwj1CPOfxQeGJF0VBTfzDT4oaM5i0HLDokCgJgpyhkIM7Mz3nBKTNIuKeKYTWrZ8uqqIyym4MbLW2yZu5u3W3b5OY2+hE69anqdffjRLG6hDWeV5e69+76+JteZ8OL+GCLoVu0AeJWQTYNGZJVgAAAABJRU5ErkJggg==",
-    "sleet_rain": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAS1BMVEUAAADO0NXw8fTS1Nm6vcRJTledoaissLZZXme+wMa/wsh8gYqZnaXa3eKanaWLj5fLzdNmanPt7vF6f4dJTlZWWmNobHQ8QEgvMzoq2hxHAAAAAXRSTlMAQObYZgAAAJRJREFUKM+lj9sOgkAMRLdlLyhdKvay/P+XCglqiMQHmL6dzjTTEK4J8Jh3MUaA9MvzggtAv6O3DuA+0LqpHzhyeCAAYo6IwKV7m8OEyIRYKyxTc/4ce1bKAMQsPFARlS2BhcncmVVd1Gza/Kl3Ny9YqTXVpvKtRak3YSO3uc1p3NVNTUma8uHnaW14XXw2OJ4N/tELkioGQO2/vnYAAAAASUVORK5CYII=",
-    "snow": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAQlBMVEUAAACIi5X09fjO0dbd3+Sfoqu/wsesr7e6vcScn6hpbXZwdX5LTle6vciPkpuqrbV6fodYXGU4O0MyNT1qbni4u8QYGpG1AAAAAXRSTlMAQObYZgAAALtJREFUKM+lkdtuAyEMRMGXNXYMGNL8/6+W1W6rNtm+NDyAdDzy2ENKb50MeM2Jt40wv3BkJBQs+UmOoiaITHg72U28AghCMVpvk3rw3kIAAwFIkIhQS995pCSwtdVBRBszYxt6NENoGhZu5sPXPfzgLGYxli/ZnBHTvZ3eg8e0QDH1+9KbfnyN2nP4EnJzH+ap/lqD3XS6xkUiu2OpT3Af/GQrEP5RefQ/Eq9yiR/pu02+KO/uvfz7mz8Bi3MGn8fHSk0AAAAASUVORK5CYII=",
-    "storm": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAaVBMVEUAAADR0tbU2uuqr7z1+PmssLl9hZpmbYNtd5FPWG0nLDo6R2kpOGShtOFwlOdHbNB3halabKSuyvPc7f80So48dvZWh/RJWotHVHhYapw5WrgHOtMUKm0sNVMnUtkUN50KGk4VHjcWJFHeldhlAAAAAXRSTlMAQObYZgAAAKpJREFUKM/Vj8kSgjAQRJkskoRsJCFhSUT8/48Uq0AsSk+enGP3m+npqvpx4IuOEAb8iQcCFOBykjHGNaNP83C44HhlUSOVNhboi6WUEIaJarV23iu05fALJj5Ia03XOUJ8THbbqIH2Mg2jiUrHbsqFb5csyznIMLoYp+t8W5o9Qyw5JGqVm1Y93ws7XuVJDshpM69837yX4KWVrA25L+JUj3NRl36P/bt5AEq8CSEuGLZhAAAAAElFTkSuQmCC",
-    "sunny": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAQlBMVEUAAAD9ngP8vg/8uhH9nQD87TD881L80An8/Gr9ZgD8/Y783DL7+rf81kX86Br9ySD8tAP9kAL8wB79bgD9VAD8sw6CxUJHAAAAAXRSTlMAQObYZgAAAJ5JREFUKM+1kckOwyAMRFnipVDAjun//2pBzQHSc+aAxDxsjY1zT8iH6OKfG8IBiMQv7zc/RgZOKWHGvWD67yGGcmx+rnUWJAbisoCGVAGZESrRGiAT1QpDwxdaOqVxnWwcotiWCpFJhi2isARup8pPqpqXmQuaXuql7XnNBjPrmjcQCqn13k14X8mcnaQQRx/uu/U+4Kfd31/wke90X4RlB0rbldE6AAAAAElFTkSuQmCC",
+    "partly_cloudy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAD2UExURQAAAOSKAOOOAP/BGvCeAPOfAOWJAOWJAP+ZAPKgAPOfAPGjAO2kAOSJAOGHANqGAOKNAeCLANyDAOWQAPKhAPKfAPOgAPGgAN2EAN6HAP+2JPOhAOqWANqEAP/DGuCKAP/BGuGHAOSJAOWKAOSLAOaKAOeMAPKpDf7CHv/DHP28FfWnBuWQAP////S0If/gbP/kd//icv/OOv7AGfSkA/X1+ebm6sPDyP7IM//jdf/SRv/CGviwDNPT2f7AGP/FI//LM//HKPr6/3p6f7y8wvu3EvX1+J6fo4+QlYyOk6+vtGhpbV5fY0lKTVxdYp+fpFhZX3V2ezSvbm0AAAAndFJOUwCQCYAyaKmABdFYJA4c8cj4+MKftXXhS4mRB0Hmw3f4iMJU6n1GKuNXR8IAAAABYktHRC3N2kE9AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH6ggbBhggcZvNOAAAAOtJREFUKM+1kGtPAjEQRUdRURRRVHwDii+Q0fU1o2JFaWW63WXF//9nLBtIgPiJxJv5NKfnTlIAgLl5yGQAFhZhKkvZAVheyU1sV9cgv17Y2CxubU8+3ynt7l1e1RvXzf0DxHFyeHRzG9zdPzw28YmYxtjx80sQvLbekBWSn+G6XK68tz8+Wx1ipQmRUJkUVKuVL6O6SIzoB1EhD52iEUISHMVrqZM/MV63vpyElWLFIQ/Aae2sS85aF4nTIqJj0WnR+YVhLTr0dS7WcRTFdnQDjIHQCjLZXi/57k99WD8Rl/zAXzEwQ2aS/iG/clspy4uDtxQAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC",
+    "rainy": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAf9JREFUSIm1lTFoE2EUx//vkjS5M8YTm5KjUUOxpWIcLGKHdDBoh4DgYHGKQifHDLbbLSUpXYQqdXLU7C6F4BakaXFQsBSkCIXiojiU4zDXeEmei9az9915ifFt977H+7335//dR8yM/xnSIJulHm2OJJ+8ftA3gOaX1FixcsvrvBO2b4Cxqj2uZ/oCnEyk55TMhWd0d1X2GOE2ALkDaaEvQHQkuXj66owmx78ve5TkAYAJd3oGKMVyLpZKT0QSKuLj2VL0fuWiq4jxDQDQhdUzgIlKspYGACQuXZGkLnRXkRQqgLEAKVT4lQoHBjBmu+22c6LC8ZqvpdwugF1nTgig+SU1aodmDqv6uiNtfXn1UlXOjqH5aQ+M3zL4hVAi5YQ2FxnN/OEWBtZs4wDGzlvYxgEYeNo3IHxmeFHJXtPkeOvILa2qvkKEPIgeEiHfquorQQB0/FehFMs5efrmRjQ9hub7ra61t5NtPdc/eDYQy+m9AROVhpIaACA2flnsFudAAjn9AYxZbrePPiBwizNEcvoCAFhmo4bm9huYjZqvW5RiORce1iZC8VMYOjcpvHzuDYC1jmng8OM2Oqbh65YgcroAvbgliJzCi2a90OsA6l6NnaVmo6ZGUudhf94XyvlPD04QOV33oNeQ71WuM2iKwO9+bj5YwN9ioG+yKH4A0ODDc95UDxAAAAAASUVORK5CYII=",
+    "sleet_rain": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAaxJREFUSIm1lD8sA1Ecx7/vlPauVZVo0yb1J2hDMBBbDZYOEqOYSiIxShqDTSSo2BhqMrJJxCgmXQwkJMQiEiIWYmguFYceP4O8pPfeUZrrN3m5l/fn932/+33eY0SEakqpanQnDNjUYsCTyoxWzaDeHx3T2jo32fi6WhUDdyg41zg4FFF97yuOG2ip5YQnHI3X+gPwxXrT7slMt6MGxFhajUQBAP6efkX5xLyzBoTkp2mWDo2Ia1x/CfRmgtwuMP4tmTIeD/YCWnM7Xu5vQIAh7pUy+Am73MmFdCMJyBb1PPTLUxT1PAjYkOKJN9k7szmteLWl59unDtqZNXgG4kaeiTqRGSawAQY6M7bnc1L6RGRp/oXdq9DWFalTq2vi3GuRSBwr1yy/SEstJ1xNkXiNrwF1LV222P1XFgNiLF0XjAAAPLE+CTuhwBUYEJLEsfuujYTdT7KrEyBjahSO9gO14VYUH+5ssfuvrBkA2Y+CjtfrC3wUdFvsRL2ZIH760j6XhGlZ7H4xsq1ROcz+iiZfd3h8blkvZSCeivcrIQgo89jxoJUGB2xq4LS+AGeAInZtjINQAAAAAElFTkSuQmCC",
+    "snow": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAI9JREFUSIlj/P//PwMtARM1DPn5hwGnKym2AGY4LksotoCdhYERmUYHjEMiDqhmAb7IpNiCA6cukRWWRMUBNpfjilSyLEC2iFiDYYCsSCYluIZhMiU3teACKEEEi0RyIhNZP7IY1YIIl88xfICugBif4NOHNRXRLYiQvU1KOYSsj+SigiY5mVClgg/QPCcDAPEQXxvroEKeAAAAAElFTkSuQmCC",
+    "storm": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAMAAADto6y6AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAADJUExURQAAAOPFQIJgAIBgAJl2BIBgAIBgAIFgAOa6FsCaDoFhAO/DGMKbD4BiALqSDcSeD4NiAMmhEMehEIBdALaQC4BmAIBgAICAAP////X1+ebm6sPDyNPT2fr6/3p6f7y8wvX1+J6fo4+QlYyOk6+vtGhpbaObhpl3Bv/SHNSrE3JfJ4tzLcykEf/YMf/1mvzmb4VsGF9fYLKqlYZlAfjLGv/kW//ykK+PGpyYklhZX1xdYodvKLOOC//whoBgAOa7FvXKGpVzBaqGCU72gNMAAAAYdFJOUwD+PUBzv/53oPtX9PY8YO4n3+MWygpQApCaLtsAAAABYktHRBibaYUeAAAAB3RJTUUH6ggbBhYtkamcCwAAAMhJREFUKM+1kcl2wjAMRUMDpVDmMqiSSbCTUhXoQKFAGMzw/x+FF0ngBLOsjja+Ou/Jfnac/ymAO/wVCS0zIAFoOoP7SMJDAAThp9AXA0ACMA0ggFIuEVBCUkYWa3wjV8YcJQlBggKKBwMMlQrf5PCdmT9G0kucyJNeYOzGk8+v75+puuzwnUBJ+J3N/xbLVZS5brTebHmXe7h9n6v3fMhbAilofTxp/Vi0zJ6YS2Vbis9cqdp4jesNa+zN1ouVu+2O/Z+6vevTGc65FUI/VOTSAAAAAElFTkSuQmCC",
+    "sunny": "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAg1JREFUSImdlc1u00AQx3+7MuRD+WgO5IbUQui579EeoXdChHppH4GX6KWHRIgjAnGhPAdI3CoqqJRDKZEShyiOE2eHg5MmsdcmyUiWLM//Y3ZnvKtEhHVj2FQCkG+IWpej11bfMlYMhk0l8yq3CRvfuoJtTJI4KtqDZWC+IWpwoara4Qw4BJ7NUlcovpgJ54UTuYtyUg2WTZTiWEFLVyg6JdDZMG9GEPTBdPkrQl3gg0080QDAa6kXOLzPPMkoXd2D7M4s0QP3BgIPMwK/jTDhONeQj2ttEcDgQlWdB/x4uJ8p6scHUH0VZ34/hcDHjGD8i36gqRVeyp8ozNpk7XCmKxR1dQ+0Y10h5d0QmwW9Q0lPObXB7GzhyCmx2JbOuzgmV1mIlCHocgS8iRlExyvfEIXiqc7YC7eFzoCCGsTH1bpFCkKQ10tW9br3rwKIYJ0WxzZaAtfG50C7N5Atx/tgAuj9XOB9QHEN8VG1n0WKy6APBB78/gbDDsg0fIYduP0K0/E9PHAB4bNVKnVMdynOf66kMCMY3+BOAmrF19KJ5q0rKJzInQh1v42YUbq430bEULeJJ65gHl5TPVeali5TcsrhtAAYP9wW4+KKoZ5ryKckjRUD24UyeKsezX6iQ2B/9vkK4XIqnC9XbuNbDaKgNIH/cVd6sJzY5E5IKyzW5E3u23W41rNoU5M0/D8sWgZb9zuqaAAAAABJRU5ErkJggg==",
 }
 
-FORECAST_ICONS = {
-    "cloudy": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAJFBMVEUAAACysrTS0tSKi45xcnZERUnq6uuJiYyfoKOrq6739/ff3+HvdDvfAAAAAXRSTlMAQObYZgAAAEJJREFUCNd9jUEOACEIA7F2F2z//981GrM3CQcmDdOI6zT0H8Cnv3kSFslNo0oC921prhbIEOwlyUF4vhxhtrx3xwdbQQFDpgN+SwAAAABJRU5ErkJggg==",
-    "foggy": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAG1BMVEUAAACZmJmwsLHPzs+zs7OWlpd/fn+xr7Hk5OR93Kv0AAAAAXRSTlMAQObYZgAAADtJREFUCNd9jckRACAMAoOApv+KvX2a12a4Ir6HQLlcSElebE2sdZssDu0Y10NjcmNm3gw8pBReN/Af7zwOAMmFrYT+AAAAAElFTkSuQmCC",
-    "moon": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAG1BMVEX///8AAAD/8ahsZ0ff9f//8qjCuIBZVTuLhFuRdGK7AAAAAXRSTlMAQObYZgAAAENJREFUCNdNjlsKwEAIAxPX1N7/xLU+YPPjhEEU6JAcssMK4NLT7ICk4Jos3GK3Sd6dNjrXTrpgvJjyp04u+3wgq/kBWhwBU0+hLZoAAAAASUVORK5CYII=",
-    "partly_cloudy": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAMFBMVEUAAAD/uAL9/J/93jf9/yX81Cb8tgD19vjQz9Kur7T/tkPr4+Xz8PqrrLCLi5FnaG4QOs3mAAAAAXRSTlMAQObYZgAAAENJREFUCNeFjEkOwCAMA8OamJTw/98SaFFv7fjikSUTfRFienuOuRxJtRYWPEtT9uiWi2/Ee1eDGICxlm6iwzkfRj9Mcw0BtAXeLNUAAAAASUVORK5CYII=",
-    "rainy": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAJ1BMVEUAAAC+vsKfn6POztJub3PS0tavr7P09PidnaFNTlJZWV5wcXQlJioRL61sAAAAAXRSTlMAQObYZgAAADxJREFUCNeFjUEOwCAMw1hIWujy//duTOI44ZNzsNLagQt9awclfApFKlNjjSDBwVmv32XGtL2j8unhlwdOVwDxyhrC8AAAAABJRU5ErkJggg==",
-    "sleet_rain": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAMFBMVEUAAABFSlSqrra3usGLkJi5vMOytr0dIi2coKrCxczn6e1/hI5ZXmcoLTg9Qk0FCA9W0GMQAAAAAXRSTlMAQObYZgAAADxJREFUCNetijkSACAIxBA5PBD+/1tHGgtbU2UnC/BS8HolZEnT1of0we0M5MlESJZhmXhErLypm4fCBzZ5KAFThKNedwAAAABJRU5ErkJggg==",
-    "snow": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAJ1BMVEUAAADT1dy5vMOVmKCsr7egpKuws7q/wsjh4+d/gopZXWYyNj48P0gShBv1AAAAAXRSTlMAQObYZgAAAEdJREFUCNdtjEsOwEAIQketP/T+562ZNF10yoK8AGGtU8Ty8qXmsSkpwjhch8XDgo05Z0kGGKob0xQamuPPRXWprD8dKX2DG396AXZsW5CFAAAAAElFTkSuQmCC",
-    "storm": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAALVBMVEUAAACWm6WutcTUz84qLEDs8/VgbIxBT3ZsmPs4ZNLG3/tygagSImQAFqIQFin5pNBTAAAAAXRSTlMAQObYZgAAAEFJREFUCNedizsCwCAIxSgPEBS5/3H7cXFwaqYMCdGBa3MGsExYrTn4dahxuPYhTz0ywz1mfVVa95kl62lmWfSPG2+YAVYMGH4OAAAAAElFTkSuQmCC",
-    "sunny": "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAMAAABhq6zVAAAAMFBMVEUAAAD+uhn/5yn//Eb/2y7/+Fz//+T/+DL/7gr//5D/3S7/zAD/tQr/jwb/XAD/cgKK9DbyAAAAAXRSTlMAQObYZgAAAEZJREFUCNd9zUEOACEIA0AEFBSQ///WXfVsb5M2KcArBYm4XFBtrcoRqvQuyhvD9IuPDQ438zhAn5EzzgzYM2/xd8j4PIcFfBIBrcLeil0AAAAASUVORK5CYII=",
-}
+# Forecasts reuse the richer current-condition source art. Rendering the art
+# larger keeps details recognizable on the physical matrix and preserves one
+# consistent visual style across both screens.
+FORECAST_ICONS = CURRENT_ICONS
 
 def round_temp(value):
     return int(float(value) + (0.5 if float(value) >= 0 else -0.5))
@@ -74,6 +67,8 @@ def weather_kind(code, is_day = True):
         return "foggy"
     if code == 56 or code == 57 or code == 66 or code == 67:
         return "sleet_rain"
+    if code == 56 or code == 57 or code == 66 or code == 67:
+        return "sleet_rain"
     if (code >= 51 and code <= 65) or (code >= 80 and code <= 82):
         return "rainy"
     if (code >= 71 and code <= 77) or (code >= 85 and code <= 86):
@@ -82,10 +77,10 @@ def weather_kind(code, is_day = True):
         return "storm"
     return "cloudy"
 
-def current_icon(kind):
+def current_icon(kind, width = 24, height = 22):
     return render.Image(
-        width = 24,
-        height = 22,
+        width = width,
+        height = height,
         src = base64.decode(CURRENT_ICONS[kind]),
     )
 
@@ -113,10 +108,25 @@ def forecast_temperature_text(value):
     return render.Stack(
         children = [
             render.Padding(
-                pad = (1, 1, 0, 0),
-                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLUE_GLOW),
+                pad = (0, 1, 0, 0),
+                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLACK),
             ),
-            render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLUE),
+            render.Padding(
+                pad = (2, 1, 0, 0),
+                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (1, 0, 0, 0),
+                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (1, 2, 0, 0),
+                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLACK),
+            ),
+            render.Padding(
+                pad = (1, 1, 0, 0),
+                child = render.Text(content = content, font = FONT_FORECAST_TEMP, color = BLUE),
+            ),
         ],
     )
 
@@ -140,6 +150,17 @@ def wind_direction(degrees):
     index = int((float(degrees) + 22.5) / 45.0) % 8
     return directions[index]
 
+def metric_row(label, value, value_color = OFF_WHITE):
+    return render.Row(
+        children = [
+            render.Text(content = label, font = FONT_TINY, color = MUTED),
+            render.Padding(
+                pad = (1, 0, 0, 0),
+                child = render.Text(content = value, font = FONT_TINY, color = value_color),
+            ),
+        ],
+    )
+
 def forecast_day(daily, timezone, index, width):
     code = int(daily["weather_code"][index])
     label = time.parse_time(
@@ -152,9 +173,9 @@ def forecast_day(daily, timezone, index, width):
         height = 32,
         child = render.Stack(
             children = [
-                render.Padding(pad = (1, 2, 0, 0), child = forecast_icon(weather_kind(code), 15, 14)),
+                render.Padding(pad = (0, 0, 0, 0), child = forecast_icon(weather_kind(code), 20, 23)),
                 render.Padding(
-                    pad = (8, 10, 0, 0),
+                    pad = (6, 0, 0, 0),
                     child = forecast_temperature_text(daily["temperature_2m_max"][index]),
                 ),
                 render.Padding(
@@ -184,6 +205,8 @@ def current_screen(current, daily):
     humidity = str(int(current["relative_humidity_2m"]))
     wind = str(round_temp(current["wind_speed_10m"]))
     direction = wind_direction(current["wind_direction_10m"])
+    high = str(round_temp(daily["temperature_2m_max"][0])) + "°"
+    low = str(round_temp(daily["temperature_2m_min"][0])) + "°"
 
     return render.Box(
         width = 64,
@@ -191,21 +214,31 @@ def current_screen(current, daily):
         color = BLACK,
         child = render.Stack(
             children = [
-                render.Padding(pad = (0, 0, 0, 0), child = current_icon(kind)),
+                render.Padding(pad = (0, 0, 0, 0), child = current_icon(kind, 30, 27)),
                 render.Padding(
-                    pad = (17, 8, 0, 0),
+                    pad = (20, 14, 0, 0),
                     child = temperature_text(current["temperature_2m"]),
                 ),
-                render.Padding(pad = (2, 25, 0, 0), child = today_temps(daily)),
                 render.Padding(
-                    pad = (38, 19, 0, 0),
+                    pad = (33, 0, 0, 0),
                     child = render.Box(
-                        width = 26,
-                        height = 13,
+                        width = 31,
+                        height = 32,
                         child = render.Column(
                             expanded = True,
-                            main_align = "space_between",
+                            cross_align = "center",
+                            main_align = "space_around",
                             children = [
+                                render.Row(
+                                    children = [
+                                        render.Text(content = low, font = FONT_TINY, color = BLUE),
+                                        render.Padding(
+                                            pad = (2, 0, 2, 0),
+                                            child = render.Text(content = "/", font = FONT_TINY, color = MUTED),
+                                        ),
+                                        render.Text(content = high, font = FONT_TINY, color = OFF_WHITE),
+                                    ],
+                                ),
                                 render.Text(content = humidity + "%", font = FONT_TINY, color = OFF_WHITE),
                                 render.Text(content = wind + "KT " + direction, font = FONT_TINY, color = OFF_WHITE),
                             ],
