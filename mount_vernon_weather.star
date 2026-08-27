@@ -7,7 +7,8 @@ knots and direction, and a three-day forecast. Weather data is provided by
 Open-Meteo.
 Author: Greg Worthing
 """
-# Build: 2026-08-27-three-drop-halo-temp-left-v4
+
+# Build: 2026-08-27-scenic-mostly-cloudy-trial-v1
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -91,6 +92,9 @@ CURRENT_ICONS["rainy"] = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAWCAYAAADafVyIAAAACXBIWX
 # consistent visual style across both screens.
 FORECAST_ICONS = CURRENT_ICONS
 
+# Trial-only 64x32 scenic background: mostly cloudy over the Skagit Valley.
+SCENIC_MOSTLY_CLOUDY_BACKGROUND = "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAABP1JREFUaIHdmetOG0cUx39z8WKwwTghl4YQlKTql1ZRb0/QL32APkQfps/Sr5X6BK1UVW1oE2guBAipI1+5GfDuXPphbWM7u+C1Ao76l0banTkz5zJzzpyzK777/gfPFPHklx/Zff16avy1lCLThC8+vZ+ZyR9PXqWOiW6bFrQQGdlPIO25PKZsAS2lHIvw60fxzt+9fT1xfGu3njr3y88epI49/VWhtQLAGDuWLO8TY7tAfxdTdjPrQfpQoL96lNGnUxRdXbkBwFKpkDhebx4m9ksJSgqsm04s1iKjA/77tnnuuCJZkd1KI7HfO3DOT+X4wyRB8AKkGfQiNrluHEjDZRlIP954v3ewsy55QIwXbFNxSUFGX1sIJpq4dxQl9mdMK6aOzDGgB5myI09eVjKtY5zDpJ2aK4Ce9GQtFnOZ5xwcTyfQnQd9lRe4+AD9Q7c74x2/zWd/X4oAR+1jrPeoKWVSY6fCSdflSfuAXE6ig+LEAvRKgWllklIIwSSt1aqTk4ab5QKNRnWiNd53DjKRAaQUjNOEoN9azRrNZo2layXKpXkEYdcIDDVw1KoVatVKf5ffpZkOvPcYY8Z3gR5do16l0ayhpGSxNA/Ax/eW+W1tAyEEN27cAqATdqi82aETdgCITMjynRWk0gmrx5ZwzsWGkpJLq5G9xzqLc3Hs03pE/zCKePFigyiKWF29z2KpDMQJTr1epd6oAlBenKfe2GNjc4eF4hwPV5cpFedodw6ptfbYbx1i3VmAPT5us72zycrdVYJgZlQqjLEoKZFSEBmDUgpxYfboscbi8WPQe5x1WDd8FWs9cDVVa1X+eb5OGMVZ3t5ai/JimfurD2jUq9Tq1T7tQrHA+sttwshQa+7T3D8kP6uRKl4vX9CctqOhKi8MQ7a2Nlm5e49iodAVy2OtReCRUiIEaCVjI0iFUsk1gnMOY03/3RiDEAKlFHLEENZZrE3OQXROQRhGPH22ztvqmYK5QDFXyOHEKX+tPx5SHqDe3COMYgGCQDOTV0OnVkrB7HxA58QQhWfMrbNs72yx/NFtELJfOygpQYCxFu89WseKeG9ByLOA6T3Gnh3hQfT8WgiBVnFdarvrpUHX6lX+3linE0ZDiueCM18tlRXtg4DOqcGamPHB0TFSQn4uQKmUChDIz2qUlnSOo36h7PHsVoZTZiEFxpztqHMO621sBAxS9r4aGZLQD6g+NkSUQjc6R/++tjageEAuSD5ySgnmCjms8XQ6BilhJp8bK5LnchJVDDg5jnADLqG07N4GInFHhRA4PDiPce8qJLpXy5AIfUN40ja+xxNAX6T4KJQWzOnsdYBUgrliQOc0wjmYmdEoLTi6INoLiCPwgEKJio/OESJ+GJk3mnvoUnk2szKTQgjIz2Y3XjxXZM4beoY4b55uhFt9ywwlKwNMBRCKVt/ig0mMVgELxVvkZ+ZHGJ8vmHURJydVqsJBrwGjX9R86stIt08nOicGkpSVjAnJfOE6xbmljCmt5/i0yelpg1SNrhD6809KYxG+6pz0n5UqkNNLCJHtOFvbxpg6WkUUC7Htp10OaIA7N+cvomOvMvhZ29E62L4sma4U+s9n+zx+vn9hDGi8SY4Bve/AolvXil5P/3mgv/dvpbs24nz/vApoG1nCk5CwHfHtN+f8JHlYzrz4Tz8/v5CmWMiz15ziN8H9yn7/ZRyB/2/4D1M/8rfBL9wWAAAAAElFTkSuQmCC"
+
 def round_temp(value):
     return int(float(value) + (0.5 if float(value) >= 0 else -0.5))
 
@@ -128,6 +132,13 @@ def forecast_icon(kind, width = 11, height = 11):
         width = width,
         height = height,
         src = base64.decode(FORECAST_ICONS[kind]),
+    )
+
+def scenic_mostly_cloudy_background():
+    return render.Image(
+        width = 64,
+        height = 32,
+        src = base64.decode(SCENIC_MOSTLY_CLOUDY_BACKGROUND),
     )
 
 def temperature_text(value, temperature_color = FORECAST_ORANGE, glow_color = FORECAST_OUTLINE):
@@ -315,10 +326,6 @@ def forecast_day(daily, timezone, index, width, temperature_color = FORECAST_ORA
     )
 
 def current_screen(current, daily, temperature_color = FORECAST_ORANGE, text_color = OFF_WHITE, wind_suffix = "KT"):
-    kind = weather_kind(
-        int(current["weather_code"]),
-        int(current["is_day"]) == 1,
-    )
     humidity = str(int(current["relative_humidity_2m"]))
     wind = str(round_temp(current["wind_speed_10m"]))
     direction = wind_direction(current["wind_direction_10m"])
@@ -331,9 +338,9 @@ def current_screen(current, daily, temperature_color = FORECAST_ORANGE, text_col
         color = BLACK,
         child = render.Stack(
             children = [
-                render.Padding(pad = (0, 0, 0, 0), child = current_icon(kind, 30, 27)),
+                scenic_mostly_cloudy_background(),
                 render.Padding(
-                    pad = (12, 14, 0, 0),
+                    pad = (3, 10, 0, 0),
                     child = temperature_text(current["temperature_2m"], temperature_color, FORECAST_OUTLINE),
                 ),
                 render.Padding(
