@@ -1,14 +1,15 @@
 """
-Applet: Mount Vernon WX
-Summary: Current conditions and a three-day outlook
-Description: A dark, high-contrast two-screen weather app with a large current
+Applet: RetroWx
+Summary: Atmospheric current weather and a three-day outlook
+Description: RetroWx pairs immersive condition-driven weather scenes with a clear
+  high-contrast current-conditions display and distinctive three-day forecast icons.
 condition icon, current temperature, today's high and low, humidity, wind in
 knots and direction, and a three-day forecast. Weather data is provided by
 Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-28-weather-scenes-clean-sweep-v6
+# Build: 2026-08-29-retrowx-atmospheric-scenes-v7
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -119,6 +120,20 @@ WEATHER_SCENES = {
 # separated by at least one black pixel on the physical Tidbyt display.
 WEATHER_SCENES["rainy"] = "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAYAAAATFf3WAAAExklEQVR4nMWWW2wUZRiG32929nzo9kDrtkCLpQrLKSYGrlAx1hhCSI0BkxoTTbReaPTCkJAmzSwhMZiGC4QQrZp4iGDaaMB4YULApCCISmqgBwjtlt0CpWx3u7uznT3P50Vd0m5nt6108b2amX/m/Z95v++f+YGHEz3k84uehDTOaU8365iZJEkSmFlYwOORiQAQM8+blJmF7u5uncZYSQHnmDPzA7hLf97YOXLrzulEQvmMmTfn3/coAGcZMzGDiDxg9vDPvQPvhsNyZ+PKCtOWdSuRTsR98VT2O7vdqlit1i+IaIKZiYj4Xx8uBaCYO9jT3SMQ7c0CwJFvduwEZT6RYzJHouEUZ9O0tr66XqfTtRv0IuKK/IIsy68CCEoS8wEPGFSaEEVgplxElL1wxbu73lX2pn98srH38hCmQmFVUO266WQGwYiSqa508LSisNVsei4WjT1vt9u/Z2bBg9LVWJQkSSAi9ccL3hcHfcGvmci5xlWOl7ZvzA77x4XphMr+e1Pw3Q6Qe62LnDajWum0qUaj8dlkMtkP4AaATIn4Zl78WE/fhrAsn5ucDFfXOIXk1g2rRL1OR96xABJplccDIaiZND296XE8WV/NZrMeVrMZJrMpHorI7avrXEdLBSgAgP/uuH3E66se83mZwKLVaqXGhsfgtBsx7PVRNBLF5nUNqCh3sM5gIIPBSCP+e+qVayO2iUCkvff3fnepAEVJkoRx09iV4OT08dW1K96yO6uEodEJgprlTU+sAljFTf99SquMvkE/Wcx6Xr+mBuV2Ey7+9TfHU6rBUV5mKBUg5T4VJ3+5tmtg+O6nE4FgrR5ptamhGu5GFxrqqsCs0tlLQ+i/fostVjNtbKpD7QqnGo4qYt/gyNFD+994HwC6TpzittaWZV0vBABHT17elWThq2gs7hwdHVXDwQlh21NuCEQQKUsNdVVQUhk+91sfJoMhOGxm1WIyqpvWN+nLnGXnEkbsFaPBUMf5ChzcHsJyQooAcHP09rZwLF6pyBEkUwmdIsdwdXA4m0imOZ2Mq6tqq2C22nSpRIqCgRClEjYdAwjJKVQ6nRXbttSEOs5XAAA6zlcsa5IiAPhu+A/DlMZ0TN6VyWTNqsrWu7f9dRabg5RpBcPeJMwmPeLxeNJg0meNRtN1nZ5uGvTCmDIlfwnUDC0HjJbmvKV07Ffb4J2rZqTIFhoPbM6oaZdIWEuqIBiN+oupTOa+o8yeqXSUD3R9/E4EmOm7XHqztZhSLybp3K+OJEmiA+/tiAGIAQgAGC1uIgmSNPfK/te34tC3fxSbbw7cBz+kFoTMG2ACA3v29ghAD5pffi2z74wFnc0KmlzrVhw/3jEFAG63mw94PNx18rSqlV5OhVLMweV05BVDwbQLknedOMX7zlgenHc2K/NMCpW3GGA+3EKQmrvkfDgA2HfGgq4Tp0qypSqmYtv4BdXW2kIHt4c0x5aSHgDk+nFBQK30ctJKUQtyMXAffbh7UZDzTGbDed5+Bp7Pe+cZFerH2dALwbUf/mmeb06z+1EseBegCVdIS/lzFIPL10P14KPQHMC21hbqbFb+LxZNFS1xvnLwS90ItLW2UK5HC61iYKb38v01J9JayVoL479oqR/qfwAGgXe/YMhKEAAAAABJRU5ErkJggg=="
 WEATHER_SCENES["moon"] = CURRENT_ICONS["moon"]
+
+# RetroWx atmospheric scenes: immersive sky/weather slices rather than
+# standalone icons. Each scene is pre-masked with a soft diagonal edge so it
+# blends naturally into the black information panel.
+WEATHER_SCENES.update({
+    "sunny": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAqUExURf///ylutUJ+vlaMw1CNzWyd04+s0Ji53KzG4qO1yNDW4TJ5vfLw7XKs4V6ATgsAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsF/G7vlAAAAGsSURBVDjLbZMJksMwCARlgwAp4v/f3Rkdjrd2SSpJ2Z3mEC4X4r5FtdZqZm6BT5Oqct/39Y0C7JJbhFgL6z0iJin6iySIK1qtmUV0xnbK2/kp+I3MIvARGhP1lV31uh+QQhRo1agbDHwDhBF3DgcjSBVbxjE26ayEyp38UwoxreCsP+CYSqHy0gNeOluuzd4clHUaHw4glHW3/JAYFPtGuqkkyBplpn7XiNTVhJj+MirH/Sj3KHWlJgquoDG1dXwc0OiLc15TXSiF7FqdBjd8rZOZXG4hXp9l5D64oyx3D4YHTqbW3L4lLEufPJjRfVIIy9yJdQtLgIIy1xHGwswSFVKZmW2BI5KX0h1dxCwgvObpRHssrrCFqdzTQX3pSJzMlBqjtQ2SZIaayV4cVD6JCS6u4F53lpksNF/Bf2MaB3RkzL8x8xK9yzGuLnjT/8HrERbuITd13vDDMk9Eos3DldawBQN1EnIQYMjhHDNG7CEiRDgWemORTtcYWDKpEQ9XbjzU3JvgOyebsR9ui9ZeqRvWu4+9X1RGngP3L1ek2SSRH+XBleTmBIB/wR/WYBw4EDdVZwAAAABJRU5ErkJggg==",
+    "partly_cloudy": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAqUExURf///5Cu0ShqrDR6wldwmHOJrZidsNHBu+Pd2qCwzGGc0TeIyKvE3zNRd5g6EZcAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsF/G7vlAAAAG2SURBVDjLZZMBjsUgCESlIgrS+193B9S2P0vapjEvMwNqoeuqF15uJH1EqU2rRlPG6KpUL+/GXBZmzTY2Bk2Qg5qNPhRPVWoXQGDT1GVj3Ww2MkgJKTgsqDS+Q7FSHx2VvmQoyIk1xrqKKZytlBrGKRWRXIHpSJhJsUTsynyVVKzNdsDEFClNNIwdkjC+7lIMXlhfoIfSCNXWmiKPdRXocSnFXdXUohcfgRFKmgVIRl3QcTgXpIab92jX3JHKMT1hQdOIAN80BjgrfOGMCORnRoKKGCI1wCBpTsuRRB1wjBB0fJmPos7YiJkD+UgO9OxQhvPN23rODYJ0dz/oyI5BRs+lzA+4RA+JTdTk7hdcnEPwISXGFAnvxYX1yQjSiHJGI+R2wAc88SgkV0woE0fHwf2AuweA8eexOcv24UraLpWx8Pi1pfcF9wh3tFVO8k+wvA2PF8TR6rICvuBnNs8IcSbwguMXPBsdY3vIOBPRMn9AkVljzgk/onl88OGHK7FHbGsujyLAuG3P9i1FwbHPS51UTBGHPjT5nIcsxVYl1t1a5iTcAj3j+QHzYhGFcARDmI19Wil/nRgeA+fXPXwAAAAASUVORK5CYII=",
+    "cloudy": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAqUExURf///4mUqpqluZ6pwK22yc/V5HmFnGl1jbrD1rK7zH2In7rC1lNheV1qgu5RywsAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsF/G7vlAAAAG3SURBVDjLTZMBlsQgCEMRKTqdev/rbhJ0unb3tVN/A0Kw5t7jOstbYjXPHNlw79ibV0RMayBxn+KmNy3cyLetMudsxt/4DqzA7s5tMFnfdO7M+NgY9aXrxYwuUaH474oGmRsgUMk6RWdgP08CkOsAe/+aPWsd1CeDKCxO4swPETqzWQCxyPKsiKMcyTUeeYZSyWFmq8ilXJ0yvTeC2Z0XM0kIWg6hz1J4la6Cqzx4k8jMXhCSlWudOFlxLbxczw2Q3AlfuVK4iFprkbPxnLVwjU1lEfjj2wL5/GNH8/Ctlq4EsW0b1A+GfsZQVbififoHCjB0ZjM8qeSKxRqhLOobaohG8WzijPksFXJXpLFpc9uOd78LZBSiTCpYG1gAPZk/j95bERl7bzyGw2Yht9BHU4/44FsgdNg1T5nnKvYqsLOlHztgcqvvgQjEdmVJENcRNNopaGMJbZafSi+ibQ4zg9SdsxDxzk6QhnF8fl+wTF8OE0leNuTGfcCyl4Zus1QrRa4f2HZTswaaA+oFoRL/OLuO28dvdjReOWiJ9Q/UQWF/kmCf3UgZ53k54+Cpadv/1dLjyRf8A/X+FMX/MNhHAAAAAElFTkSuQmCC",
+    "rainy": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAnUExURf///ztOY0VYb09jel1xiXCEnDJDVyc3ShgnNxYkND9RZkVYbi4/U64TSKMAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsF/G7vlAAAAGTSURBVDjLZZONtoMgDINpi8Xp3v95b5LWn52LjqPuI5QEhrlHzLnNGeZpK9fa97W6z7XzQhsGcqJtQGeEZ/J/9rtoNI75jCQJVaHbdKNq8tMquoQPgOmcnuhEH2ZJMNypzQbAjkE8IQu4xAmH6jaLKmfGOYYKz+ogJbjlUQwbHv0LUOU22HRoedErBHceDV5sDZBjnFwYi4XgWP9ILCW8nWCFWN1BsA1tFpZw1SZZybnbl6AMfqHtidEhLR8XZ4aPHkbwc6dQ86MAqsIFOwSy8FvxxRqdd/YSZNYGMB/RIlMJoti0AvGKdC3XA1228jYkPwpUPamhaRG1OMrpxppKcPTnckN5OHMk1ZEeBZZ50LrAatjEmjzK7VasvRCzoqgB01gDQj/HC5QZchdbqgYgaMwf23a8wC4SlOKYXoeo2nhAGYEioYle+7YYwuf4UTTucWNmVYFkUYPfguPlA88Dt3+dNuHnAxKjayZR50lgqF6/y0QpVvPm1CcZvvgDIswSsxtkmvXUG6fAC7ofFHu95iP4B5VUEkoCBqHNAAAAAElFTkSuQmCC",
+    "snow": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAkUExURf///5Gr1Jav1WyJtHiVw42kyFZzoE1qlVhynF15o7LG5c7b8LjIIdYAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsGGEEo8EAAAGaSURBVDjLTZMLEsMgCERFibHk/vftfjQtM7aZ9mVZEFpEj5GMuHIwJg/i5hnzdrRAACAciQecNGlg3EvRJAaVNKgvK5Jci5rgPi0yJDCOgbRunqSL9A1QrmLSGTD4CLL4OMkt2PTuDJDARSiq50vKYoMOykaFTBhWjF69EmaE8jSAGfwR0c0oqmggUCM6lAeMKvxnJT5BjvAui+XDIjyCe+p5UBXIpxA9Sm9EunlL4EWdx21PviJmB+8tkhxSp5JBE79RuuoPZbpYAl0rQTLPliw1yRIXuTZ1eyz9cZRit5NgjA1O3ts/KGM6lKzeDgg0YFTUo6L35YQ6eqmWxqlD9nCXpLD7yK7j1sKcQaWPU71tUhdkXAdUcHiI2iiF1W1+LHNt7VnSmHWRspA7TuataFT53R4MCud+jiPYlJf1uCiOCLudAOe4ca0HHG7PTG0dB0NDCTnNzSuInRln90xqwbhfWEBM9+cF+Y922duk1RbL8Z4v19419n7ODXols/9Ac0rLbmJ/ImyFLfhZbFagWsbR08Jy+uoHfgHi2BM1ZQ2z9AAAAABJRU5ErkJggg==",
+    "sleet_rain": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAnUExURf///6e1y7zH2pysw5WlvIeXr3qMpmZ4kFlrhU5geHCCm2R1jaSzyRtVgCgAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsGGEEo8EAAAGbSURBVDjLZZMBjsUgCESxCird+593Zwb7+zdL0qaxzxEGtNau1jpiuEf4RKy198azFFpYy3q/QJIGmZFYFsa3WGF7A2wK6npy+5zFPOTirtt8ELoQBCk4qbJPzLPltjGgeSmGR0rzEX3B28yDmoU2oiBz7hetMEOlryYqGlLNXN8kBAECVUXMtGrPcD/lfwQt4F6naMG0EzG6cnhYcJYkg/+G2D4Y+JQFx6RbYMWDnixak/JUUeRsQjJftjfJku2DeeR6wEkwxQ6XA6VKtKsopQgwfcqQ71TFUhQrKUGr+WCwKj+sSBirwx9wF6nzIe8D54+nsxwVcVYjtXYEYXqd7sfL6lcJmqaUqFJAovQg4z+YnKt9RpmlJ7vNDSDJ/RTHMcPPhTYgQZyKF0xAIhyrv6AP6rCVemblSk3O9CkFoBfDijOwjbkEzSovH0GNWaRTI+kM+7uo6Y2tHPcDipg8+zQn5rGVXrafD1irSRuRXqQGnBaEvPxwVvad/7VpZnWLbn6BvLsCzv1TM0/758vZuZUiV5Qz7HdZ9oK/HwwYPoCcceIAAAAASUVORK5CYII=",
+    "storm": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAnUExURf///zAxTT0+X01Mb2RgiG5pkR4gNZWLskVEZIJ6o7GlyNTI4VNRdNh95U8AAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsGGEEo8EAAAGISURBVDjLXZQLEsIwCAVJAk1DvP955T1I7YiOU+12+ZQqLaK30ftAqJqOET+06y+kuHi13m2o2RzBteuPlV4gomscBDiSay/2lvAEGEltZJgBJBYfP3DAFh6EarJxccvaH1CkPEouagSMHJ3YIW+Ayl7NFlgjieb6eLUkIkoZMZBLQbIEOquhAJHM1pxrTbAAq9ZOmOQtTB2jmx7YnOYodJnq6SvKjdaFoAEMErijzLggg3Aob4I6DbkdMLxmzi88pPQq0CBdnkqcnnO7gy0nM3OO6Hxtt4nzi+oNspwUSsuaR5zX5Xs76A1lOod+CuxcHWVE0ojkUg+QXG4P1wcTNN8ZBJlcUyi1AHXDo/uHPP0csII3AuT2oyRnxQk39CpUMW00nbr1BmuPwPbcNk4TM1+4+SoHzDXGmj5gpCSMFX1AyPhOIXKDOLfz4SR9MA7uOJTcCPeFNfqB5YMxwcU9jipfQ0ywyHwEc7/COnfk/gOvKpH/FOxAWeVvNg/Ing+qfNwMo/w83BcSCROP9KV4JgAAAABJRU5ErkJggg==",
+    "foggy": "iVBORw0KGgoAAAANSUhEUgAAACgAAAAcCAMAAAAkyw3kAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAnUExURf///4masJKjuJ2twaa1yHiKoLjG2L7N4JGhtsjV5m+Altbh77vI2gUFgDIAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oIHBUsGGEEo8EAAAGCSURBVDjLZZMLksMgDEPBJlCS3v+8K8kG0llP2xR4kT/YpdZq5t6au5thVa9jhjOL3SKuwTpYs+vF1cDi7WLixui9Q9QkqC8NR07S6qc43bbexwTq3LNg5CfcYAWQq0EQ1hmnfOEXB9hpCv0uha/R75gPrDNawc4M+2RAAL8BkoMiQPqXu4AhwUW9PgJbD8+UfOYI1PMAfys9l9xQiM8zQrXxM6mnWiBngCvp+aQmnlTFQoKt2fUC+3IdJFC8SIwXRq4g7JR8XuQIxaEStASbZzrPLzjmyGstAfrJ55AEmRHB7wJbW8WcRzIyYpTKueiurXn7dS9QF4YGKBt0l/+TOylVFpfdPwtkpdQDcq96CugR5zwgfKuVIykGB72RHdAjlczaLZsecD+mBugLNAVpy5y1y3pJ+LNB6ahfr2hscOZZsC1Y7JiGiGzNt9n8S7DEfASWY3VJW+nt4pQS4xZia0yvGO6qodrgHuL35O/N/2DYDcvHfeHf4cp95+Hm7mMv8A8LZxSCJqUJTAAAAABJRU5ErkJggg==",
+})
 FORECAST_RAIN = "iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAA4ElEQVR4nGNgQAPrdhz4L5556P+6HQf+o8vhA0zohmRuhAhlbmRiIMUwJsJKSDQI2TWlkcYkuwqri7qXnyWoEd0CJnTXoANsrlq348D/6NmvUMSZGBgYGII8HBin+/9jmO7/D8Og6f7/GII8HBjRDUEHKM6IX/odq2G4DEF2FQtMQfzS73DDFkZzwhUjuwYfwBn9QR4OjLi81JzvjeEqJmTX1KfawV2FHJDoXqqduBXDYkbe2O040wnMi8iGNOd7YzWI5JSNzRAGBgYGJuSARXcNLJyWporhNXxpqhj18hoAsayCuCHH4hIAAAAASUVORK5CYII="
 
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
@@ -516,10 +531,17 @@ def forecast_screen(daily, timezone, units, night, text_color):
         ),
     )
 
-def sweep_frame(screen, y):
+def wipe_frame(old_screen, new_screen, y):
+    # Reveal the new screen directly behind the old screen. The display never
+    # goes black between pages; a two-pixel edge marks the moving boundary.
     return render.Stack(
         children = [
-            screen,
+            old_screen,
+            render.Box(
+                width = 64,
+                height = y,
+                child = new_screen,
+            ),
             render.Padding(
                 pad = (0, y, 0, 0),
                 child = render.Box(width = 64, height = 1, color = OFF_WHITE),
@@ -589,17 +611,17 @@ def main(config):
 
     frames = hold(now_screen, 32)
     frames.extend([
-        sweep_frame(now_screen, 0),
-        sweep_frame(now_screen, 10),
-        sweep_frame(now_screen, 20),
-        sweep_frame(outlook_screen, 30),
+        wipe_frame(now_screen, outlook_screen, 8),
+        wipe_frame(now_screen, outlook_screen, 16),
+        wipe_frame(now_screen, outlook_screen, 24),
+        outlook_screen,
     ])
     frames.extend(hold(outlook_screen, 32))
     frames.extend([
-        sweep_frame(outlook_screen, 30),
-        sweep_frame(outlook_screen, 20),
-        sweep_frame(outlook_screen, 10),
-        sweep_frame(now_screen, 0),
+        wipe_frame(outlook_screen, now_screen, 8),
+        wipe_frame(outlook_screen, now_screen, 16),
+        wipe_frame(outlook_screen, now_screen, 24),
+        now_screen,
     ])
 
     return render.Root(
