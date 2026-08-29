@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-clean-type-v10
+# Build: 2026-08-29-retrowx-gray-edge-v11
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -33,6 +33,7 @@ BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
 FORECAST_OUTLINE = "#30383E"
+TEMPERATURE_EDGE = "#555A63"
 OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
@@ -234,7 +235,9 @@ def forecast_icon(kind, width = 11, height = 11):
     )
 
 def weather_scene(kind):
-    width = 34 if kind == "moon" else 35
+    # Reserve a full 30-pixel black field for the metrics, including the
+    # high-temperature degree symbol and its one-pixel outline.
+    width = 34
     return render.Image(
         width = width,
         height = 28,
@@ -361,11 +364,16 @@ def legacy_forecast_temperature_text(value, temperature_color = FORECAST_ORANGE)
     )
 
 def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
-    return render.Text(
-        content = str(round_temp(value)) + "°",
-        font = FONT_FORECAST_TEMP,
-        color = temperature_color,
+    return outlined_text(
+        str(round_temp(value)) + "°",
+        FONT_FORECAST_TEMP,
+        temperature_color,
+        TEMPERATURE_EDGE,
+        1,
     )
+
+def secondary_temperature_text(content, color):
+    return outlined_text(content, FONT_TINY, color, TEMPERATURE_EDGE, 1)
 
 def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
     return render.Stack(
@@ -505,9 +513,9 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                     child = temperature_text(current["temperature_2m"], current_color),
                 ),
                 render.Padding(
-                    pad = (35, 0, 0, 0),
+                    pad = (34, 0, 0, 0),
                     child = render.Box(
-                        width = 29,
+                        width = 30,
                         height = 32,
                         child = render.Column(
                             expanded = True,
@@ -516,12 +524,12 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                             children = [
                                 render.Row(
                                     children = [
-                                        plain_small_text(low, low_color(night)),
+                                        secondary_temperature_text(low, low_color(night)),
                                         render.Padding(
                                             pad = (1, 0, 1, 0),
                                             child = render.Box(width = 1, height = 8, color = divider_color),
                                         ),
-                                        plain_small_text(high, high_color(night)),
+                                        secondary_temperature_text(high, high_color(night)),
                                     ],
                                 ),
                                 plain_small_text(humidity + "%", humidity_color),
