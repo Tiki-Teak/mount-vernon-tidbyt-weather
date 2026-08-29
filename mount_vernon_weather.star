@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-physical-display-fixes-v8
+# Build: 2026-08-29-retrowx-clean-type-v9
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -32,15 +32,15 @@ BLACK = "#000000"
 BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
-FORECAST_OUTLINE = "#505A61"
+FORECAST_OUTLINE = "#30383E"
 OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
 DIVIDER = "#34434C"
-LOW_BLUE = "#496FC4"
-HIGH_CORAL = "#F06445"
-NIGHT_LOW_BLUE = "#405682"
-NIGHT_HIGH_CORAL = "#A94A3B"
+LOW_BLUE = "#4B8DFF"
+HIGH_CORAL = "#FF6845"
+NIGHT_LOW_BLUE = "#4B79D8"
+NIGHT_HIGH_CORAL = "#D95B43"
 NIGHT_TEXT = "#B77A68"
 NIGHT_MUTED = "#79564D"
 FLAP_TOP = "#202326"
@@ -140,6 +140,13 @@ FORECAST_RAIN = "iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAA4ElEQVR4nGNgQAP
 # Drawn natively at 18x15 so the physical display shows three unmistakable,
 # separately shaded teardrops instead of merged/downscaled blobs.
 FORECAST_RAIN_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" shape-rendering="crispEdges"><defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fc8ff"/><stop offset=".45" stop-color="#237cff"/><stop offset="1" stop-color="#063da8"/></linearGradient></defs><path d="M9 0L12 4V6L11 7H9L8 6V4Z" fill="#d9e5ee"/><path d="M10 1L11 4V5L10 6L9 5V4Z" fill="url(#b)"/><path d="M2 6L7 11V13L6 15H3L1 13V11Z" fill="#d9e5ee"/><path d="M3 7L6 11V13L5 14H3L2 13V11Z" fill="url(#b)"/><path d="M3 9H4L3 12H2Z" fill="#a9dcff"/><path d="M13 4L18 10V13L16 15H13L11 13V10Z" fill="#d9e5ee"/><path d="M14 5L17 10V13L16 14H13L12 13V10Z" fill="url(#b)"/><path d="M14 8H15L14 12H13Z" fill="#a9dcff"/></svg>"""
+FORECAST_RAIN_SHIFTED_SVG = FORECAST_RAIN_SVG.replace(
+    "M9 0L12 4V6L11 7H9L8 6V4Z",
+    "M5 0L8 4V6L7 7H5L4 6V4Z",
+).replace(
+    "M10 1L11 4V5L10 6L9 5V4Z",
+    "M6 1L7 4V5L6 6L5 5V4Z",
+)
 
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
 SCENIC_BACKGROUNDS = {
@@ -167,10 +174,12 @@ def temperature_color(value, units = "Fahrenheit", night = False):
         return "#E8F5FF"
     if fahrenheit <= 44:
         return "#87C7FF"
-    if fahrenheit <= 59:
+    if fahrenheit <= 57:
         return "#4E91FF"
+    if fahrenheit <= 63:
+        return "#FFE08A"
     if fahrenheit <= 69:
-        return "#FFBD35"
+        return "#FFB52A"
     if fahrenheit <= 79:
         return "#FF8A24"
     if fahrenheit <= 89:
@@ -214,7 +223,7 @@ def current_icon(kind, width = 24, height = 22):
 
 def forecast_icon(kind, width = 11, height = 11):
     if kind == "rainy":
-        return render.Image(width = width, height = height, src = FORECAST_RAIN_SVG)
+        return render.Image(width = width, height = height, src = FORECAST_RAIN_SHIFTED_SVG)
     source = FORECAST_ICONS[kind]
     return render.Image(
         width = width,
@@ -278,7 +287,7 @@ def outlined_text(content, font, color, outline, radius):
     return render.Stack(children = children)
 
 def temperature_text(value, color):
-    return outlined_text(str(round_temp(value)) + "°", FONT_TEMP, color, BLACK, 2)
+    return outlined_text(str(round_temp(value)) + "°", FONT_TEMP, color, BLACK, 1)
 
 def wind_color(value, units, night):
     knots = float(value)
@@ -375,6 +384,9 @@ def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAS
 
 def small_outlined_text(content, color = OFF_WHITE, outer_color = BRIGHT_WHITE):
     return outlined_text(content, FONT_TINY, color, outer_color, 1)
+
+def plain_small_text(content, color = OFF_WHITE):
+    return render.Text(content = content, font = FONT_TINY, color = color)
 
 def scenic_metric_text(content, color = OFF_WHITE):
     # Compact 3x5 lettering with a complete one-pixel black halo. Keeping the
@@ -504,20 +516,20 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                             children = [
                                 render.Row(
                                     children = [
-                                        small_outlined_text(low, low_color(night)),
+                                        plain_small_text(low, low_color(night)),
                                         render.Padding(
                                             pad = (1, 0, 1, 0),
                                             child = render.Box(width = 1, height = 8, color = divider_color),
                                         ),
-                                        small_outlined_text(high, high_color(night)),
+                                        plain_small_text(high, high_color(night)),
                                     ],
                                 ),
-                                small_outlined_text(humidity + "%", humidity_color, BRIGHT_WHITE),
+                                plain_small_text(humidity + "%", humidity_color),
                                 render.Row(
                                     cross_align = "center",
                                     children = [
-                                        small_outlined_text(wind, wind_speed_color),
-                                        small_outlined_text(wind_suffix + " " + direction, secondary_color),
+                                        plain_small_text(wind, wind_speed_color),
+                                        plain_small_text(wind_suffix + " " + direction, secondary_color),
                                     ],
                                 ),
                             ],
