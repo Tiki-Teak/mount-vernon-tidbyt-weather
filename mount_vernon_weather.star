@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-clean-type-v9
+# Build: 2026-08-29-retrowx-clean-type-v10
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -142,10 +142,10 @@ FORECAST_RAIN = "iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAA4ElEQVR4nGNgQAP
 FORECAST_RAIN_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" shape-rendering="crispEdges"><defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fc8ff"/><stop offset=".45" stop-color="#237cff"/><stop offset="1" stop-color="#063da8"/></linearGradient></defs><path d="M9 0L12 4V6L11 7H9L8 6V4Z" fill="#d9e5ee"/><path d="M10 1L11 4V5L10 6L9 5V4Z" fill="url(#b)"/><path d="M2 6L7 11V13L6 15H3L1 13V11Z" fill="#d9e5ee"/><path d="M3 7L6 11V13L5 14H3L2 13V11Z" fill="url(#b)"/><path d="M3 9H4L3 12H2Z" fill="#a9dcff"/><path d="M13 4L18 10V13L16 15H13L11 13V10Z" fill="#d9e5ee"/><path d="M14 5L17 10V13L16 14H13L12 13V10Z" fill="url(#b)"/><path d="M14 8H15L14 12H13Z" fill="#a9dcff"/></svg>"""
 FORECAST_RAIN_SHIFTED_SVG = FORECAST_RAIN_SVG.replace(
     "M9 0L12 4V6L11 7H9L8 6V4Z",
-    "M5 0L8 4V6L7 7H5L4 6V4Z",
+    "M6 0L9 4V6L8 7H6L5 6V4Z",
 ).replace(
     "M10 1L11 4V5L10 6L9 5V4Z",
-    "M6 1L7 4V5L6 6L5 5V4Z",
+    "M7 1L8 4V5L7 6L6 5V4Z",
 )
 
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
@@ -173,18 +173,20 @@ def temperature_color(value, units = "Fahrenheit", night = False):
     if fahrenheit <= 32:
         return "#E8F5FF"
     if fahrenheit <= 44:
-        return "#87C7FF"
+        return "#63B3FF"
     if fahrenheit <= 57:
-        return "#4E91FF"
+        return "#3278F2"
     if fahrenheit <= 63:
-        return "#FFE08A"
-    if fahrenheit <= 69:
-        return "#FFB52A"
-    if fahrenheit <= 79:
+        return "#F6E7B0"
+    if fahrenheit <= 68:
+        return "#FFC247"
+    if fahrenheit <= 74:
         return "#FF8A24"
-    if fahrenheit <= 89:
+    if fahrenheit <= 84:
         return "#FF5638"
-    return "#FF3030"
+    if fahrenheit <= 94:
+        return "#F13C32"
+    return "#E02020"
 
 def low_color(night):
     return NIGHT_LOW_BLUE if night else LOW_BLUE
@@ -232,7 +234,7 @@ def forecast_icon(kind, width = 11, height = 11):
     )
 
 def weather_scene(kind):
-    width = 34 if kind == "moon" else 38
+    width = 34 if kind == "moon" else 35
     return render.Image(
         width = width,
         height = 28,
@@ -359,12 +361,10 @@ def legacy_forecast_temperature_text(value, temperature_color = FORECAST_ORANGE)
     )
 
 def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
-    return outlined_text(
-        str(round_temp(value)) + "°",
-        FONT_FORECAST_TEMP,
-        temperature_color,
-        BRIGHT_WHITE,
-        1,
+    return render.Text(
+        content = str(round_temp(value)) + "°",
+        font = FONT_FORECAST_TEMP,
+        color = temperature_color,
     )
 
 def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
