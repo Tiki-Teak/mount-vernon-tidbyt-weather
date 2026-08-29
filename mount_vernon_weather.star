@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-atmospheric-scenes-v7
+# Build: 2026-08-29-retrowx-physical-display-fixes-v8
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -34,6 +34,7 @@ BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
 FORECAST_OUTLINE = "#505A61"
 OFF_WHITE = "#E8EEF2"
+BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
 DIVIDER = "#34434C"
 LOW_BLUE = "#496FC4"
@@ -136,6 +137,10 @@ WEATHER_SCENES.update({
 })
 FORECAST_RAIN = "iVBORw0KGgoAAAANSUhEUgAAABIAAAAPCAYAAADphp8SAAAA4ElEQVR4nGNgQAPrdhz4L5556P+6HQf+o8vhA0zohmRuhAhlbmRiIMUwJsJKSDQI2TWlkcYkuwqri7qXnyWoEd0CJnTXoANsrlq348D/6NmvUMSZGBgYGII8HBin+/9jmO7/D8Og6f7/GII8HBjRDUEHKM6IX/odq2G4DEF2FQtMQfzS73DDFkZzwhUjuwYfwBn9QR4OjLi81JzvjeEqJmTX1KfawV2FHJDoXqqduBXDYkbe2O040wnMi8iGNOd7YzWI5JSNzRAGBgYGJuSARXcNLJyWporhNXxpqhj18hoAsayCuCHH4hIAAAAASUVORK5CYII="
 
+# Drawn natively at 18x15 so the physical display shows three unmistakable,
+# separately shaded teardrops instead of merged/downscaled blobs.
+FORECAST_RAIN_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" shape-rendering="crispEdges"><defs><linearGradient id="b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fc8ff"/><stop offset=".45" stop-color="#237cff"/><stop offset="1" stop-color="#063da8"/></linearGradient></defs><path d="M9 0L12 4V6L11 7H9L8 6V4Z" fill="#d9e5ee"/><path d="M10 1L11 4V5L10 6L9 5V4Z" fill="url(#b)"/><path d="M2 6L7 11V13L6 15H3L1 13V11Z" fill="#d9e5ee"/><path d="M3 7L6 11V13L5 14H3L2 13V11Z" fill="url(#b)"/><path d="M3 9H4L3 12H2Z" fill="#a9dcff"/><path d="M13 4L18 10V13L16 15H13L11 13V10Z" fill="#d9e5ee"/><path d="M14 5L17 10V13L16 14H13L12 13V10Z" fill="url(#b)"/><path d="M14 8H15L14 12H13Z" fill="#a9dcff"/></svg>"""
+
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
 SCENIC_BACKGROUNDS = {
     "sunny": "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",
@@ -158,34 +163,19 @@ def temperature_color(value, units = "Fahrenheit", night = False):
     if units == "Celsius":
         fahrenheit = fahrenheit * 9.0 / 5.0 + 32.0
 
-    if night:
-        if fahrenheit <= 32:
-            return "#7F9BB5"
-        if fahrenheit <= 44:
-            return "#5E78A6"
-        if fahrenheit <= 59:
-            return "#41558B"
-        if fahrenheit <= 69:
-            return "#8B6236"
-        if fahrenheit <= 79:
-            return "#A65432"
-        if fahrenheit <= 89:
-            return "#B5473A"
-        return "#A83232"
-
     if fahrenheit <= 32:
-        return "#D9ECFF"
+        return "#E8F5FF"
     if fahrenheit <= 44:
-        return "#8CB6E8"
+        return "#87C7FF"
     if fahrenheit <= 59:
-        return "#4F78C8"
+        return "#4E91FF"
     if fahrenheit <= 69:
-        return "#C28A3E"
+        return "#FFBD35"
     if fahrenheit <= 79:
-        return "#D97832"
+        return "#FF8A24"
     if fahrenheit <= 89:
-        return "#F05A3C"
-    return "#E53935"
+        return "#FF5638"
+    return "#FF3030"
 
 def low_color(night):
     return NIGHT_LOW_BLUE if night else LOW_BLUE
@@ -223,7 +213,9 @@ def current_icon(kind, width = 24, height = 22):
     )
 
 def forecast_icon(kind, width = 11, height = 11):
-    source = FORECAST_RAIN if kind == "rainy" else FORECAST_ICONS[kind]
+    if kind == "rainy":
+        return render.Image(width = width, height = height, src = FORECAST_RAIN_SVG)
+    source = FORECAST_ICONS[kind]
     return render.Image(
         width = width,
         height = height,
@@ -231,7 +223,7 @@ def forecast_icon(kind, width = 11, height = 11):
     )
 
 def weather_scene(kind):
-    width = 34 if kind == "moon" else 40
+    width = 34 if kind == "moon" else 38
     return render.Image(
         width = width,
         height = 28,
@@ -265,21 +257,28 @@ def scenic_kind(code, is_day):
         return "fog"
     return kind
 
+def outlined_text(content, font, color, outline, radius):
+    children = []
+    size = radius * 2 + 1
+    for y in range(size):
+        for x in range(size):
+            # At one pixel, cardinal neighbors form a crisp halo without
+            # filling every tiny counter in the 3x5 font. The two-pixel main
+            # temperature uses the complete square halo requested.
+            use_pixel = radius > 1 or abs(x - radius) + abs(y - radius) == 1
+            if (x != radius or y != radius) and use_pixel:
+                children.append(render.Padding(
+                    pad = (x, y, 0, 0),
+                    child = render.Text(content = content, font = font, color = outline),
+                ))
+    children.append(render.Padding(
+        pad = (radius, radius, 0, 0),
+        child = render.Text(content = content, font = font, color = color),
+    ))
+    return render.Stack(children = children)
+
 def temperature_text(value, color):
-    content = str(round_temp(value)) + "°"
-    return render.Stack(
-        children = [
-            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = BLACK)),
-            render.Padding(pad = (4, 2, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = BLACK)),
-            render.Padding(pad = (2, 0, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = BLACK)),
-            render.Padding(pad = (2, 4, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = BLACK)),
-            render.Padding(pad = (1, 2, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = OFF_WHITE)),
-            render.Padding(pad = (3, 2, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = OFF_WHITE)),
-            render.Padding(pad = (2, 1, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = OFF_WHITE)),
-            render.Padding(pad = (2, 3, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = OFF_WHITE)),
-            render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = FONT_TEMP, color = color)),
-        ],
-    )
+    return outlined_text(str(round_temp(value)) + "°", FONT_TEMP, color, BLACK, 2)
 
 def wind_color(value, units, night):
     knots = float(value)
@@ -291,7 +290,7 @@ def wind_color(value, units, night):
         return "#9B6A36" if night else "#D18A3A"
     return NIGHT_TEXT if night else OFF_WHITE
 
-def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
+def legacy_forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
     content = str(round_temp(value)) + "°"
     return render.Stack(
         children = [
@@ -350,7 +349,16 @@ def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
         ],
     )
 
-def small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
+def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
+    return outlined_text(
+        str(round_temp(value)) + "°",
+        FONT_FORECAST_TEMP,
+        temperature_color,
+        BRIGHT_WHITE,
+        1,
+    )
+
+def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
     return render.Stack(
         children = [
             render.Padding(pad = (0, 0, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = outer_color)),
@@ -364,6 +372,9 @@ def small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLI
             render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = FONT_TINY, color = color)),
         ],
     )
+
+def small_outlined_text(content, color = OFF_WHITE, outer_color = BRIGHT_WHITE):
+    return outlined_text(content, FONT_TINY, color, outer_color, 1)
 
 def scenic_metric_text(content, color = OFF_WHITE):
     # Compact 3x5 lettering with a complete one-pixel black halo. Keeping the
@@ -444,7 +455,7 @@ def forecast_day(daily, timezone, index, width, units, night, text_color):
                             cross_align = "center",
                             main_align = "center",
                             children = [
-                                render.Text(content = label, font = FONT_TINY, color = text_color),
+                                render.Text(content = label, font = FONT_TINY, color = OFF_WHITE),
                             ],
                         ),
                     ),
@@ -462,9 +473,9 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
     high = str(round_temp(daily["temperature_2m_max"][0])) + "°"
     low = str(round_temp(daily["temperature_2m_min"][0])) + "°"
     current_color = temperature_color(current["temperature_2m"], units, night)
-    humidity_color = "#607D9C" if night else HUMIDITY_BLUE
+    humidity_color = HUMIDITY_BLUE
     wind_speed_color = wind_color(current["wind_speed_10m"], "Miles per hour" if wind_suffix == "MPH" else "Knots", night)
-    secondary_color = NIGHT_TEXT if night else text_color
+    secondary_color = OFF_WHITE
     divider_color = NIGHT_MUTED if night else MUTED
 
     return render.Box(
@@ -482,9 +493,9 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                     child = temperature_text(current["temperature_2m"], current_color),
                 ),
                 render.Padding(
-                    pad = (36, 0, 0, 0),
+                    pad = (35, 0, 0, 0),
                     child = render.Box(
-                        width = 28,
+                        width = 29,
                         height = 32,
                         child = render.Column(
                             expanded = True,
@@ -501,7 +512,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                                         small_outlined_text(high, high_color(night)),
                                     ],
                                 ),
-                                small_outlined_text(humidity + "%", humidity_color, OFF_WHITE),
+                                small_outlined_text(humidity + "%", humidity_color, BRIGHT_WHITE),
                                 render.Row(
                                     cross_align = "center",
                                     children = [
@@ -540,7 +551,13 @@ def wipe_frame(old_screen, new_screen, y):
             render.Box(
                 width = 64,
                 height = y,
-                child = new_screen,
+                # Box centers oversized children. The compensating top pad
+                # keeps the 32px incoming screen fixed at y=0 while the box
+                # clips progressively farther down.
+                child = render.Padding(
+                    pad = (0, 32 - y, 0, 0),
+                    child = new_screen,
+                ),
             ),
             render.Padding(
                 pad = (0, y, 0, 0),
