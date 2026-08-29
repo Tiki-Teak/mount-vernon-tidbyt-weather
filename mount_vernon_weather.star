@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-baked-rain-scene-v13
+# Build: 2026-08-29-retrowx-photo-weather-standard-temps-v15
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -33,7 +33,7 @@ BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
 FORECAST_OUTLINE = "#30383E"
-TEMPERATURE_EDGE = "#555A63"
+TEMPERATURE_EDGE = "#3F474D"
 OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
@@ -151,7 +151,9 @@ FORECAST_RAIN_SHIFTED_SVG = FORECAST_RAIN_SVG.replace(
 
 # Storm-sky crop with no mountains or ground scenery. Keeping the visible rain
 # inside this single raster preserves the atmospheric texture on the Tidbyt.
-RAIN_SKY_SCENE = "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"
+RAIN_SKY_SCENE = "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"
+
+THUNDER_SKY_SCENE = "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"
 
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
 SCENIC_BACKGROUNDS = {
@@ -241,8 +243,12 @@ def forecast_icon(kind, width = 11, height = 11):
 def weather_scene(kind):
     # Reserve a full 30-pixel black field for the metrics, including the
     # high-temperature degree symbol and its one-pixel outline.
-    width = 34
-    source = RAIN_SKY_SCENE if kind == "rainy" else WEATHER_SCENES[kind]
+    width = 33
+    source = WEATHER_SCENES[kind]
+    if kind == "rainy":
+        source = RAIN_SKY_SCENE
+    elif kind == "storm":
+        source = THUNDER_SKY_SCENE
     return render.Image(
         width = width,
         height = 28,
@@ -394,7 +400,7 @@ def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
     )
 
 def secondary_temperature_text(content, color):
-    return complete_outlined_text(content, FONT_TINY, color, TEMPERATURE_EDGE)
+    return complete_outlined_text(content, FONT_FORECAST_TEMP, color, TEMPERATURE_EDGE)
 
 def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
     return render.Stack(
@@ -534,10 +540,11 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                     child = temperature_text(current["temperature_2m"], current_color),
                 ),
                 render.Padding(
-                    pad = (34, 0, 0, 0),
+                    pad = (33, 0, 0, 0),
                     child = render.Box(
-                        width = 30,
+                        width = 31,
                         height = 32,
+                        color = BLACK,
                         child = render.Column(
                             expanded = True,
                             cross_align = "center",
@@ -547,7 +554,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT"):
                                     children = [
                                         secondary_temperature_text(low, low_color(night)),
                                         render.Padding(
-                                            pad = (1, 0, 1, 0),
+                                            pad = (0, 0, 0, 0),
                                             child = render.Box(width = 1, height = 8, color = divider_color),
                                         ),
                                         secondary_temperature_text(high, high_color(night)),
