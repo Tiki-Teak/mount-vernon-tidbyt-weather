@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-complete-edge-rain-v12
+# Build: 2026-08-29-retrowx-baked-rain-scene-v13
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -149,10 +149,9 @@ FORECAST_RAIN_SHIFTED_SVG = FORECAST_RAIN_SVG.replace(
     "M7 1L8 4V5L7 6L6 5V4Z",
 )
 
-# High-contrast diagonal rain drawn over the photographic rain scene. These
-# crisp one-pixel streaks stay legible after the image reaches the Tidbyt LED
-# matrix, where the softer rain embedded in the scene can otherwise disappear.
-RAIN_STREAKS_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="34" height="28" viewBox="0 0 34 28" shape-rendering="crispEdges"><g stroke="#8CB9D8" stroke-width="1" opacity=".72"><path d="M4 1L2 5M12 0L10 4M20 2L18 6M28 0L26 4M8 9L6 13M16 11L14 15M24 9L22 13M32 11L30 15M5 18L3 22M13 20L11 24M21 18L19 22M29 20L27 24"/></g><g stroke="#5D93BC" stroke-width="1" opacity=".62"><path d="M7 3L5 7M23 4L21 8M11 14L9 18M27 15L25 19"/></g></svg>"""
+# Storm-sky crop with no mountains or ground scenery. Keeping the visible rain
+# inside this single raster preserves the atmospheric texture on the Tidbyt.
+RAIN_SKY_SCENE = "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"
 
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
 SCENIC_BACKGROUNDS = {
@@ -243,19 +242,12 @@ def weather_scene(kind):
     # Reserve a full 30-pixel black field for the metrics, including the
     # high-temperature degree symbol and its one-pixel outline.
     width = 34
-    scene = render.Image(
+    source = RAIN_SKY_SCENE if kind == "rainy" else WEATHER_SCENES[kind]
+    return render.Image(
         width = width,
         height = 28,
-        src = base64.decode(WEATHER_SCENES[kind]),
+        src = base64.decode(source),
     )
-    if kind == "rainy":
-        return render.Stack(
-            children = [
-                scene,
-                render.Image(width = width, height = 28, src = RAIN_STREAKS_SVG),
-            ],
-        )
-    return scene
 
 def scenic_background(kind):
     return render.Image(
