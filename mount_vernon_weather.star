@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-gray-edge-v11
+# Build: 2026-08-29-retrowx-complete-edge-rain-v12
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -38,9 +38,9 @@ OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
 DIVIDER = "#34434C"
-LOW_BLUE = "#4B8DFF"
+LOW_BLUE = "#72B5FF"
 HIGH_CORAL = "#FF6845"
-NIGHT_LOW_BLUE = "#4B79D8"
+NIGHT_LOW_BLUE = "#6598E8"
 NIGHT_HIGH_CORAL = "#D95B43"
 NIGHT_TEXT = "#B77A68"
 NIGHT_MUTED = "#79564D"
@@ -149,6 +149,11 @@ FORECAST_RAIN_SHIFTED_SVG = FORECAST_RAIN_SVG.replace(
     "M7 1L8 4V5L7 6L6 5V4Z",
 )
 
+# High-contrast diagonal rain drawn over the photographic rain scene. These
+# crisp one-pixel streaks stay legible after the image reaches the Tidbyt LED
+# matrix, where the softer rain embedded in the scene can otherwise disappear.
+RAIN_STREAKS_SVG = """<svg xmlns="http://www.w3.org/2000/svg" width="34" height="28" viewBox="0 0 34 28" shape-rendering="crispEdges"><g stroke="#8CB9D8" stroke-width="1" opacity=".72"><path d="M4 1L2 5M12 0L10 4M20 2L18 6M28 0L26 4M8 9L6 13M16 11L14 15M24 9L22 13M32 11L30 15M5 18L3 22M13 20L11 24M21 18L19 22M29 20L27 24"/></g><g stroke="#5D93BC" stroke-width="1" opacity=".62"><path d="M7 3L5 7M23 4L21 8M11 14L9 18M27 15L25 19"/></g></svg>"""
+
 # Full-screen Skagit Valley scenes selected from live weather and daylight.
 SCENIC_BACKGROUNDS = {
     "sunny": "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",
@@ -238,11 +243,19 @@ def weather_scene(kind):
     # Reserve a full 30-pixel black field for the metrics, including the
     # high-temperature degree symbol and its one-pixel outline.
     width = 34
-    return render.Image(
+    scene = render.Image(
         width = width,
         height = 28,
         src = base64.decode(WEATHER_SCENES[kind]),
     )
+    if kind == "rainy":
+        return render.Stack(
+            children = [
+                scene,
+                render.Image(width = width, height = 28, src = RAIN_STREAKS_SVG),
+            ],
+        )
+    return scene
 
 def scenic_background(kind):
     return render.Image(
@@ -287,6 +300,23 @@ def outlined_text(content, font, color, outline, radius):
                 ))
     children.append(render.Padding(
         pad = (radius, radius, 0, 0),
+        child = render.Text(content = content, font = font, color = color),
+    ))
+    return render.Stack(children = children)
+
+def complete_outlined_text(content, font, color, outline):
+    # All eight neighboring pixels are included so the edge remains continuous
+    # around corners, diagonals, and degree symbols on the physical display.
+    children = []
+    for y in range(3):
+        for x in range(3):
+            if x != 1 or y != 1:
+                children.append(render.Padding(
+                    pad = (x, y, 0, 0),
+                    child = render.Text(content = content, font = font, color = outline),
+                ))
+    children.append(render.Padding(
+        pad = (1, 1, 0, 0),
         child = render.Text(content = content, font = font, color = color),
     ))
     return render.Stack(children = children)
@@ -364,16 +394,15 @@ def legacy_forecast_temperature_text(value, temperature_color = FORECAST_ORANGE)
     )
 
 def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
-    return outlined_text(
+    return complete_outlined_text(
         str(round_temp(value)) + "°",
         FONT_FORECAST_TEMP,
         temperature_color,
         TEMPERATURE_EDGE,
-        1,
     )
 
 def secondary_temperature_text(content, color):
-    return outlined_text(content, FONT_TINY, color, TEMPERATURE_EDGE, 1)
+    return complete_outlined_text(content, FONT_TINY, color, TEMPERATURE_EDGE)
 
 def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
     return render.Stack(
