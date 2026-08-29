@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-three-scene-showcase-v17
+# Build: 2026-08-29-retrowx-refined-showcase-v18
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -193,23 +193,23 @@ def temperature_color(value, units = "Fahrenheit", night = False):
     if units == "Celsius":
         fahrenheit = fahrenheit * 9.0 / 5.0 + 32.0
 
+    # Two-degree steps make the color feel continuous while keeping every
+    # shade bright enough to survive the Tidbyt panel and a blue storm scene.
+    colors = [
+        "#FFFFFF", "#F7FCFF", "#EEF9FF", "#E5F5FF", "#DDF2FF",
+        "#D4EEFF", "#CBEAFF", "#C1E6FF", "#B6E1FF", "#ABDCFF",
+        "#A0D7FF", "#A8D8FA", "#B7DCF0", "#C9E0E2", "#DDE4CF",
+        "#F1E8B9", "#FFE3A0", "#FFDA7F", "#FFD064", "#FFC34D",
+        "#FFB33B", "#FFA02F", "#FF8C2B", "#FF792D", "#FF6732",
+        "#FF5738", "#FA4939", "#F23D38", "#E93234", "#DF2830",
+        "#D6202B", "#CF1926", "#C91322", "#C20F1F", "#BC0B1C",
+    ]
     if fahrenheit <= 32:
-        return "#E8F5FF"
-    if fahrenheit <= 44:
-        return "#63B3FF"
-    if fahrenheit <= 57:
-        return "#3278F2"
-    if fahrenheit <= 63:
-        return "#F6E7B0"
-    if fahrenheit <= 68:
-        return "#FFC247"
-    if fahrenheit <= 74:
-        return "#FF8A24"
-    if fahrenheit <= 84:
-        return "#FF5638"
-    if fahrenheit <= 94:
-        return "#F13C32"
-    return "#E02020"
+        return colors[0]
+    index = int((fahrenheit - 32) / 2)
+    if index >= len(colors):
+        index = len(colors) - 1
+    return colors[index]
 
 def low_color(night):
     return NIGHT_LOW_BLUE if night else LOW_BLUE
@@ -255,6 +255,18 @@ def forecast_icon(kind, width = 11, height = 11):
         height = height,
         src = base64.decode(source),
     )
+
+def forecast_scene(kind, width = 21, height = 17):
+    # The forecast uses the same illustrated artwork as Current Conditions,
+    # scaled to fill its column and held completely still.
+    source = WEATHER_SCENES[kind]
+    if kind in ANIMATED_SCENES:
+        source = ANIMATED_SCENES[kind][0]
+    elif kind == "rainy":
+        source = RAIN_SKY_SCENE
+    elif kind == "storm":
+        source = THUNDER_SKY_SCENE
+    return render.Image(width = width, height = height, src = base64.decode(source))
 
 def weather_scene(kind, scene_frame = 0):
     # Reserve a full 30-pixel black field for the metrics, including the
@@ -339,7 +351,31 @@ def complete_outlined_text(content, font, color, outline):
     return render.Stack(children = children)
 
 def temperature_text(value, color):
-    return outlined_text(str(round_temp(value)) + "°", FONT_TEMP, color, BLACK, 1)
+    content = str(round_temp(value)) + "°"
+    children = []
+    # A sparse two-pixel charcoal halo eases into the artwork instead of
+    # creating a hard rectangular backing plate.
+    for y in range(7):
+        for x in range(7):
+            distance = abs(x - 3) + abs(y - 3)
+            if distance == 3:
+                children.append(render.Padding(
+                    pad = (x, y, 0, 0),
+                    child = render.Text(content = content, font = FONT_TEMP, color = "#17232A"),
+                ))
+    # The requested crisp one-pixel black edge remains nearest the number.
+    for y in range(3):
+        for x in range(3):
+            if x != 1 or y != 1:
+                children.append(render.Padding(
+                    pad = (x + 2, y + 2, 0, 0),
+                    child = render.Text(content = content, font = FONT_TEMP, color = BLACK),
+                ))
+    children.append(render.Padding(
+        pad = (3, 3, 0, 0),
+        child = render.Text(content = content, font = FONT_TEMP, color = color),
+    ))
+    return render.Stack(children = children)
 
 def wind_color(value, units, night):
     knots = float(value)
@@ -491,19 +527,20 @@ def metric_row(label, value, value_color = OFF_WHITE):
         ],
     )
 
-def forecast_day(daily, timezone, index, width, units, night, text_color):
+def forecast_day(daily, timezone, index, width, units, night, text_color, kind_override = ""):
     code = int(daily["weather_code"][index])
     label = time.parse_time(
         daily["time"][index],
         format = "2006-01-02",
         location = timezone,
     ).format("Mon").upper()
+    kind = kind_override if kind_override else weather_kind(code)
     return render.Box(
         width = width,
         height = 32,
         child = render.Stack(
             children = [
-                render.Padding(pad = (1, 10, 0, 0), child = forecast_icon(weather_kind(code), 18, 15)),
+                render.Padding(pad = (0, 9, 0, 0), child = forecast_scene(kind, width, 17)),
                 render.Padding(
                     pad = (4, 0, 0, 0),
                     child = forecast_temperature_text(
@@ -530,7 +567,7 @@ def forecast_day(daily, timezone, index, width, units, night, text_color):
         ),
     )
 
-def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_frame = 0, kind_override = ""):
+def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_frame = 0, kind_override = "", temperature_override = None):
     night = int(current["is_day"]) != 1
     kind = kind_override if kind_override else weather_kind(current["weather_code"], not night)
     humidity = str(int(current["relative_humidity_2m"]))
@@ -538,7 +575,8 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
     direction = wind_direction(current["wind_direction_10m"])
     high = str(round_temp(daily["temperature_2m_max"][0])) + "°"
     low = str(round_temp(daily["temperature_2m_min"][0])) + "°"
-    current_color = temperature_color(current["temperature_2m"], units, night)
+    shown_temperature = current["temperature_2m"] if temperature_override == None else temperature_override
+    current_color = temperature_color(shown_temperature, units, night)
     humidity_color = HUMIDITY_BLUE
     wind_speed_color = wind_color(current["wind_speed_10m"], "Miles per hour" if wind_suffix == "MPH" else "Knots", night)
     secondary_color = OFF_WHITE
@@ -551,12 +589,12 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
         child = render.Stack(
             children = [
                 render.Padding(
-                    pad = (0, 2, 0, 0),
+                    pad = (0, 0, 0, 0),
                     child = weather_scene(kind, scene_frame),
                 ),
                 render.Padding(
-                    pad = (14, 14, 0, 0),
-                    child = temperature_text(current["temperature_2m"], current_color),
+                    pad = (15, 15, 0, 0),
+                    child = temperature_text(shown_temperature, current_color),
                 ),
                 render.Padding(
                     pad = (33, 0, 0, 0),
@@ -572,10 +610,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                                 render.Row(
                                     children = [
                                         secondary_temperature_text(low, low_color(night)),
-                                        render.Padding(
-                                            pad = (0, 0, 0, 0),
-                                            child = render.Box(width = 1, height = 8, color = divider_color),
-                                        ),
+                                        render.Padding(pad = (1, 0, 1, 0), child = render.Text(content = "/", font = FONT_FORECAST_TEMP, color = divider_color)),
                                         secondary_temperature_text(high, high_color(night)),
                                     ],
                                 ),
@@ -583,8 +618,9 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                                 render.Row(
                                     cross_align = "center",
                                     children = [
-                                        plain_small_text(wind, wind_speed_color),
-                                        plain_small_text(wind_suffix + " " + direction, secondary_color),
+                                        render.Text(content = wind, font = FONT_FORECAST_TEMP, color = wind_speed_color),
+                                        render.Padding(pad = (1, 0, 1, 0), child = plain_small_text(wind_suffix, secondary_color)),
+                                        render.Text(content = direction, font = FONT_FORECAST_TEMP, color = secondary_color),
                                     ],
                                 ),
                             ],
@@ -605,6 +641,20 @@ def forecast_screen(daily, timezone, units, night, text_color):
                 forecast_day(daily, timezone, 1, 21, units, night, text_color),
                 forecast_day(daily, timezone, 2, 21, units, night, text_color),
                 forecast_day(daily, timezone, 3, 22, units, night, text_color),
+            ],
+        ),
+    )
+
+def forecast_showcase_screen(daily, timezone, units, night, text_color):
+    return render.Box(
+        width = 64,
+        height = 32,
+        color = BLACK,
+        child = render.Row(
+            children = [
+                forecast_day(daily, timezone, 1, 21, units, night, text_color, "sunny"),
+                forecast_day(daily, timezone, 2, 21, units, night, text_color, "partly_cloudy"),
+                forecast_day(daily, timezone, 3, 22, units, night, text_color, "storm"),
             ],
         ),
     )
@@ -691,16 +741,20 @@ def main(config):
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
 
-    # Temporary physical-display showcase: cycle only the three candidate
-    # illustrated scenes while keeping every data field stationary.
+    # Temporary physical-display showcase: cycle the three candidate scenes,
+    # then show their static forecast-sized versions together.
     frames = []
     for i in range(32):
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, (i // 8) % 2, "sunny"))
+        # Irregular holds keep the small ray changes from reading as a gear.
+        sunny_frame = 1 if (i >= 5 and i <= 8) or (i >= 18 and i <= 21) else 0
+        frames.append(current_screen(current, daily, units, text_color, wind_suffix, sunny_frame, "sunny"))
     for i in range(32):
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, (i // 8) % 2, "partly_cloudy"))
+        partly_frame = 1 if (i >= 8 and i <= 11) or (i >= 23 and i <= 26) else 0
+        frames.append(current_screen(current, daily, units, text_color, wind_suffix, partly_frame, "partly_cloudy"))
     for i in range(32):
         storm_frame = 1 if i == 14 or i == 15 else 0
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, storm_frame, "storm"))
+        frames.append(current_screen(current, daily, units, text_color, wind_suffix, storm_frame, "storm", 48))
+    frames.extend(hold(forecast_showcase_screen(daily, timezone, units, night, forecast_text_color), 32))
 
     return render.Root(
         delay = 125,
