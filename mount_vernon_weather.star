@@ -534,28 +534,13 @@ def double_complete_outlined_text(content, font, color, inner_outline, outer_out
 
 def temperature_text(value, color):
     number = str(round_temp(value))
+    degree_x = len(number) * 6 + 2
 
-    # The main font plus its two outline layers occupies two more columns than
-    # the raw character advance. Clear that outline before placing the circle.
-    # The 6x13 glyph is five illuminated columns wide. A ten-pixel advance
-    # leaves one clear column between the completed outer contours instead of
-    # letting neighboring outline copies merge into a solid bar.
-    digit_advance = 10
-    degree_x = len(number) * digit_advance + 1
-
-    # Exact order from the number outward: temperature, one gray pixel, then
-    # one black pixel. The small circular degree follows the same order.
-    # Outline each glyph independently. Outlining the complete multi-character
-    # string let neighboring shifted copies merge into a straight black bar;
-    # per-glyph layers keep the exact color -> gray -> one-pixel black contour.
-    children = []
-    for index in range(len(number)):
-        children.append(render.Padding(
-            pad = (index * digit_advance, 2, 0, 0),
-            child = double_complete_outlined_text(number[index], FONT_TEMP, color, TEMPERATURE_EDGE, BLACK),
-        ))
-    children.append(render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)))
-    return render.Stack(children = children)
+    # Exact approved compact arrangement from the physical-display reference.
+    return render.Stack(children = [
+        render.Padding(pad = (0, 2, 0, 0), child = double_complete_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
+        render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
+    ])
 
 def temperature_slash(color):
     # Three columns only: the smallest clean diagonal the LEDs preserve.
@@ -965,7 +950,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                 render.Padding(
                     # Move the wider, correctly separated temperature left so
                     # its degree remains inside the 33px weather panel.
-                    pad = (8, 15, 0, 0),
+                    pad = (16, 15, 0, 0),
                     child = temperature_text(shown_temperature, current_color),
                 ),
                 render.Padding(
