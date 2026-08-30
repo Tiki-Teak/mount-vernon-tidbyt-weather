@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-30-retrowx-even-forecast-rain-v36
+# Build: 2026-08-30-retrowx-normal-live-v37
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -828,47 +828,28 @@ def main(config):
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
 
-    # Temporary physical-display showcase. All artwork is deliberately static;
-    # only the app's screen-to-screen transition moves.
-    rain_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "rainy", 55)
-    storm_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "storm", 48)
-    partly_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "partly_cloudy", 65)
-    sunny_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "sunny", 75)
-    outlook_screen = forecast_showcase_screen(daily, timezone, units, night, forecast_text_color)
-
-    frames = []
-    for i in range(22):
-        rain_phase = int(i / 4) % 3
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, rain_phase, "rainy", 55))
-    for y in [4, 8, 12, 16, 20, 24, 28]:
-        frames.append(wipe_frame(rain_screen, storm_screen, y))
-    for i in range(22):
-        # First strike grows down over three fast frames, holds for 0.5s,
-        # clears briefly, then strikes again and remains through the transition.
-        if i == 6 or i == 15:
-            storm_phase = 3
-        elif i == 7 or i == 16:
-            storm_phase = 4
-        elif (i >= 8 and i <= 12) or i >= 17:
-            storm_phase = 5
+    # Normal live presentation: choose the current scene from the weather
+    # code, then show the real three-day forecast. No forced showcase scenes
+    # or test temperatures are used here.
+    kind = weather_kind(current["weather_code"], not night)
+    current_frames = []
+    for i in range(30):
+        if kind in FINAL_PRECIP_FRAMES:
+            scene_frame = i % len(FINAL_PRECIP_FRAMES[kind])
+        elif kind == "sunny" or kind == "partly_cloudy":
+            scene_frame = int(i / 8) % 2
         else:
-            storm_phase = int(i / 4) % 3
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, storm_phase, "storm", 48))
+            scene_frame = 0
+        current_frames.append(current_screen(
+            current, daily, units, text_color, wind_suffix, scene_frame,
+        ))
+    current_screen_frame = current_frames[-1]
+    outlook_screen = forecast_screen(daily, timezone, units, night, forecast_text_color)
+
+    frames = current_frames
     for y in [4, 8, 12, 16, 20, 24, 28]:
-        frames.append(wipe_frame(storm_screen, partly_screen, y))
-    for i in range(22):
-        # Alternate the two ray arrangements every 0.8 seconds. The sun and
-        # cloud stay fixed while only the ray lengths change.
-        partly_phase = int(i / 8) % 2
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, partly_phase, "partly_cloudy", 65))
-    for y in [4, 8, 12, 16, 20, 24, 28]:
-        frames.append(wipe_frame(partly_screen, sunny_screen, y))
-    for i in range(22):
-        sunny_phase = int(i / 8) % 2
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, sunny_phase, "sunny", 75))
-    for y in [4, 8, 12, 16, 20, 24, 28]:
-        frames.append(wipe_frame(sunny_screen, outlook_screen, y))
-    frames.extend(hold(outlook_screen, 22))
+        frames.append(wipe_frame(current_screen_frame, outlook_screen, y))
+    frames.extend(hold(outlook_screen, 30))
 
     return render.Root(
         delay = 100,
