@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-29-retrowx-final-visual-test-v20
+# Build: 2026-08-30-retrowx-static-pixel-symbols-v22
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -18,10 +18,11 @@ load("render.star", "render")
 # Final 33x28 illustrated scene assets. These remain embedded so Greg's
 # installation continues to require only this single .star file.
 FINAL_SCENES = {
-    "rainy": "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",
-    "storm": "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",
-    "snow": "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",
-    "sleet_rain": "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",
+    "rainy": "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAFG0lEQVR42u1UW2xUVRRd5z7mcefVmWmnU9oCbUNpKCBRShHRIrEGiREhxA+ChoAoBqORD4WIqY3BD/XDoFEsEIyoGEVCDCACKRRb3lMgYN8tLX1MO49O5/26925/BBsQUoyhfrC+Ts5ZZ5+1195nA2MHu3XjtY/Pr9l70tdxtj2c2LG/+/TCN35bOn/Rpqy73fnXeOWrCyIRsZmV3xg2fNn85qc/d7xXvr5hy85DPoqGfBSJJ2k4kKJzLSO09cC1/srNJ2qeX/+hnYhYRdVx4Z6zu/WciMAYIwBYs+XX3zevWzTfbgb2n00gGA6SkfegoljDopxVTSgSC0ZU5rqawDFX47mjnzxTfjMSEcNfccYsoqLquFBX/aQMgG38onWt1SYtn2gLVFbO0MlGSw60Go7VNyf4wxdH4B3xwp2yIxSJYDJFqEjklR9bhgVZirxVOsnp4t5dcOonQAGIAbcLuYOIm2R+6Yb6dza++tiWkjwZQ8G06vV6ObPZBHdYQKaRB8+J+K62BzsOXIZOCSPl74fDrMeChQ+rT8ydznnieuw72VKfHW1fMWhyuhfghFpdXa3eWQQRq3gffF01k9d+dOptZOStNhkMU1+aoyqXesI4dHGEz0x0YFpJIcpn5oMT9Gjp8mLAl4RGy2FWsQM1B5tQ3zqC9cvnYnoGqXpPWKm6JIqDA+d/aatZtgRVxKGaqXdzggGg8pe/XVVSNn/XpiXZmGKN00g0znbW+hH3eTGjwApPIIFADGjs8KLZLQMZEzG1OBdFpiT8fYM40BSDw2pHtobDFAOou6tTGZRsNLtA/Ix1XtlYkzOgYJQb7G8TiB3ZfUQ6GHZuPdsVX7GuLCiUF1pZL0l8Y3cQE1N+lM6ahyHOhoZmN/bsO4ZBtwfhpABIDtiMHKRUAPl5eZj9SCHmFGlhSEs4eHIAh89cIJPRzrJyBWxaGHAsfmGNd3Tm/Kg1t6/Xsb09mLEq3t/OpzwRfu91O/dDs4D+q1eQUDPwfQuPw2faEOrrg0GrwZDfDy0vQysqSHi6kJNpQFnFowiqPOqaA6hv7IS7z4+IQWLLns5XLJmZtOeSbHz2IfNRl8ul/mM55q3e/rksZqwrnWwjZ26xcKRpAE1n6mA2mSDqzYhHY7ApQVg0Ggg2G2DLRnFhDpLRGM6dbgBnzoUvJSA0HADFY3DYbdBoTSgqzkL5lFwk0xzV/tHLzAHX4w27Xq+/8e7NQbLqg7p51oKiiqmTRMrnVDR2RtQSoQfxbJH1DYUp0NvDtBRFUODJZ8hiqYgMyRfCUHcb4rEoRK0W4f5riHuuQ4AIWEsAbRag43G5qZeGmlrJInLqMIwkTSheDKD+Nidmr9zmUwWjXUz0IxRhiCUCSKfiiCQIiqoiEY1Do9GBCRqAFJCchJqKAlCh8BJ4BmiQhppOIiVYwQQRikogVYGWUtDpJHAcwWTLh22CXWn8erVwmxPRAdeLHKdbyetMOZKokQySRa/Iep2TkZhKphjBIiiMU3WcSqqc5gTBICqyWSUQD05QBJAqq1AVXuQ4knmeSJHlNGlEPcDxwVQyHdKKnE+vC7RLwY7dYx7bRKTbdhH5qgmJ7ushyenv9VomlKZbA0lnWYE23OEOmbl0OpbvSCYmGTTJy+HMjIIMf7CrLSyl7U5dp2eE5UkWZdpT+thzjPkOEZkXMxbCA4wFRbVE48ofS8DRnLEKuMG7V8EPMG69Mq4Cxr1P/pOf8r/K6H6U+AHuK/4EQHmAmNBlPAkAAAAASUVORK5CYII=",
+    "storm": "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAFhklEQVR42t2VaWwVVRTH//fOzFvm9b3Xt3SjLVAaSkMBiQJFRIuNGCRGhCAfEA0BUQhGIx8UIgYbgybqB4NGkCUYETGAhBhABAIUW/YWSLEtdKHQ/S28vn2bmeMXiw2VpsUaE8+ne2bOPfd3/ufkXmDwxu7/sOqzS8v3n/E0XmgIxrYfbDlX+tav82fOWZc20J6Htte/uSwREZs0+zvTms11b3/xU+MHxasrN+444qFwwEOhaJzu+hJ0sb6HNh261T57/emtL67+2EFErGTDKXHI1d3/n4jAGCMAWL7xl9/Wr5wz02EBDl6IwR/0U4rgQkmBjoW5TYupMvOHNFZ1PYYTVdUXj3/+XPG9TEQMf+YZNETJhlNiednTCgC29usbK2x2eeFIu2/27IkGJcWaBb2Os4q6mHD0Sg/cPW50JhwIhEIYTSHKlwR1b/1dUZFD7xSNyqzi7886uw9QAWJAf5AHQNwLFuavqXhv7RtPbCzMUdDtT2put5tbLGZ0BkU4UwQIXMLuk7ex/dA1GNQgEt52pFuMmFX6qPbU9AncFTXiwJn6ioxww+Iuc2bnLJzWysrKtAdDELGSDyGUlzFlxadn30VqzjKzyTTu1WmaevV2EEeu9AjOWCPGF45B8aRccNGI+mY3Ojxx6PQckwvSsfVwLSpu9GD1wumYkEqa0RVUN1yVpK6OSz/f3LpgHjYQRxnTBlKCAaDi175fWjh15s518zIw1halnnCU7TjpRdTjxsQ8G1y+GHwRoLrRjbpOBUgdiXEF2cg3x+Ft68Kh2gjSbQ5k6DjGmkAtzU1ql2ynKXnSl6ypZu3WrA4VfdRgf4lA7NiuY/LhYOamC83RxSun+sXiMTbWSrJQ3eLHyIQXRZNnoJvbUVnXiT0HTqCr04VgXATkdNhTOOSED7k5OZjy2BhMy9fDlJRx+EwHjp6/TOYUB0vLFrGu1Jc+d9Fyd9/KhT5rfqA1fVuDP3VptL1BSLhCwv47Dv5jnYj26zWIaan4oV7A0fM3EWhrg0mvQ7fXC72gQC+piLmakeU0YWrJ4/BrAsrrfKiobkJnmxchk8wWPJurWp1O2nNVSXn+Ecvxqqoq7W/bMWPZtq8UKXVl0Wg7ZWYXiMdqO1B7vhwWsxmS0YJoOAK76odVp4NotwP2DBSMyUI8HMHFc5Xglmx4EiICd32gaATpDjt0ejPyC9JQPDYb8SSnk7+3Mouv6snKnW9W9J577yJZ+lH5DFtefsm4URLlcg3VTSGtULyNaIbE2rqD5Gu9zfQUhl8UyGNKY4mQAtkTQHfLTUQjYUh6PYLttxB13YEICbAVAvo0wCDgWm0rddfeIKvEtbtIIXlEwVwAFf2UmLJki0cTUxxSrB2BEEMk5kMyEUUoRlA1DbFwFDqdAUzUAaSClDi0RBiABlWQITBAhyS0ZBwJ0QYmSlA1Amkq9JSAwSCDc4LZngv7CIda/e0ysZ8S4Y6qVzg3LBEM5ixZ0skm2WpUFaMhk5GUiCcYwSqqjGsGrpGmJLkomiRVsWgEEsBFVQRpigZNFSTOSREEIlVRkqSTjAAX/Il4MqCXuMdo8DXI/sZdg762iciw5QpyNTNiLXcCcqa31W0dUZS84YtnTs3TBxs7AxaeTEZy0+OxUSZd/FrQmZqX6vU33wzKSUemocnVw3Jkqzr+GWPkBcY8R4gscxkLDPXtGJTtXeWkl1623vP37fYDABZt9gwqPx8OgL7+UAH6QeSfJBoKQG98XxUGAnhQft43oKmUscEc2rv+ZF9av5j7gXr3DJSfDecs9G3HUFoi/NNZqK2Jo7YmjqJJBvT6Q52JIfV+ICCqyKe9q5y0d5WThjpb/ynAsMH2hRjO4gZN+LAAw2q9LRjuFv/rAMOuAv5P9gemdND7QeEmugAAAABJRU5ErkJggg==",
+    "snow": "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAFJklEQVR42u1UWWyUVRg9919m+WefaadT2gJtQ2koIFFKEdEisQaJESHEB4KGgCgGo5EHhYipjcEH9cGgUSwQjKgYRUIMIAIBii17CwTs3tLSZdpZOp19+///80WQgCC0Ek3kPN313HPOvfcD7hzsxoFXPjyzYucxX/uptnBiy+6uE3Nf+2Xh7HnrMm+3Z8R46YuzIhGxqRVfGdZ83vT6xz+2v1O2um7D1n0+ioZ8FIknaSiQotPNw7Rxz+W+ivVHq59d/b6DiFh55RHhrt3dOE9EYIwRAKzY8POv61fNm+0wA7tPJRAMB8nIe1BepGFRzqYmFIkFIyqrv5TAofqG0wc/eqrsGhMRwx88dyyivPKIUFP1uAyArf2sZaXNLi0eaw9UVEzRyUZLNrQajtU2Jfj954bhHfbCnXIgFIlgPEWoUOSV75uHBFmKvFEyzlXPvT3n+A+AAhADbhZyCxHXFvML19S+tfblRzYU58oYDKZVr9fLmc0muMMCMow8eE7EN4e7sWXPBeiUMFL+PjjNesyZ+6D62MzJnCeux65jzbVZ0bYlAyaXew6OqlVVVeqtRRCx8nfB11QxeeUHx9+ENXe5yWCY+MIMVTnfHca+c8N8RqIdk4oLUDY1D5ygR3OnF/2+JDRaDtOKnKje24jalmGsXjwTk62k6j1hpfK8KA70n/mptXrRAlQShyqm3i4JBoDKXvx6WXHp7G3rFmRhgi1Ow9E423rYj7jPiyn5NngCCQRiQEO7F01uGbCOxcSiHBSakvD3DmBPYwxOmwNZGg4TDKCuzg5lQLLT9HzxE9ZxcW11dr+C69Jgf4ZA7MD2A9LesGvjqc74klWlQaGswMZ6SOIbuoIYm/KjZNosDHJ21DW5sWPXIQy4PQgnBUBywm7kIKUCyMvNxfSHCjCjUAtDWsLeY/3Yf/IsmYwOlpkjYN3cgHP+cyu81zvnr2tzu3qcm9uC1mXxvjY+5YnwO684uO+aBPRduoiEasW3zTz2n2xFqLcXBq0Gg34/tLwMragg4elEdoYBpeUPI6jyqGkKoLahA+5ePyIGiS16Mk+xZGTQjvOy8ekHzAfr6+vVv7yOWcs3fyqL1lUl4+3kyikSDjT2o/FkDcwmE0S9GfFoDHYlCItGA8FuB+xZKCrIRjIaw+kTdeDMOfClBISGAqB4DE6HHRqtCYVFmSibkINkmqPDv/Uwc6D+0bptr9ZePfdaIVn2Xs0sW35h+cRxIuVxKho6Imqx0I14lsh6B8MU6OlmWooiKPDkM2SyVESG5AthsKsV8VgUolaLcN9lxD1XIEAEbMWANhPQ8bjQ2EODjS1kETl1CEaSxhTNB1B7UxLTl27yqYLRISb6EIowxBIBpFNxRBIERVWRiMah0ejABA1ACkhOQk1FAahQeAk8AzRIQ00nkRJsYIIIRSWQqkBLKeh0EjiOYLLnwT7GoTR8uVy4KYlof/3zHKdbyutM2ZKokQySRa/Iep2LkZhKphjBIiiMU3WcSqqc5gTBICqyWSUQD05QBJAqq1AVXuQ4knmeSJHlNGlEPcDxwVQyHdKKnE+vC7RJwfbtd1y2iUi36RzyVBMSXVdCksvf47WMKUm3BJKu0nxtuN0dMnPpdCzPmUyMM2iSF8IZ1nyrP9jZGpbSDpeuwzPMciWLMukJfewZxnz7iMzzGQvhPu4WRES364+E41bz7O82M8bYaE2MlGNEzu8Fx//jnf2nCLnRCBipkH/MwGgEXMW/+pLv6Vn3v+Ro8TsORJ+EvIR71AAAAABJRU5ErkJggg==",
+    "sleet_rain": "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAFRUlEQVR42u1UWWxVVRRd5w5vuG9+ryNtgbahNBSQKKWIaJFYg8SIEOIHQUNAFIPRyIdCxNTG4If6YdAoFohGVIwiIQYQgRSKLXMLBOzc0tL5DX1983Tv3f4INq0tbVVijOvr5tx11ll77X0OMH6w4QsvvX9pw4Ez7pYLzYHonkPt55a+8vPKxcu2JY+1Z9J44bPLIhGxuSVfGrZ8Wv/qhz+0vFW0uXrH3qNuCvndFIzEaMAbp4sNg7Tz8M3uku2ny5/e/K6DiFhx6SlhwtUN/09EYIwRAGzY8dMv2zctW+wwA4cuROEL+MjIO1Gcp2EhzqZGFYn5giqruRHFyZraiyc+eKLojhIRw+864zZRXHpKqCx7VAbAtn7SuNFml1ZPtXtLSuboZKMlHVoNx6rqo/yxK4NwDbrQG3fAHwxiOgUpV+SV7xoGBFkKvlYwLa2Ge3PJ2e8BBSAGjDQyiok7ZH7llqo3tr740I78TBn9voTqcrk4s9mE3oCAJCMPnhPxdUUH9hy+Bp0SQNzTjRSzHkuW3q8+snA254zocfBMQ1VqqHlNnymtdwlOq2VlZeroJohY8dvgK8uYvPG9s6/DmrneZDDMfG6BqlztCODolUE+KdqCWfk5KJqbBU7Qo6HNhR53DBoth3l5KSg/UoeqxkFsXr0Qs62k6p0BpfSqKPb1XPqxqXzVCpQShzKmjpUEA0BFz3+1Lr9w8efbVqRihi1Cg6EI21vhQcTtwpxsG5zeKLxhoLbFhfpeGbBOxcy8DOSaYvB09eFwXRgpNgdSNRxmGEDtba1Kn2Sn+dniR6z1+tby9B4FQ9Jgf4RA7Pi+49KRQNrOC22RNZsKfUJRjo11ksTXtvswNe5BwbxF6OfsqK7vxf6DJ9HX60QgJgBSCuxGDlLci6zMTMx/IAcLcrUwJCQcOdODY+cvk8noYMkZArYt9aYsf2aDa2jl/JBv7mBnyu5mn3VdpLuZjzuD/IFbDu7begHdN64jqlrxTQOPY+eb4O/qgkGrQb/HAy0vQysqiDrbkJ5kQGHxg/CpPCrrvaiqbUVvlwdBg8RWPZ6lWJKSaP9V2fjkfeYTNTU16p+2Y9H63R/LonVTwXQ7pWXkCcfrelB3vhJmkwmi3oxIKAy74oNFo4FgtwP2VOTlpCMWCuPiuWpw5gy44wL8A15QJIwUhx0arQm5eckompGBWIKjil87mdlb83D15y9X3T73zkOy7p3KRbbs3OKZ00TK4lTUtgbVfKEDkVSRdfUHyNvZwbQUgk/gyW1IZvGgDMntR397EyLhEEStFoHum4g4b0GACNjyAW0yoONxra6T+usaySJy6gCMJE3JWw6gakQS89fucquC0SFGu+EPMoSjXiTiEQSjBEVVEQ1FoNHowAQNQApIjkGNhwCoUHgJPAM0SEBNxBAXbGCCCEUlkKpAS3HodBI4jmCyZ8E+xaHUfrFeGJFEqKfmWY7TreV1pnRJ1EgGyaJXZL0ujZEYj8UZwSIojFN1nEqqnOAEwSAqslklEA9OUASQKqtQFV7kOJJ5nkiR5QRpRD3A8b54LOHXipxbr/M2S76WfeN+tolIt+sKslQTou23/FKap9NlmVKQaPTG0gqztYGWXr+ZSyTCWSmx6DSDJnYtkGTNtnp8bU0BKeFI07U6B1mmZFFmPaYPP8WY+yiReTljfvyP8SC3gmhIK2hYa2gs/ijtpLH4IzSHG7iN0TjjMTBU4278cVUxGfwdGv/eWfkr/EknM1HBiRie1JzcbXAnsv+uBsbjcKiBiVQ0ZgH3cpL/0bP+e1fyXuM3w3Xedpi+cUMAAAAASUVORK5CYII=",
+    "foggy": "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAEkElEQVR42uVVbUyTVxQ+533bUqDSCpbyUUGIIBSQDXSiZk4wbvMjMcbYmGWTJWabcUuW7ENgZlaSxZEwHYtOY3E6guxHmV+scUzHEDdjmYKsHRqd8iHVUpCCLfQt7/v23v2YmPljbRHnsnj+3Zv7nPPc5zn3XIQQglKKAACISAEAqGk9u6NTR5/NJvM9o3LFjR6+eelSYAoLy8X7EKQUABEoPO4wmUxsdVWVZmL9Q8PnVeaa7fUT65o9O2Mopcxk8zKhKGCsrdAuK22N0ev1/vRk5+rjdZUly0pb02dopr2kZZ3Pryq15JsbPtkSM92zEREJfEHDTKYyNQAABcBgJNhgJM+ePQt9tu9TV2b2tqzUb+rtcgh0SUbX3rSRMyvmpLlTVEM2hTbSviJdy284cUZzsLhiu/LDcOMx/wj30zcnLQM7wIAtLS0BbcFQJWs6sHXvopflb5+/4LInhV9PUCXMYaKiJSLjvQbcSJikt4uQvoic6wU6Nu0Xs6duTcnu4lBzS4IdMBo/S49KVOlOtUsvpp07wuemhGuJZqMQM1vvp2QQiL8WFZ5GIYpTYY7MnjF2vk+sG3yn4fTpaQVcz6hzzZu7uoPVCKhEc7NB4vg9IjZGzX2l0/mKvJ1X6YzMSCY69y0UfNGA0AZAbED93SB19+D1xngyJlNSZVaSz9bOnuPddLPaLXUWlj94NVOxg6rb9q+zJs9yqVX5hJCIxYiMHAAcgPQeUMEB6OkFX0c43PojHz3Se0MLSk4+A150hJI9IIkj1eWLZ8ZicWKyokiJXUlC56+oyR1CEpdKQSoFSkRkaD+lXh6pZxSkHQJYf5tHVRt0xOufebP31vA5dz9Xo99cceGRe8IjKoQ7fbyE6bdLpJFXKNgZBtRuIGE3kAlHisQPVJAhcDzQuzzAYBiIXgSwXWLsHiIbEFWjDIrclJR4EHNp7M9lm9pVA9641PGLVP6cE8UICTCsHAAYIG4OZD08ONsyyY3kHIZJEG4vqqydBx04OGU7mpsNkr4+TbRKNlylS+xfN9Zpo8O2ROYFTRMDs7wgKhDAR4G5g0DuqKF9PJcoc5xUmpWHV+2xxjC3ZJsknRv72zif/LCqqWkha5YvyBjnRL76u8xjRUX8So32ntzaqiUKF0vYLkTSHYFj7ni/HVSYvnpUeleRI+z6Nu29eKXPIQq8a9WG8oHHYwcAHDr65QdLptkrL1tG2nTzXdmym8NhCH7Cjnsoqwxn+elS/+Wrqd35BdGzL7mStur1Wyofy99htlgpNRiYfft2pzL9t1/Z0xC/tkKz9dVhLsXbNJhz1J+Xd1dMmDXe6Fh4wkXmuM3c8jcON8S9iEP2IrPFSikFnPh/QlLCbLEGnO/vG6VR1w5lemoPfLTKNSxLerd0x/4fj3x80jvoS2UWvpYdCLu6YC4GuuhDJIIdDlbIYDgsz7pyStDX1/sngw01EOAvwmaLlZpM61kAwG2VxhTDzurZAID39yCYvfC/i0+/Pk6fFBZDAZW9vhYftWAg7ARe8m8Xmoqi/7lFT2eD4pPy/p+wDzXmU9+gfwK9WENIVNyZewAAAABJRU5ErkJggg==",
 }
 
 FINAL_SUN_FRAMES = ["iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAI1ElEQVR42q1Xa1iUZRq+n29OnNGZ4SgIhAkC6ioWClmp2cHSNB21tYNal3a5m7Wm7eZW38ylXray4lbKhlae0mzQtDJtDQQPpQmbJAfRUAE5zzDAzHCYmW++Z38YRlbGVvfP53re93me93vv+7tfoJ9gZgJAACCKogAAB3e/krZ/5yuTAJDZbFDckNtvCP1NJCIGwAAwdWqjAgAoUD3HJWuWA2BDSAvdkPvbwSwKBrNZ0TtVdlbWLVjEKmZ8V4yVJ46+Vfrl9j87cRvretcAwM7NYlRvP6IoCn1P6f/B9am4zKAGMxV+sGzhrnczNwPAuYN/Gxgy4+rI86XvStZ9Mzn1ybPT8/JWDgKAD95fZTywdeUKAHTo0Oua/hRT/lSwzCyqyiSNuK/23sOUMuYkQNi7ylyw4t5z77y2fmtFbVdl0OMZJyLDwxRCUFUzTx5U9LjDivGrd316Pi32uJi5J3ECAJ4y5TnXqFWXY15O3PJQQlnVlhRTrrtfd6JAFJUps01uP08TZT6Yf+Kt93ZsQqpdH6L5NtLucdU/lX70NW5unD8z5OOnfP2aJPZzeqf7752h6LHOXTDuzMbWsqa2T12PNgLAK9uLnnl/4jvnVDZnXIop110g3qW86bH3wmAwK8wGgGYb/L/c/peL4x4fHJZ/0Fv8zRVf5x36vLG3p3eqKgpJERps8/oO0ULltMFd6YJFlyjExLYi7xN9+5kBdxckDImSH0k7N+urnTVtGUs3xzLDMXt2rpCbO9v7i030xWOPbVvwzxlHssNmaH3Kj3Sy90Ity4lxcviwNAzUDmbB20Lk/QqSy4quejUuXvCB3FynCB4VT8l3RMKy7ah3Rr5p+Rd70v/VL4r2smDLlg3D1h74YhTAPkl3ei1FlYHtUn6eJ1jvlXxHDpWH37WQwqPnk1KTQeQ7DvBPZWWgCtrBFbhtZDkh4havJljhxuFs6ciF4Y0P3VPxNQDs+2JHaMHWxbHXav1w+OtNGI1GYoA8Do1+hPvz/NJvXrs0NIZNsZF1upqzYUK3tZtuTR8DWTGEPW4LM7cAXAnIVgLLkFRaYIAK6XEn6fJpWag+p8OwpMth2lC16WzRq4UBNaVf1rVFRjNARqP4gyau8/fYsWMMURReXPlijStwRf5on5K5942tS1CHa7yWdg0ljW8njyoRJHeAqBvgCoZcSkArQDIIMljqBNhOOmcnnbZl0G0Py5w+0BZfXujSrj879Y+Zq+cfhygKJpNJ/skmRFEU7r67UNi2rQZzpu+ud8SvuxBTd+jBAGeTxneQhMDwDpIhgwQB4KsAXyHACkIXILcDsgVwW+Dt6aQAVxtaakbK/o5yKj/V4Vh3dcGCwxsnfcYMAYAQGzv/2tA/fzFZk77i4u1PJnz294l+hyaixUOhoy3kH+0GD0hiKAd8N7kEGUQCrAxvC9jlInT1gO1dUF1149LpdLZ1gpWjJTrumPKft8vmGss26UsAkn6WHdnZ68feGmJdFBGqmKANC44N0gbI/oHVcuXBGkRxMfkmeiAPDAP5+zEIYGiIyMHwWgBJTej2ApITbJWhuuJB05k4/mZYKu55Iozs9qGyo6Wampo7G6wWqaCnQ9o0c/H6oh8pZrcXnTXNQZ7uWoePpKmC2r9K0AyyylJzGJGgBLfZQapmgH0AHwKxzJB6CLIacMuAuwtwegCbCuhUAJIPfNqsUBQc5676CMVle7zQJA9slzWolmV03lwnQjhg4GTb+IXRBxbN1W2bqrQwhwYqETnsLHmiNECAEqR0MwQiCH6AmwCZgC4HuE0GW9VQ1zKKqydzt7qRA2Ocyh3tTxzZUL7EhAN06qY6IYqiwGaDAhZytu3WHdbr7PstEX9oD7w3BKVtyYzqAMh1EsjWBba6CW0A2lxAtxuwdwA2D8gCCE0eSPX+fEadJMdOE4Ra3VhLhLbnHRygU8wQCsS7lDf6jeufw2QyyUZmAgj4E0cOH7VlzgPJKh2aa73FpEdl1RgkuvPgaldDCBMAtRuAFyAB3EkgG4MtCqgaNCjuGY9oXaUQrbNx9Ahl6Idf+c4E+BMi6gEXMm7wG9T3JIxGI2e9sSUtTluzf5CfM/zKeeU5rXDplqTgEr/9zU97H2gqpnjtSZKDlZAD3ZDVBOoSAIcH1OEDOPRoVEfgSrSOk1WnqKQ7RWqhhOrEEYqEeotfUZs9YM6lVmeN0Wjkvsbnuk4UFh4DkYkfnTJ8ZEeHz+fTxbUvDJ3UWi4phAlps4YEjNYfR15JLHU6ohDo8JC6XQVFowBlkwrcHgS7OwL1wTo4/Zx8+8NW9qRMlE+eH2KrUoeJ87KeXXb/sKJ6Jbt46UumGgDCL+jE94iZ1zT2/ec/+WicT0HoMbNXDtddEXoiQ6SuagUC6+2s1rgEhcKDblYzYjQICrDAe1WlbBAGyxmzBghFLWMsz2yaNO3rXUmnb1bnR7bLbDYo/nrPc8rNBw/KWS9H7ngwuCTlHzmxJ4r1qfvsAfHaqZNt+q6LDQqvmhUhs6LYN7QNrssepU+ErxA7Vo8932a0nuURR8oPKeumptUN1+na4/fu+2w75+SokJr6A6W8idE1YMzixZ61b2Y/HdVdPWH+9geyVoYbp7y+cuHymDhvfUWBv5xrn/55vnfiGaX/KK/OE0Afu6ed/7hlQn5VRag7Tu+uGsS3LlvauuqhRTkTl2l76kbu2vjqPFq82JOcnEz9clYGw2yZGTTA3UJZJdNS38ue+QJM5Jy3k4M8TQ13vv3fMc+FJ4Qv2V1838qGmk5uaosQdrZM3hgeLT29pzhlqdLVM+LNr+9vQC65t+bM3LCk4JERLqm9pXfvX+W6cxYtUgFMb2SZMjasMRn7/GMURz946WLhhiVujOOY3uhba9asfnvty6MAppycHNVvsvxmg0HR+8i5RmGzuteQFBenqgDgw38/u3f7uuWlAMBmg6LXrPTm9lK/7z6/w1vk+gtMCQDr1697PjMzczUAKvguxr/AuN8R12T3UbFAv3TNR2F9Y78G/wOVsSklwb/DnAAAAABJRU5ErkJggg==", "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAAJFklEQVR42rVXa1RU1xX+zr0zw8AgTwF5IxCjiAHiC1Qq+IiYp4YMmhCjWW01jxolWSarNfXOJCgkJIqPaLQr1kq0i0mM2lh8YESi0CSOShAwgqLg8BiEkcfMwDzu3f2B01IliU1X96+79jn37G+fs/d3vgPcpwmCwBERc30DQNFu4eHdu9+dBoAJNOgDwFzjQ42IhvX/QiOm1++UA8CBz/K363avKwEA/c7lcmAQ5N2m1un4XxaKwHQ6He9CvyU/d4o6R+c3ZIZ76cmPm/V7lzvcp1GIy5uRUeK2bZN2qiv7sjJBBgBPrSrz2Zb/5niXf2gs7se2njFQVlaWqNGc5gRB4KJDehIXTmj8HCDF4T/lxIapL00JD1aEj1G1yiaHH0/T6d6eABCXnV21x1s+sBBEDLVZ8vR0rTM7ryxtccLxck93UQkAGo3mP0DIhgMx1c8kL/qzdvd5S2oJY7P2AeWY8pvy0i9eLt25sXDHll5O6fnsxHP+gUEKGtFgRGpE/esWC9eSt+ezq3MeMC1e8/FDs8EYMcCe8/GZt16acDRf/51NWJaz6bxOp+azsrTi0Hj3nFVZmSB7ZPH7jgUZyUnLM3oKx6U+m3KF11ycP75ycrBvd/pj8TUzDHWmMSkB1WND4tyJu12NgPYfQm3ufEzmI+bpDadbzMWOp4oNHQvMm7ct2rP28TOr9EdNlzJztmSTro6Lz9JJgBY/CcL62Kvso1fi+AXq3G9njdUtzVzKJcV73XjaeEs5J8ZRHhAac1tkXX3yUN9OiZNaGceJ8GFm0cvHg/OTXZbqa+S83I9PXblUlv3io1Xp5/Y04PkTa5/trfe/vqJiFX/+yCTx7pjsp4ozM3vP8wXzjn4yeomXovGMHd3nbkhcXAxCE9Lh5RsNTuoEE0/BaTeg3wA0XPHBQFMLC5sWzKKTg9G+85Rz2ak1648fyNT8VBxuaB8DQOG2/BmbPj+4ABkUFvdwv091q7fTduSEk5M7nX4pY5A49zUEBD8Pnk8Ck00AuSVC5q6Ad9hVTEnUQxU1iiychxNHdjhONKVYJ85sbwRIduB4Yfy+ratSXJ03LAiNRsOIwOxWlRhlu1BUs17blPQQ1kWHNrkbLocxMvdxUVOmwyGOgsPWBlALiC6BSW0AMYiyADg8fDExuhJdlwa4+u9Hc4njarwio1Xv6ivX1SuMhjOdfSO9CWAajcCGrYny8nICBO7tt9+6WS+9d2iyQj/niZRrkcpIb9HYyXPjZpph56PAUR8YswD4AZC+B6gD4O6sKfUB1ItAazcqjKlsYqZCnObV4nvhhH1g7TfPPP2XTUtOQRA4rVYrDbsTgiBwGs1g1V48lHJ5v2HWuorP2yyW8joWGGEi0C0wRxWIGkBSJUiqAqgNQDcgdYFJ7YBohEj98PQ0IMQh0e2/NbCvi69a97anvVldlHoWADTjtYzuou97C3MuBS6Yej4tI6oid47XoRixVaRRibeYKtwK8o0H5D4ARBDEO7/fAhNvAQ47yGoH+vohN9hw4+xEtPW6kWdyPzvZ/czVktZH1pysia3AIdb1o91RWLh+bmRg3+8jgih17AO+MjdPBfgRLVLtwUZESVVQjrND8g0EUylAjAM4JSCZAbETTHIDWRxgZAV1EuRNNnScCce3Y6fgieUBsPbGsoFuA6tvNNta21hlnxEFy9a8f/Qexhwg3mDpQqnRYCbHeUNisOqmV1BUBxPbghjJZICpB5DdAsgNTAlAkgCnDSAFyC4B9n7AbAc6FUAPB3K4Q9VlhOPvX6G1OdzZ0Btrb4d/lc2dKxVFqfnneSKFIlf/atd7Wf771cr2AQpQKVjY+ItwRLiBeSsAZgPxDIypQDYJjBjI2gd2W4TUpYDiOkF/fS4s8lbJK9rKF/W8ULHp3Gsvo5TV/CxPlAmCjHRxCvyDNXkobZWm4MQB7yf9UX17LNA8ApJBBLrMoA4b0EWgzgGwfgfQ1wdmcoI6GVibCEeTJ76Tj6HYxRIzhKRYPRRsL0pZDZVBViYIsrt1xb+OgzFGgiBI6Vl1zvjXW8ZOn344+9EJkgcMzeIFmT/qriQjznYMNhMHbhQHprAD6Ac4HjAD6JIAIw95ixsuOKchwruOhbrflkLnk4oqxSWYS4dZOusg0rB0xmhYnhhsUQ15eIyYrY4tO+Vtuxlx8pjySksj55scdoY7xjLgddMLQf0t4PvkkPokiBY50MIDTQR20x3MGIAWeQw6H5Qhya8CXzeMYyfPjroROdKU8MSYbxalJWeUTZoxwwiAG+SlexhTS4wxCuBbZR1G5cKZz20PqfNKWN+oSrB6Zy4Sfz3/qFTFVHS2azZM10OBKyMh13tAUe0B1hyAXksErvoHo9unh2bMuy7JnlJLN1iKtdkrYmvq0g0hJpNslYI3BzDGSKPR0H1fYBGLamcXrzl9MFlxekRpsQxh/j9AjPITzdcAjxsWKD2IgbdjQOSJjZbD28cExzUZ36sMRNKSYFRem2l9c8eDiys+Tfvyvi4wl+nUan5QLwLvLDicm2j/dsQfC+PKD8rTdh2TL2mPnxrIecksPIIZ7/diDALmExSw825KNz5iUiRfwj/W/Vfrk9VFH6papsXqPZbOa9QC5FajExQ/pjXvAVEbF8cmrdjl2LDpw9XB/e2Tl33yuJCr0szboVmxIiqyv6n6K09pf8/CqhIp4xrkCZLvgDc7YF9483DHbP3l6qCB0YHONoc0aeELtbvmbt4cVbk0vjbp9wVFr8Rnae1xtbXsvkBoNFpREATO02bsz9fPTyj+JOsdbGW2xz+gkejsmrpdP+mNwHAu+8CFmSsNTRZ0dAay4pap+QFB1iX7qif+jneI4y6enmFCCbu8esMfZm//ctTW9JEXCrZv3Bet1Wqdv0j2C4JaARArKFg7K1fI3ThEbcu/3C80nt74WwkP0WiXd3PuhryP1mtnQhA4osEkP8jLW7b3wze27Fy+XE70X4DQ6dT8UNQrV252+/dTQK0AgE8/Wv3FnoKcegAgnZp3iRXXXIAY6dQ8AAg5gp8gCLL//dlzJ4hrsQ82rn/1vYINeQBQdsd3t2pyJYT/gzEAeC7viO9Lwt5AV9b3k8Bw9k++Ly9Ri/W7gwAAAABJRU5ErkJggg=="]
@@ -284,9 +285,9 @@ def weather_scene(kind, scene_frame = 0):
     width = 33
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
     if kind == "sunny":
-        source = FINAL_SUN_FRAMES[scene_frame % len(FINAL_SUN_FRAMES)]
+        source = FINAL_SUN_FRAMES[0]
     elif kind == "partly_cloudy":
-        source = FINAL_PARTLY_FRAMES[scene_frame % len(FINAL_PARTLY_FRAMES)]
+        source = FINAL_PARTLY_FRAMES[0]
     return render.Image(
         width = width,
         height = 28,
@@ -368,12 +369,11 @@ def temperature_text(value, color):
     ])
 
 def temperature_slash(color):
-    # A hand-drawn four-pixel diagonal avoids the hooked slash glyph.
+    # Three columns only: the smallest clean diagonal the LEDs preserve.
     return render.Stack(children = [
-        render.Padding(pad = (3, 0, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
-        render.Padding(pad = (2, 2, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
-        render.Padding(pad = (1, 4, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
-        render.Padding(pad = (0, 6, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
+        render.Padding(pad = (2, 0, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
+        render.Padding(pad = (1, 2, 0, 0), child = render.Box(width = 1, height = 3, color = color)),
+        render.Padding(pad = (0, 5, 0, 0), child = render.Box(width = 1, height = 2, color = color)),
     ])
 
 def wind_color(value, units, night):
@@ -453,8 +453,46 @@ def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
         TEMPERATURE_EDGE,
     )
 
+def tiny_degree(color):
+    # Hand-drawn three-pixel degree ring. It consumes less horizontal room
+    # than another font glyph, so the high-temperature mark cannot be clipped.
+    return render.Stack(children = [
+        render.Box(width = 3, height = 3, color = TEMPERATURE_EDGE),
+        render.Padding(pad = (1, 1, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
+        render.Padding(pad = (0, 0, 0, 0), child = render.Box(width = 1, height = 1, color = color)),
+        render.Padding(pad = (2, 0, 0, 0), child = render.Box(width = 1, height = 1, color = color)),
+        render.Padding(pad = (0, 2, 0, 0), child = render.Box(width = 1, height = 1, color = color)),
+        render.Padding(pad = (2, 2, 0, 0), child = render.Box(width = 1, height = 1, color = color)),
+    ])
+
 def secondary_temperature_text(content, color):
-    return complete_outlined_text(content, FONT_FORECAST_TEMP, color, TEMPERATURE_EDGE)
+    return render.Row(
+        cross_align = "start",
+        children = [
+            complete_outlined_text(content, FONT_FORECAST_TEMP, color, TEMPERATURE_EDGE),
+            tiny_degree(color),
+        ],
+    )
+
+def high_low_temperature_row(low, high, night):
+    # Fixed pixel positions prevent the high degree mark from being clipped by
+    # the 31px metrics panel. The low degree touches the slash with one pixel
+    # of breathing room—no font-added whitespace.
+    low_degree_x = len(low) * 5 + 1
+    slash_x = low_degree_x + 3
+    high_x = slash_x + 3
+    high_degree_x = high_x + len(high) * 5 + 1
+    return render.Box(
+        width = 31,
+        height = 10,
+        child = render.Stack(children = [
+            complete_outlined_text(low, FONT_FORECAST_TEMP, low_color(night), TEMPERATURE_EDGE),
+            render.Padding(pad = (low_degree_x, 0, 0, 0), child = tiny_degree(low_color(night))),
+            render.Padding(pad = (slash_x, 1, 0, 0), child = temperature_slash(NIGHT_MUTED if night else MUTED)),
+            render.Padding(pad = (high_x, 0, 0, 0), child = complete_outlined_text(high, FONT_FORECAST_TEMP, high_color(night), TEMPERATURE_EDGE)),
+            render.Padding(pad = (high_degree_x, 0, 0, 0), child = tiny_degree(high_color(night))),
+        ]),
+    )
 
 def legacy_small_outlined_text(content, color = OFF_WHITE, outer_color = FORECAST_OUTLINE):
     return render.Stack(
@@ -496,8 +534,8 @@ def scenic_metric_text(content, color = OFF_WHITE):
     )
 
 def today_temps(daily):
-    high = str(round_temp(daily["temperature_2m_max"][0])) + "°"
-    low = str(round_temp(daily["temperature_2m_min"][0])) + "°"
+    high = str(round_temp(daily["temperature_2m_max"][0]))
+    low = str(round_temp(daily["temperature_2m_min"][0]))
     return render.Row(
         cross_align = "center",
         children = [
@@ -592,7 +630,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                     child = weather_scene(kind, scene_frame),
                 ),
                 render.Padding(
-                    pad = (12, 15, 0, 0),
+                    pad = (15, 15, 0, 0),
                     child = temperature_text(shown_temperature, current_color),
                 ),
                 render.Padding(
@@ -606,13 +644,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                             cross_align = "center",
                             main_align = "space_around",
                             children = [
-                                render.Row(
-                                    children = [
-                                        secondary_temperature_text(low, low_color(night)),
-                                        temperature_slash(divider_color),
-                                        secondary_temperature_text(high, high_color(night)),
-                                    ],
-                                ),
+                                high_low_temperature_row(low, high, night),
                                 plain_small_text(humidity + "%", humidity_color),
                                 render.Padding(
                                     pad = (2, 0, 0, 0),
@@ -743,20 +775,24 @@ def main(config):
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
 
-    # Temporary physical-display showcase: cycle the three candidate scenes,
-    # then show their static forecast-sized versions together.
+    # Temporary physical-display showcase. All artwork is deliberately static;
+    # only the app's screen-to-screen transition moves.
+    sunny_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "sunny")
+    partly_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "partly_cloudy")
+    storm_screen = current_screen(current, daily, units, text_color, wind_suffix, 0, "storm", 48)
+    outlook_screen = forecast_showcase_screen(daily, timezone, units, night, forecast_text_color)
+
     frames = []
-    for i in range(32):
-        # Irregular holds keep the small ray changes from reading as a gear.
-        sunny_frame = 1 if (i >= 5 and i <= 8) or (i >= 18 and i <= 21) else 0
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, sunny_frame, "sunny"))
-    for i in range(32):
-        partly_frame = 1 if (i >= 8 and i <= 11) or (i >= 23 and i <= 26) else 0
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, partly_frame, "partly_cloudy"))
-    for i in range(32):
-        storm_frame = 1 if i == 14 or i == 15 else 0
-        frames.append(current_screen(current, daily, units, text_color, wind_suffix, storm_frame, "storm", 48))
-    frames.extend(hold(forecast_showcase_screen(daily, timezone, units, night, forecast_text_color), 32))
+    frames.extend(hold(sunny_screen, 32))
+    for y in [4, 8, 12, 16, 20, 24, 28]:
+        frames.append(wipe_frame(sunny_screen, partly_screen, y))
+    frames.extend(hold(partly_screen, 32))
+    for y in [4, 8, 12, 16, 20, 24, 28]:
+        frames.append(wipe_frame(partly_screen, storm_screen, y))
+    frames.extend(hold(storm_screen, 32))
+    for y in [4, 8, 12, 16, 20, 24, 28]:
+        frames.append(wipe_frame(storm_screen, outlook_screen, y))
+    frames.extend(hold(outlook_screen, 32))
 
     return render.Root(
         delay = 125,
