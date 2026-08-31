@@ -506,26 +506,23 @@ def complete_outlined_text(content, font, color, outline):
     return render.Stack(children = children)
 
 def double_complete_outlined_text(content, font, color, inner_outline, outer_outline):
-    # Explicit complete layers: colored glyph, all eight gray neighbors, then
-    # a full one-pixel black band outside the gray. No helper overlap can hide
-    # either outline on the physical display.
+    # Build two true morphological layers. First dilate the glyph through the
+    # complete 5x5 neighborhood in black; then cover its inner 3x3 dilation in
+    # gray; finally draw the colored glyph. Drawing only the outer offset
+    # positions left gaps around corners and internal turns on real hardware.
     children = []
     for y in range(5):
         for x in range(5):
-            # Draw only the outside ring. The gray layer below fills the
-            # interior, leaving an exact one-pixel black perimeter.
-            if max(abs(x - 2), abs(y - 2)) == 2:
-                children.append(render.Padding(
-                    pad = (x, y, 0, 0),
-                    child = render.Text(content = content, font = font, color = outer_outline),
-                ))
+            children.append(render.Padding(
+                pad = (x, y, 0, 0),
+                child = render.Text(content = content, font = font, color = outer_outline),
+            ))
     for y in range(3):
         for x in range(3):
-            if x != 1 or y != 1:
-                children.append(render.Padding(
-                    pad = (x + 1, y + 1, 0, 0),
-                    child = render.Text(content = content, font = font, color = inner_outline),
-                ))
+            children.append(render.Padding(
+                pad = (x + 1, y + 1, 0, 0),
+                child = render.Text(content = content, font = font, color = inner_outline),
+            ))
     children.append(render.Padding(
         pad = (2, 2, 0, 0),
         child = render.Text(content = content, font = font, color = color),
