@@ -423,45 +423,168 @@ def forecast_scene(kind, width = 21, height = 17):
         source = FINAL_PARTLY_FRAMES[0]
     return render.Image(width = width, height = height, src = base64.decode(source))
 
+def fog_scene():
+    # Blue early-morning sky, three stepped evergreens, and low fog banks that
+    # weave in front of and behind the trunks instead of crossing the scene as
+    # rigid bars.
+    return render.Stack(children = [
+        render.Box(width = 33, height = 28, color = "#244E69"),
+        render.Padding(pad = (0, 0, 0, 0), child = render.Box(width = 33, height = 5, color = "#376D8A")),
+        render.Padding(pad = (0, 5, 0, 0), child = render.Box(width = 33, height = 5, color = "#315F79")),
+        # Left pine.
+        render.Padding(pad = (5, 5, 0, 0), child = render.Box(width = 1, height = 20, color = "#5B4632")),
+        render.Padding(pad = (4, 6, 0, 0), child = render.Box(width = 3, height = 2, color = "#39705B")),
+        render.Padding(pad = (3, 8, 0, 0), child = render.Box(width = 5, height = 2, color = "#2F654F")),
+        render.Padding(pad = (2, 10, 0, 0), child = render.Box(width = 7, height = 3, color = "#285A47")),
+        render.Padding(pad = (1, 13, 0, 0), child = render.Box(width = 9, height = 3, color = "#214E3E")),
+        # Tall middle pine.
+        render.Padding(pad = (16, 2, 0, 0), child = render.Box(width = 1, height = 23, color = "#5B4632")),
+        render.Padding(pad = (15, 3, 0, 0), child = render.Box(width = 3, height = 2, color = "#478265")),
+        render.Padding(pad = (14, 5, 0, 0), child = render.Box(width = 5, height = 2, color = "#39705B")),
+        render.Padding(pad = (13, 7, 0, 0), child = render.Box(width = 7, height = 3, color = "#2F654F")),
+        render.Padding(pad = (12, 10, 0, 0), child = render.Box(width = 9, height = 3, color = "#285A47")),
+        render.Padding(pad = (11, 13, 0, 0), child = render.Box(width = 11, height = 3, color = "#214E3E")),
+        # Right pine.
+        render.Padding(pad = (27, 7, 0, 0), child = render.Box(width = 1, height = 18, color = "#5B4632")),
+        render.Padding(pad = (26, 8, 0, 0), child = render.Box(width = 3, height = 2, color = "#39705B")),
+        render.Padding(pad = (25, 10, 0, 0), child = render.Box(width = 5, height = 2, color = "#2F654F")),
+        render.Padding(pad = (24, 12, 0, 0), child = render.Box(width = 7, height = 3, color = "#285A47")),
+        render.Padding(pad = (23, 15, 0, 0), child = render.Box(width = 9, height = 3, color = "#214E3E")),
+        # Flowing fog: staggered tones and lengths imply movement and depth.
+        render.Padding(pad = (0, 12, 0, 0), child = render.Box(width = 12, height = 2, color = "#A9C4CF")),
+        render.Padding(pad = (8, 13, 0, 0), child = render.Box(width = 16, height = 2, color = "#C4D6DC")),
+        render.Padding(pad = (21, 12, 0, 0), child = render.Box(width = 12, height = 2, color = "#8FAFBC")),
+        render.Padding(pad = (2, 18, 0, 0), child = render.Box(width = 17, height = 3, color = "#D2DEE2")),
+        render.Padding(pad = (16, 17, 0, 0), child = render.Box(width = 17, height = 3, color = "#A9C4CF")),
+        render.Padding(pad = (0, 23, 0, 0), child = render.Box(width = 14, height = 3, color = "#90ADB8")),
+        render.Padding(pad = (10, 22, 0, 0), child = render.Box(width = 23, height = 4, color = "#C4D6DC")),
+    ])
+
+def haze_scene():
+    return render.Stack(children = [
+        render.Image(width = 33, height = 28, src = base64.decode(FINAL_SUN_FRAMES[0])),
+        # Three thin, softly colored undulating layers in front of the sun.
+        render.Padding(pad = (1, 11, 0, 0), child = render.Box(width = 9, height = 1, color = "#C7BEC4")),
+        render.Padding(pad = (10, 12, 0, 0), child = render.Box(width = 9, height = 1, color = "#B6ACB6")),
+        render.Padding(pad = (19, 11, 0, 0), child = render.Box(width = 12, height = 1, color = "#CBBFC0")),
+        render.Padding(pad = (0, 15, 0, 0), child = render.Box(width = 7, height = 1, color = "#9FA7B2")),
+        render.Padding(pad = (7, 16, 0, 0), child = render.Box(width = 12, height = 1, color = "#C8C1C4")),
+        render.Padding(pad = (19, 15, 0, 0), child = render.Box(width = 13, height = 1, color = "#AAA4AF")),
+        render.Padding(pad = (2, 20, 0, 0), child = render.Box(width = 11, height = 1, color = "#B8B2BD")),
+        render.Padding(pad = (13, 19, 0, 0), child = render.Box(width = 8, height = 1, color = "#D1C8C5")),
+        render.Padding(pad = (21, 20, 0, 0), child = render.Box(width = 10, height = 1, color = "#A9A4B0")),
+        # A small warm sunspot breaking through the lower-left haze.
+        render.Padding(pad = (5, 17, 0, 0), child = render.Box(width = 2, height = 2, color = "#F6D56A")),
+        render.Padding(pad = (4, 18, 0, 0), child = render.Box(width = 4, height = 1, color = "#E5B74D")),
+    ])
+
+def smoke_scene():
+    return render.Stack(children = [
+        render.Image(width = 33, height = 28, src = base64.decode(FINAL_SUN_FRAMES[0])),
+        # Faint fire glow in the foreground.
+        render.Padding(pad = (1, 24, 0, 0), child = render.Box(width = 12, height = 4, color = "#7F261C")),
+        render.Padding(pad = (3, 22, 0, 0), child = render.Box(width = 3, height = 5, color = "#E04B22")),
+        render.Padding(pad = (7, 21, 0, 0), child = render.Box(width = 3, height = 6, color = "#FF8C28")),
+        render.Padding(pad = (4, 24, 0, 0), child = render.Box(width = 7, height = 3, color = "#FFC34A")),
+        # Connected puffs rise, then lean toward the low-temperature side.
+        render.Padding(pad = (7, 17, 0, 0), child = render.Box(width = 4, height = 6, color = "#555153")),
+        render.Padding(pad = (6, 19, 0, 0), child = render.Box(width = 6, height = 3, color = "#666164")),
+        render.Padding(pad = (9, 13, 0, 0), child = render.Box(width = 5, height = 6, color = "#6D696C")),
+        render.Padding(pad = (8, 15, 0, 0), child = render.Box(width = 7, height = 3, color = "#7B7678")),
+        render.Padding(pad = (12, 9, 0, 0), child = render.Box(width = 6, height = 6, color = "#777174")),
+        render.Padding(pad = (11, 11, 0, 0), child = render.Box(width = 8, height = 3, color = "#888184")),
+        render.Padding(pad = (17, 6, 0, 0), child = render.Box(width = 6, height = 6, color = "#827B7D")),
+        render.Padding(pad = (16, 8, 0, 0), child = render.Box(width = 8, height = 3, color = "#92898A")),
+        render.Padding(pad = (23, 4, 0, 0), child = render.Box(width = 6, height = 5, color = "#716B6D")),
+        render.Padding(pad = (22, 6, 0, 0), child = render.Box(width = 8, height = 2, color = "#817A7C")),
+        render.Padding(pad = (29, 6, 0, 0), child = render.Box(width = 4, height = 4, color = "#5B5759")),
+        # Warm brown where smoke crosses the sun; the surrounding rays remain.
+        render.Padding(pad = (8, 10, 0, 0), child = render.Box(width = 6, height = 4, color = "#9A715D")),
+        render.Padding(pad = (12, 8, 0, 0), child = render.Box(width = 5, height = 4, color = "#AD8066")),
+    ])
+
+def wind_scene(kind, scene_frame):
+    line_count = 2 if kind == "wind_breezy" else (4 if kind == "wind_high" else 3)
+    phase = scene_frame % 4
+    children = [render.Box(width = 33, height = 28, color = BLACK)]
+
+    # More and thicker pale-gray lines indicate stronger wind.
+    ys = [4, 9, 14, 19]
+    for i in range(line_count):
+        thickness = 2 if kind == "wind_high" and i < 2 else 1
+        children.append(render.Padding(pad = (0, ys[i], 0, 0), child = render.Box(width = 14 + i, height = thickness, color = "#A9B4BC")))
+        children.append(render.Padding(pad = (11 + i, ys[i] + thickness, 0, 0), child = render.Box(width = 4, height = 1, color = "#66747D")))
+
+    # Angled tower and hub.
+    children.extend([
+        render.Padding(pad = (20, 11, 0, 0), child = render.Box(width = 3, height = 3, color = "#D8B06C")),
+        render.Padding(pad = (20, 14, 0, 0), child = render.Box(width = 2, height = 11, color = "#52677C")),
+        render.Padding(pad = (17, 24, 0, 0), child = render.Box(width = 9, height = 2, color = "#405369")),
+        render.Padding(pad = (17, 17, 0, 0), child = render.Box(width = 1, height = 8, color = "#405369")),
+        render.Padding(pad = (25, 17, 0, 0), child = render.Box(width = 1, height = 8, color = "#405369")),
+    ])
+    if phase == 0 or phase == 2:
+        children.extend([
+            render.Padding(pad = (12, 12, 0, 0), child = render.Box(width = 9, height = 1, color = "#D5A45B")),
+            render.Padding(pad = (23, 12, 0, 0), child = render.Box(width = 8, height = 1, color = "#D5A45B")),
+            render.Padding(pad = (21, 4, 0, 0), child = render.Box(width = 1, height = 8, color = "#E7BD72")),
+            render.Padding(pad = (21, 14, 0, 0), child = render.Box(width = 1, height = 7, color = "#E7BD72")),
+        ])
+    else:
+        children.extend([
+            render.Padding(pad = (15, 6, 0, 0), child = render.Box(width = 2, height = 2, color = "#E7BD72")),
+            render.Padding(pad = (17, 8, 0, 0), child = render.Box(width = 2, height = 2, color = "#E7BD72")),
+            render.Padding(pad = (19, 10, 0, 0), child = render.Box(width = 2, height = 2, color = "#E7BD72")),
+            render.Padding(pad = (23, 14, 0, 0), child = render.Box(width = 2, height = 2, color = "#D5A45B")),
+            render.Padding(pad = (25, 16, 0, 0), child = render.Box(width = 2, height = 2, color = "#D5A45B")),
+            render.Padding(pad = (27, 18, 0, 0), child = render.Box(width = 2, height = 2, color = "#D5A45B")),
+            render.Padding(pad = (25, 6, 0, 0), child = render.Box(width = 2, height = 2, color = "#E7BD72")),
+            render.Padding(pad = (23, 8, 0, 0), child = render.Box(width = 2, height = 2, color = "#E7BD72")),
+            render.Padding(pad = (17, 16, 0, 0), child = render.Box(width = 2, height = 2, color = "#D5A45B")),
+            render.Padding(pad = (15, 18, 0, 0), child = render.Box(width = 2, height = 2, color = "#D5A45B")),
+        ])
+    return render.Stack(children = children)
+
+def blowing_snow_scene(scene_frame):
+    shift = scene_frame % 3
+    return render.Stack(children = [
+        render.Image(width = 33, height = 15, src = base64.decode(FINAL_SCENES["cloudy"])),
+        # Wind-driven streaks moving slightly downward from left to right.
+        render.Padding(pad = (0 + shift, 14, 0, 0), child = render.Box(width = 8, height = 1, color = "#DCEFFF")),
+        render.Padding(pad = (7 + shift, 16, 0, 0), child = render.Box(width = 10, height = 1, color = "#AFCFE8")),
+        render.Padding(pad = (1 + shift, 19, 0, 0), child = render.Box(width = 12, height = 1, color = "#F2F8FF")),
+        render.Padding(pad = (12 + shift, 21, 0, 0), child = render.Box(width = 8, height = 1, color = "#BFDDF0")),
+        render.Padding(pad = (4 + shift, 23, 0, 0), child = render.Box(width = 2, height = 1, color = BRIGHT_WHITE)),
+        render.Padding(pad = (18 + shift, 17, 0, 0), child = render.Box(width = 1, height = 1, color = BRIGHT_WHITE)),
+        # Shaded drift piled against the temperature border at the right.
+        render.Padding(pad = (20, 25, 0, 0), child = render.Box(width = 13, height = 3, color = "#86B9DC")),
+        render.Padding(pad = (23, 23, 0, 0), child = render.Box(width = 10, height = 3, color = "#BFDFF2")),
+        render.Padding(pad = (27, 21, 0, 0), child = render.Box(width = 6, height = 3, color = "#F2F8FF")),
+    ])
+
 def weather_scene(kind, scene_frame = 0):
     # Reserve a full 30-pixel black field for the metrics, including the
     # high-temperature degree symbol and its one-pixel outline.
     width = 33
+    if kind == "foggy":
+        return fog_scene()
+    if kind == "haze":
+        return haze_scene()
     if kind == "smoke":
-        # A single coherent plume enters from the right, passes underneath the
-        # temperature, and veils only the left half of the sun.
+        return smoke_scene()
+    if kind in ["wind_breezy", "windy", "wind_high"]:
+        return wind_scene(kind, scene_frame)
+    if kind == "blowing_snow":
+        return blowing_snow_scene(scene_frame)
+    if kind == "mostly_cloudy":
         return render.Stack(children = [
             render.Image(width = width, height = 28, src = base64.decode(FINAL_SUN_FRAMES[0])),
-            render.Padding(pad = (27, 17, 0, 0), child = render.Box(width = 6, height = 3, color = "#56433F")),
-            render.Padding(pad = (23, 15, 0, 0), child = render.Box(width = 7, height = 4, color = "#624943")),
-            render.Padding(pad = (19, 13, 0, 0), child = render.Box(width = 7, height = 5, color = "#70524B")),
-            render.Padding(pad = (15, 11, 0, 0), child = render.Box(width = 7, height = 5, color = "#7C5B52")),
-            render.Padding(pad = (11, 9, 0, 0), child = render.Box(width = 7, height = 5, color = "#89645A")),
-            render.Padding(pad = (8, 8, 0, 0), child = render.Box(width = 6, height = 4, color = "#765750")),
-            render.Padding(pad = (5, 10, 0, 0), child = render.Box(width = 5, height = 3, color = "#694D47")),
+            render.Padding(pad = (5, 3, 0, 0), child = render.Image(width = 30, height = 25, src = base64.decode(FINAL_SCENES["cloudy"]))),
         ])
-    if kind == "foggy":
-        # Recognizable evergreen silhouettes softened by three fog banks;
-        # avoids the previous green/gray crosshatched appearance.
+    if kind == "cloudy":
         return render.Stack(children = [
-            render.Box(width = width, height = 28, color = "#172327"),
-            render.Padding(pad = (5, 4, 0, 0), child = render.Box(width = 1, height = 21, color = "#29453F")),
-            render.Padding(pad = (4, 7, 0, 0), child = render.Box(width = 3, height = 2, color = "#29453F")),
-            render.Padding(pad = (3, 10, 0, 0), child = render.Box(width = 5, height = 2, color = "#29453F")),
-            render.Padding(pad = (2, 13, 0, 0), child = render.Box(width = 7, height = 2, color = "#29453F")),
-            render.Padding(pad = (1, 16, 0, 0), child = render.Box(width = 9, height = 2, color = "#29453F")),
-            render.Padding(pad = (15, 2, 0, 0), child = render.Box(width = 1, height = 23, color = "#35534B")),
-            render.Padding(pad = (14, 5, 0, 0), child = render.Box(width = 3, height = 2, color = "#35534B")),
-            render.Padding(pad = (13, 8, 0, 0), child = render.Box(width = 5, height = 2, color = "#35534B")),
-            render.Padding(pad = (12, 11, 0, 0), child = render.Box(width = 7, height = 2, color = "#35534B")),
-            render.Padding(pad = (11, 14, 0, 0), child = render.Box(width = 9, height = 2, color = "#35534B")),
-            render.Padding(pad = (26, 6, 0, 0), child = render.Box(width = 1, height = 19, color = "#29453F")),
-            render.Padding(pad = (25, 9, 0, 0), child = render.Box(width = 3, height = 2, color = "#29453F")),
-            render.Padding(pad = (24, 12, 0, 0), child = render.Box(width = 5, height = 2, color = "#29453F")),
-            render.Padding(pad = (23, 15, 0, 0), child = render.Box(width = 7, height = 2, color = "#29453F")),
-            render.Padding(pad = (0, 9, 0, 0), child = render.Box(width = 28, height = 2, color = "#AABAC0")),
-            render.Padding(pad = (5, 16, 0, 0), child = render.Box(width = 28, height = 2, color = "#82969D")),
-            render.Padding(pad = (0, 22, 0, 0), child = render.Box(width = 29, height = 2, color = "#B8C4C8")),
+            render.Image(width = width, height = 28, src = base64.decode(FINAL_SCENES["cloudy"])),
+            render.Padding(pad = (14, 0, 0, 0), child = render.Image(width = 21, height = 18, src = base64.decode(FINAL_SCENES["cloudy"]))),
         ])
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
     if kind in FINAL_PRECIP_FRAMES:
@@ -1070,6 +1193,13 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                     pad = (16, 15, 0, 0),
                     child = temperature_text(shown_temperature, current_color),
                 ),
+                # A few foreground snow pixels sit on the temperature's outer
+                # border so the blowing-snow drift visibly piles against it.
+                render.Stack(children = [
+                    render.Padding(pad = (16, 26, 0, 0), child = render.Box(width = 2, height = 1, color = "#DCEFFF")),
+                    render.Padding(pad = (28, 27, 0, 0), child = render.Box(width = 2, height = 1, color = "#AFCFE8")),
+                    render.Padding(pad = (30, 25, 0, 0), child = render.Box(width = 1, height = 1, color = BRIGHT_WHITE)),
+                ]) if kind == "blowing_snow" else render.Box(width = 1, height = 1, color = BLACK),
                 render.Padding(
                     pad = (33, 0, 0, 0),
                     child = render.Box(
