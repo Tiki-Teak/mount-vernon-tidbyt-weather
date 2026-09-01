@@ -119,7 +119,9 @@ BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
 FORECAST_OUTLINE = "#30383E"
-TEMPERATURE_EDGE = "#3F474D"
+# A brighter neutral edge survives the Tidbyt panel's dimmer settings. The
+# previous charcoal edge blended into black once the display reduced output.
+TEMPERATURE_EDGE = "#78858F"
 OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
@@ -515,11 +517,12 @@ def double_complete_outlined_text(content, font, color, inner_outline, outer_out
 
 def temperature_text(value, color):
     number = str(round_temp(value))
-    degree_x = len(number) * 6 + 2
+    degree_x = len(number) * 6 + 1
 
-    # Exact approved compact arrangement from the physical-display reference.
+    # Use one crisp edge around the large digits. The former two-pixel dilation
+    # crowded the counters and turned the border into uneven blocks on-panel.
     return render.Stack(children = [
-        render.Padding(pad = (0, 2, 0, 0), child = double_complete_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
+        render.Padding(pad = (1, 3, 0, 0), child = complete_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE)),
         render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
     ])
 
@@ -714,13 +717,13 @@ def wind_direction(degrees):
     return directions[index]
 
 def wind_direction_text(direction, color = OFF_WHITE):
-    # Keep the original recognizable letterforms, with exactly two blank
-    # pixels between paired directions so NW does not visually merge into WW.
+    # Keep the original recognizable letterforms, with exactly one blank
+    # pixel between paired directions so NW does not visually merge into WW.
     if len(direction) == 1:
         return render.Text(content = direction, font = FONT_TINY, color = color)
     return render.Row(children = [
         render.Text(content = direction[0:1], font = FONT_TINY, color = color),
-        render.Box(width = 2, height = 1, color = BLACK),
+        render.Box(width = 1, height = 1, color = BLACK),
         render.Text(content = direction[1:2], font = FONT_TINY, color = color),
     ])
 def metric_row(label, value, value_color = OFF_WHITE):
@@ -960,13 +963,14 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                                 render.Padding(
                                     pad = (2, 0, 0, 0),
                                     child = render.Row(
-                                        cross_align = "end",
+                                        # Align the visible bottoms explicitly: the
+                                        # 7px number and 5px labels share one baseline.
+                                        cross_align = "start",
                                         children = [
                                             compact_secondary_temperature_text(gust if show_gust else wind, wind_speed_color),
-                                            render.Padding(pad = (1, 1, 0, 0), child = plain_small_text(wind_suffix, secondary_color)),
+                                            render.Padding(pad = (1, 2, 0, 0), child = plain_small_text(wind_suffix, secondary_color)),
                                             render.Padding(
-                                                # One bottom pixel lifts the direction so it shares the visual baseline.
-                                                pad = (1, 0, 0, 1),
+                                                pad = (1, 2, 0, 0),
                                                 child = plain_small_text("G", secondary_color) if show_gust else wind_direction_text(direction, secondary_color),
                                             ),
                                         ],
