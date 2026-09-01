@@ -280,9 +280,9 @@ def temperature_color(value, units = "Fahrenheit", night = False):
         "#A8D8FA",
         "#B7DCF0",
         "#C9E0E2",
-        "#DDE4CF",
-        "#F1E8B9",
-        "#FFE3A0",
+        "#E5D56A",
+        "#F0D974",
+        "#F7D77A",
         "#FFDA7F",
         "#FFD064",
         "#FFC34D",
@@ -729,13 +729,13 @@ def wind_direction(degrees):
     index = int((float(degrees) + 22.5) / 45.0) % 8
     return directions[index]
 
-# A wider 4x5 alphabet keeps the diagonal stroke of N visible on the physical
+# A wider 5x6 alphabet keeps the diagonal stroke of N visible on the physical
 # display. In tom-thumb, NW could blur into WW even though the data was right.
 WIND_DIRECTION_GLYPHS = {
-    "N": ["1001", "1101", "1011", "1001", "1001"],
-    "E": ["1111", "1000", "1110", "1000", "1111"],
-    "S": ["1111", "1000", "1111", "0001", "1111"],
-    "W": ["1001", "1001", "1001", "1111", "0110"],
+    "N": ["10001", "11001", "11001", "10101", "10011", "10001"],
+    "E": ["11111", "10000", "11110", "10000", "10000", "11111"],
+    "S": ["11111", "10000", "11110", "00001", "00001", "11110"],
+    "W": ["10001", "10001", "10101", "10101", "11011", "01010"],
 }
 
 def wind_direction_text(direction, color = OFF_WHITE):
@@ -745,7 +745,7 @@ def wind_direction_text(direction, color = OFF_WHITE):
         letter = direction[letter_index:letter_index + 1]
         glyph = WIND_DIRECTION_GLYPHS[letter]
         glyph_width = len(glyph[0])
-        for y in range(5):
+        for y in range(6):
             for x in range(glyph_width):
                 if glyph[y][x] == "1":
                     children.append(render.Padding(
@@ -755,7 +755,7 @@ def wind_direction_text(direction, color = OFF_WHITE):
         x_offset = x_offset + glyph_width + 1
     return render.Box(
         width = x_offset - 1,
-        height = 5,
+        height = 6,
         child = render.Stack(children = children),
     )
 
@@ -1001,7 +1001,8 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                                             compact_secondary_temperature_text(gust if show_gust else wind, wind_speed_color),
                                             render.Padding(pad = (1, 1, 0, 0), child = plain_small_text(wind_suffix, secondary_color)),
                                             render.Padding(
-                                                pad = (1, 0, 0, 0),
+                                                # One bottom pixel lifts the direction so it shares the visual baseline.
+                                                pad = (1, 0, 0, 1),
                                                 child = plain_small_text("G", secondary_color) if show_gust else wind_direction_text(direction, secondary_color),
                                             ),
                                         ],
