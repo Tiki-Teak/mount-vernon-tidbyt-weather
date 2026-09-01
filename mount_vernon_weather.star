@@ -741,7 +741,8 @@ WIND_DIRECTION_GLYPHS = {
 def wind_direction_text(direction, color = OFF_WHITE):
     children = []
     x_offset = 0
-    for letter in direction:
+    for letter_index in range(len(direction)):
+        letter = direction[letter_index:letter_index + 1]
         glyph = WIND_DIRECTION_GLYPHS[letter]
         glyph_width = len(glyph[0])
         for y in range(5):
