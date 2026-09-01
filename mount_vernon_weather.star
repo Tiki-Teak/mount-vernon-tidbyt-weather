@@ -263,52 +263,36 @@ def temperature_color(value, units = "Fahrenheit", night = False):
     if units == "Celsius":
         fahrenheit = fahrenheit * 9.0 / 5.0 + 32.0
 
-    # Two-degree steps make the color feel continuous while keeping every
-    # shade bright enough to survive the Tidbyt panel and a blue storm scene.
-    colors = [
-        "#FFFFFF",
-        "#F7FCFF",
-        "#EEF9FF",
-        "#E5F5FF",
-        "#DDF2FF",
-        "#D4EEFF",
-        "#CBEAFF",
-        "#C1E6FF",
-        "#B6E1FF",
-        "#ABDCFF",
-        "#A0D7FF",
-        "#A8D8FA",
-        "#B7DCF0",
-        "#C9E0E2",
-        "#E5D56A",
-        "#F0D974",
-        "#F7D77A",
-        "#FFDA7F",
-        "#FFD064",
-        "#FFC34D",
-        "#FFB33B",
-        "#FFA02F",
-        "#FF8C2B",
-        "#FF792D",
-        "#FF6732",
-        "#FF5738",
-        "#FA4939",
-        "#F23D38",
-        "#E93234",
-        "#DF2830",
-        "#D6202B",
-        "#CF1926",
-        "#C91322",
-        "#C20F1F",
-        "#BC0B1C",
-    ]
-    if fahrenheit <= 32:
-        return colors[0]
-    index = int((fahrenheit - 32) / 2)
-    if index >= len(colors):
-        index = len(colors) - 1
-    return colors[index]
-
+    # Broad, high-contrast bands remain distinct on the physical LED matrix.
+    if fahrenheit <= 20:
+        return "#FFFFFF"
+    if fahrenheit <= 29:
+        return "#E0F7FA"
+    if fahrenheit <= 34:
+        return "#B3E5FC"
+    if fahrenheit <= 39:
+        return "#81D4FA"
+    if fahrenheit <= 44:
+        return "#29B6F6"
+    if fahrenheit <= 49:
+        return "#0288D1"
+    if fahrenheit <= 54:
+        return "#00ACC1"
+    if fahrenheit <= 59:
+        return "#9CCC65"
+    if fahrenheit <= 64:
+        return "#FFF59D"
+    if fahrenheit <= 69:
+        return "#FFEE58"
+    if fahrenheit <= 74:
+        return "#FFA726"
+    if fahrenheit <= 79:
+        return "#FB8C00"
+    if fahrenheit <= 89:
+        return "#EF5350"
+    if fahrenheit <= 99:
+        return "#E53935"
+    return "#B71C1C"
 def low_color(night):
     return NIGHT_LOW_BLUE if night else LOW_BLUE
 
@@ -729,36 +713,13 @@ def wind_direction(degrees):
     index = int((float(degrees) + 22.5) / 45.0) % 8
     return directions[index]
 
-# A wider 5x6 alphabet keeps the diagonal stroke of N visible on the physical
-# display. In tom-thumb, NW could blur into WW even though the data was right.
-WIND_DIRECTION_GLYPHS = {
-    "N": ["10001", "11001", "11001", "10101", "10011", "10001"],
-    "E": ["11111", "10000", "11110", "10000", "10000", "11111"],
-    "S": ["01110", "10001", "10000", "01110", "00001", "11110"],
-    "W": ["10001", "10001", "10101", "10101", "11011", "01010"],
-}
-
 def wind_direction_text(direction, color = OFF_WHITE):
-    children = []
-    x_offset = 0
-    for letter_index in range(len(direction)):
-        letter = direction[letter_index:letter_index + 1]
-        glyph = WIND_DIRECTION_GLYPHS[letter]
-        glyph_width = len(glyph[0])
-        for y in range(6):
-            for x in range(glyph_width):
-                if glyph[y][x] == "1":
-                    children.append(render.Padding(
-                        pad = (x_offset + x, y, 0, 0),
-                        child = render.Box(width = 1, height = 1, color = color),
-                    ))
-        x_offset = x_offset + glyph_width + 1
-    return render.Box(
-        width = x_offset - 1,
-        height = 6,
-        child = render.Stack(children = children),
-    )
-
+    # Keep the font's recognizable letterforms and insert a visible gap so
+    # combinations such as NW cannot visually merge into WW.
+    content = direction
+    if len(direction) == 2:
+        content = direction[0:1] + " " + direction[1:2]
+    return render.Text(content = content, font = FONT_TINY, color = color)
 def metric_row(label, value, value_color = OFF_WHITE):
     return render.Row(
         children = [
