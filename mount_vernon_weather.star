@@ -119,9 +119,8 @@ BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
 FORECAST_ORANGE = "#FFB21A"
 FORECAST_OUTLINE = "#30383E"
-# A brighter neutral edge survives the Tidbyt panel's dimmer settings. The
-# previous charcoal edge blended into black once the display reduced output.
-TEMPERATURE_EDGE = "#78858F"
+# A deliberately faded charcoal inner edge, backed by a separate black edge.
+TEMPERATURE_EDGE = "#465159"
 OFF_WHITE = "#E8EEF2"
 BRIGHT_WHITE = "#FFFFFF"
 MUTED = "#9FAEB8"
@@ -515,14 +514,33 @@ def double_complete_outlined_text(content, font, color, inner_outline, outer_out
     ))
     return render.Stack(children = children)
 
+def crisp_double_outlined_text(content, font, color, inner_outline, outer_outline):
+    # A sparse two-stage outline avoids the solid rectangular patches produced
+    # by fully dilating the larger temperature fonts. Gray hugs the glyph on
+    # four sides; black traces the outside corners and cardinal edges.
+    return render.Stack(children = [
+        render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (4, 2, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (2, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (2, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (3, 1, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (1, 3, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (3, 3, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
+        render.Padding(pad = (1, 2, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
+        render.Padding(pad = (3, 2, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
+        render.Padding(pad = (2, 1, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
+        render.Padding(pad = (2, 3, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
+        render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = font, color = color)),
+    ])
+
 def temperature_text(value, color):
     number = str(round_temp(value))
-    degree_x = len(number) * 6 + 1
+    degree_x = len(number) * 6 + 2
 
-    # Use one crisp edge around the large digits. The former two-pixel dilation
-    # crowded the counters and turned the border into uneven blocks on-panel.
+    # Faded gray directly around the digits, with a crisp black outer trace.
     return render.Stack(children = [
-        render.Padding(pad = (1, 3, 0, 0), child = complete_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE)),
+        render.Padding(pad = (0, 2, 0, 0), child = crisp_double_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
         render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
     ])
 
@@ -606,8 +624,8 @@ def legacy_forecast_temperature_text(value, temperature_color = FORECAST_ORANGE)
 def forecast_temperature_text(value, temperature_color = FORECAST_ORANGE):
     number = str(round_temp(value))
     return render.Stack(children = [
-        complete_outlined_text(number, FONT_FORECAST_TEMP, temperature_color, TEMPERATURE_EDGE),
-        render.Padding(pad = (len(number) * 5, 0, 0, 0), child = tiny_degree(temperature_color)),
+        crisp_double_outlined_text(number, FONT_FORECAST_TEMP, temperature_color, TEMPERATURE_EDGE, BLACK),
+        render.Padding(pad = (len(number) * 5 + 1, 1, 0, 0), child = tiny_degree(temperature_color)),
     ])
 
 def tiny_degree(color, edge = TEMPERATURE_EDGE):
@@ -886,7 +904,7 @@ def forecast_day(daily, timezone, index, width, units, night, text_color, kind_o
                 render.Padding(pad = (1, 10, 0, 0), child = forecast_scene(kind, 18, 16)),
                 render.Padding(
                     # Preserve one black row above the forecast temperature.
-                    pad = (4, 1, 0, 0),
+                    pad = (3, 0, 0, 0),
                     child = forecast_temperature_text(
                         daily["temperature_2m_max"][index],
                         temperature_color(daily["temperature_2m_max"][index], units, night),
