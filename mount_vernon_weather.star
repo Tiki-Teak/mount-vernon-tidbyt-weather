@@ -714,12 +714,15 @@ def wind_direction(degrees):
     return directions[index]
 
 def wind_direction_text(direction, color = OFF_WHITE):
-    # Keep the font's recognizable letterforms and insert a visible gap so
-    # combinations such as NW cannot visually merge into WW.
-    content = direction
-    if len(direction) == 2:
-        content = direction[0:1] + " " + direction[1:2]
-    return render.Text(content = content, font = FONT_TINY, color = color)
+    # Keep the original recognizable letterforms, with exactly two blank
+    # pixels between paired directions so NW does not visually merge into WW.
+    if len(direction) == 1:
+        return render.Text(content = direction, font = FONT_TINY, color = color)
+    return render.Row(children = [
+        render.Text(content = direction[0:1], font = FONT_TINY, color = color),
+        render.Box(width = 2, height = 1, color = BLACK),
+        render.Text(content = direction[1:2], font = FONT_TINY, color = color),
+    ])
 def metric_row(label, value, value_color = OFF_WHITE):
     return render.Row(
         children = [
