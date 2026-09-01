@@ -111,6 +111,7 @@ DEFAULT_LOCATION = """{
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 NWS_ALERTS_URL = "https://api.weather.gov/alerts/active"
+ALERT_INDICATOR_IMAGE = "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAbUExURQAAAKImM+Q7ROSQlf8ARBgUJeRaYuQ2P////2FYtZYAAAABdFJOUwBA5thmAAAAAWJLR0QIht6VegAAAAd0SU1FB+oJARQQAnFE74EAAABwSURBVDjLY2AYBSMNCBCQZ1QkoIDZkYACERf8djCLhAjhd4JrKH47FIEKDPA6wTUUvyNACvA5gtEFqMARrwKXELwKhFxAALcjmERAJrgI47bBBOQGPHYAnQBWoIDbCW5AK5xxO6JMTFBQ0FA8EZcCAOHeEqIRSIXiAAAAAElFTkSuQmCC"
 FONT_TINY = "tom-thumb"
 FONT_TEMP = "6x13"
 FONT_FORECAST_TEMP = "tb-8"
@@ -755,138 +756,33 @@ def metric_row(label, value, value_color = OFF_WHITE):
         ],
     )
 
-def alert_level(event):
-    name = str(event).lower()
-    if "warning" in name:
-        return "warning"
-    if "watch" in name:
-        return "watch"
-    return ""
-
-def alert_color(level):
-    return "#FF3030" if level == "warning" else "#FF9D24"
-
-def alert_priority(level):
-    return 2 if level == "warning" else (1 if level == "watch" else 0)
-
-def active_alerts(payload):
-    alerts = []
+def has_active_watch_or_warning(payload):
+    # RetroWx only needs a yes/no signal. NWS event names, severity labels,
+    # instructions, forecast badges, and takeover behavior are intentionally
+    # excluded from the presentation.
     for feature in payload.get("features", []):
         properties = feature.get("properties", {})
-        level = alert_level(properties.get("event", ""))
-        if level:
-            alerts.append({
-                "level": level,
-                "event": properties.get("event", "WEATHER ALERT"),
-                "severity": properties.get("severity", "Unknown"),
-                "urgency": properties.get("urgency", "Unknown"),
-                "certainty": properties.get("certainty", "Unknown"),
-                "onset": properties.get("onset", properties.get("effective", "")),
-                "ends": properties.get("ends", properties.get("expires", "")),
-                "headline": properties.get("headline", properties.get("event", "WEATHER ALERT")),
-                "instruction": properties.get("instruction", ""),
-            })
-    return alerts
+        event = str(properties.get("event", "")).lower()
+        if "warning" in event or "watch" in event:
+            return True
+    return False
 
-def highest_alert(alerts):
-    best = None
-    score = 0
-    for alert in alerts:
-        candidate = alert_priority(alert["level"])
-        if candidate > score:
-            best = alert
-            score = candidate
-    return best
+def alert_indicator():
+    # This is the user's complete 64x32 source canvas, reduced by exact
+    # nearest-neighbor pixel sampling. Its position and pixels are unchanged.
+    return render.Image(width = 64, height = 32, src = base64.decode(ALERT_INDICATOR_IMAGE))
 
-def takeover_alert(alert):
-    if alert == None or alert["level"] != "warning":
-        return False
-    return alert.get("severity", "") in ["Extreme", "Severe"] and alert.get("urgency", "") in ["Immediate", "Expected"]
-
-def forecast_alert_level(alerts, date):
-    best = ""
-    for alert in alerts:
-        start = str(alert.get("onset", ""))[:10]
-        end = str(alert.get("ends", ""))[:10]
-        if start and end and date >= start and date <= end and alert_priority(alert["level"]) > alert_priority(best):
-            best = alert["level"]
-    return best
-
-def warning_mark(color, small = False, event = ""):
-    if small:
-        return render.Stack(children = [
-            render.Box(width = 1, height = 4, color = color),
-            render.Padding(pad = (0, 5, 0, 0), child = render.Box(width = 1, height = 1, color = color)),
-        ])
-
-    # Custom pixel triangle; this is intentionally not an emoji.
-    children = [
-        render.Padding(pad = (4, 0, 0, 0), child = render.Box(width = 3, height = 1, color = color)),
-        render.Padding(pad = (3, 1, 0, 0), child = render.Box(width = 5, height = 1, color = color)),
-        render.Padding(pad = (2, 2, 0, 0), child = render.Box(width = 7, height = 2, color = color)),
-        render.Padding(pad = (1, 4, 0, 0), child = render.Box(width = 9, height = 2, color = color)),
-        render.Padding(pad = (0, 6, 0, 0), child = render.Box(width = 11, height = 2, color = color)),
-    ]
-    name = str(event).upper()
-    if "FLOOD" in name or "TSUNAMI" in name:
-        children.extend([
-            render.Padding(pad = (3, 3, 0, 0), child = render.Box(width = 5, height = 1, color = BLACK)),
-            render.Padding(pad = (2, 5, 0, 0), child = render.Box(width = 3, height = 1, color = BLACK)),
-            render.Padding(pad = (6, 5, 0, 0), child = render.Box(width = 3, height = 1, color = BLACK)),
-        ])
-    elif "THUNDER" in name:
-        children.extend([
-            render.Padding(pad = (5, 2, 0, 0), child = render.Box(width = 2, height = 2, color = BLACK)),
-            render.Padding(pad = (4, 4, 0, 0), child = render.Box(width = 2, height = 1, color = BLACK)),
-            render.Padding(pad = (3, 5, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
-        ])
-    elif "TORNADO" in name:
-        children.extend([
-            render.Padding(pad = (3, 2, 0, 0), child = render.Box(width = 5, height = 1, color = BLACK)),
-            render.Padding(pad = (4, 3, 0, 0), child = render.Box(width = 4, height = 1, color = BLACK)),
-            render.Padding(pad = (4, 4, 0, 0), child = render.Box(width = 3, height = 1, color = BLACK)),
-            render.Padding(pad = (5, 5, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
-        ])
-    else:
-        children.extend([
-            render.Padding(pad = (5, 2, 0, 0), child = render.Box(width = 1, height = 3, color = BLACK)),
-            render.Padding(pad = (5, 6, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
-        ])
-    return render.Stack(children = children)
-
-def short_alert_name(event):
-    name = str(event).upper()
-    for suffix in [" WARNING", " WATCH"]:
-        if name.endswith(suffix):
-            name = name[:-len(suffix)]
-    replacements = {
-        "SEVERE THUNDERSTORM": "SVR TSTORM",
-        "FLASH FLOOD": "FLASH FLD",
-        "WINTER STORM": "WINTER WX",
-    }
-    return replacements.get(name, name)
-
-def alert_page(alert, pulse = False):
-    level = alert["level"]
-    color = alert_color(level)
-    background = "#351010" if level == "warning" else "#2A1D09"
-    border = "#FF6A55" if pulse else color
-    title = short_alert_name(alert["event"])
-    action = "TAKE SHELTER" if "TORNADO" in title else ("SEEK HIGH GROUND" if "FLOOD" in title else "CHECK LOCAL ALERTS")
-    return render.Box(width = 64, height = 32, color = background, child = render.Stack(children = [
-        render.Box(width = 64, height = 2, color = border),
-        render.Padding(pad = (0, 30, 0, 0), child = render.Box(width = 64, height = 2, color = border)),
-        render.Box(width = 2, height = 32, color = border),
-        render.Padding(pad = (62, 0, 0, 0), child = render.Box(width = 2, height = 32, color = border)),
-        render.Padding(pad = (5, 10, 0, 0), child = warning_mark(color, False, alert["event"])),
+def alert_information_screen():
+    return render.Box(width = 64, height = 32, color = BLACK, child = render.Stack(children = [
+        alert_indicator(),
         render.Padding(pad = (20, 5, 0, 0), child = render.Column(children = [
-            render.Text(content = title[:10], font = FONT_TINY, color = BRIGHT_WHITE),
-            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = level.upper(), font = FONT_TINY, color = color)),
-            render.Padding(pad = (0, 3, 0, 0), child = render.Text(content = action[:10], font = FONT_TINY, color = OFF_WHITE)),
+            render.Text(content = "CHECK LOCAL", font = FONT_TINY, color = OFF_WHITE),
+            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = "WEATHER FOR", font = FONT_TINY, color = OFF_WHITE)),
+            render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = "ALERT INFO", font = FONT_TINY, color = OFF_WHITE)),
         ])),
     ]))
 
-def forecast_day(daily, timezone, index, width, units, night, text_color, kind_override = "", alert_level_value = ""):
+def forecast_day(daily, timezone, index, width, units, night, text_color, kind_override = ""):
     code = int(daily["weather_code"][index])
     label = time.parse_time(
         daily["time"][index],
@@ -911,10 +807,6 @@ def forecast_day(daily, timezone, index, width, units, night, text_color, kind_o
                     ),
                 ),
                 render.Padding(
-                    pad = (width - 3, 18, 0, 0),
-                    child = warning_mark(alert_color(alert_level_value), True) if alert_level_value else render.Box(width = 1, height = 1, color = BLACK),
-                ),
-                render.Padding(
                     pad = (0, 26, 0, 0),
                     child = render.Box(
                         width = width,
@@ -933,7 +825,7 @@ def forecast_day(daily, timezone, index, width, units, night, text_color, kind_o
         ),
     )
 
-def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_frame = 0, kind_override = "", temperature_override = None, alert = None, show_gust = False):
+def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_frame = 0, kind_override = "", temperature_override = None, alert_active = False, show_gust = False):
     night = int(current["is_day"]) != 1
     kind = kind_override if kind_override else weather_kind(current["weather_code"], not night)
     humidity = str(int(current["relative_humidity_2m"]))
@@ -998,24 +890,21 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                         ),
                     ),
                 ),
-                render.Padding(
-                    pad = (1, 20, 0, 0),
-                    child = warning_mark(alert_color(alert["level"]), False, alert["event"]) if alert != None else render.Box(width = 1, height = 1, color = BLACK),
-                ),
+                alert_indicator() if alert_active else render.Box(width = 1, height = 1, color = BLACK),
             ],
         ),
     )
 
-def forecast_screen(daily, timezone, units, night, text_color, alerts = []):
+def forecast_screen(daily, timezone, units, night, text_color):
     return render.Box(
         width = 64,
         height = 32,
         color = BLACK,
         child = render.Row(
             children = [
-                forecast_day(daily, timezone, 1, 21, units, night, text_color, "", forecast_alert_level(alerts, daily["time"][1])),
-                forecast_day(daily, timezone, 2, 21, units, night, text_color, "", forecast_alert_level(alerts, daily["time"][2])),
-                forecast_day(daily, timezone, 3, 22, units, night, text_color, "", forecast_alert_level(alerts, daily["time"][3])),
+                forecast_day(daily, timezone, 1, 21, units, night, text_color),
+                forecast_day(daily, timezone, 2, 21, units, night, text_color),
+                forecast_day(daily, timezone, 3, 22, units, night, text_color),
             ],
         ),
     )
@@ -1128,7 +1017,7 @@ def main(config):
     if air_response.status_code == 200:
         air = air_response.json().get("current", {})
 
-    alerts = []
+    alert_active = False
     alerts_url = NWS_ALERTS_URL + "?point=" + str(location["lat"]) + "," + str(location["lng"]) + "&status=actual&message_type=alert"
     alerts_response = http.get(
         alerts_url,
@@ -1139,8 +1028,7 @@ def main(config):
         ttl_seconds = 300,
     )
     if alerts_response.status_code == 200:
-        alerts = active_alerts(alerts_response.json())
-    primary_alert = highest_alert(alerts)
+        alert_active = has_active_watch_or_warning(alerts_response.json())
 
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
@@ -1168,33 +1056,24 @@ def main(config):
             scene_frame,
             kind,
             None,
-            primary_alert,
+            alert_active,
             show_gust,
         ))
     current_screen_frame = current_frames[-1]
-    outlook_screen = forecast_screen(daily, timezone, units, night, forecast_text_color, alerts)
-
-    # Severe/Extreme Immediate/Expected warnings take over RetroWx. The
-    # pulsing two-pixel border is the only animation needed on this page.
-    if takeover_alert(primary_alert):
-        emergency_frames = []
-        for i in range(12):
-            emergency_frames.append(alert_page(primary_alert, int(i / 3) % 2 == 1))
-        return render.Root(delay = 200, max_age = 300, show_full_animation = True, child = render.Animation(children = emergency_frames))
+    outlook_screen = forecast_screen(daily, timezone, units, night, forecast_text_color)
 
     frames = current_frames
     for y in [4, 8, 12, 16, 20, 24, 28]:
         frames.append(wipe_frame(current_screen_frame, outlook_screen, y))
     frames.extend(hold(outlook_screen, 30))
 
-    # Watches get one page per cycle; warnings repeat it to raise prominence.
-    if primary_alert != None:
-        alert_frames = []
-        for i in range(16 if primary_alert["level"] == "warning" else 10):
-            alert_frames.append(alert_page(primary_alert, int(i / 3) % 2 == 1))
-        frames.extend(alert_frames)
-        if primary_alert["level"] == "warning":
-            frames.extend(alert_frames)
+    # During any active NWS watch or warning, add one simple third page. The
+    # supplied alert symbol also remains over the normal current page.
+    if alert_active:
+        info_screen = alert_information_screen()
+        for y in [4, 8, 12, 16, 20, 24, 28]:
+            frames.append(wipe_frame(outlook_screen, info_screen, y))
+        frames.extend(hold(info_screen, 30))
 
     return render.Root(
         delay = 100,
