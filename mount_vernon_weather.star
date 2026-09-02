@@ -764,7 +764,7 @@ def wind_direction_text(direction, color = OFF_WHITE):
         render.Text(content = direction[1:2], font = FONT_TINY, color = color),
     ])
 
-def gust_wind_row(wind, gust, wind_suffix, direction, wind_color_value, text_color):
+def gust_wind_row(wind, gust, wind_suffix, direction, wind_color_value, gust_color_value, text_color):
     # A tightly packed 3x5 row keeps speed, unit, gust and direction on the
     # same baseline. Each group has exactly one blank pixel between it.
     return render.Row(
@@ -774,7 +774,7 @@ def gust_wind_row(wind, gust, wind_suffix, direction, wind_color_value, text_col
             render.Box(width = 1, height = 1, color = BLACK),
             render.Text(content = wind_suffix, font = FONT_TINY, color = text_color),
             render.Box(width = 1, height = 1, color = BLACK),
-            render.Text(content = "G" + gust, font = FONT_TINY, color = wind_color_value),
+            render.Text(content = "G" + gust, font = FONT_TINY, color = gust_color_value),
             render.Box(width = 1, height = 1, color = BLACK),
             wind_direction_text(direction, text_color),
         ],
@@ -873,6 +873,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
     current_color = temperature_color(shown_temperature, units, night)
     humidity_color = HUMIDITY_BLUE
     wind_speed_color = wind_color(current["wind_speed_10m"], "Miles per hour" if wind_suffix == "MPH" else "Knots", night)
+    gust_speed_color = wind_color(current.get("wind_gusts_10m", current["wind_speed_10m"]), "Miles per hour" if wind_suffix == "MPH" else "Knots", night)
     secondary_color = OFF_WHITE
     divider_color = NIGHT_MUTED if night else MUTED
 
@@ -905,7 +906,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                             children = [
                                 high_low_temperature_row(low, high, night),
                                 plain_small_text(humidity + "%", humidity_color),
-                                gust_wind_row(wind, gust, wind_suffix, direction, wind_speed_color, secondary_color) if show_gust else render.Padding(
+                                gust_wind_row(wind, gust, wind_suffix, direction, wind_speed_color, gust_speed_color, secondary_color) if show_gust else render.Padding(
                                     pad = (2, 0, 0, 0),
                                     child = render.Row(
                                         # Align the visible bottoms explicitly: the
