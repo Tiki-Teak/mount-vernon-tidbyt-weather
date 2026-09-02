@@ -1011,33 +1011,11 @@ def main(config):
     current = weather["current"]
     daily = weather["daily"]
 
-    # Open-Meteo air quality supplies the visibility-obstruction clues missing
-    # from WMO weather codes. A failed optional request leaves normal weather
-    # rendering intact.
+    # The precipitation preview does not use air-quality or alert data. Keeping
+    # those optional services out of this build prevents their timeouts from
+    # blocking the artwork preview.
     air = {}
-    air_url = (
-        AIR_QUALITY_URL +
-        "?latitude=" + str(location["lat"]) +
-        "&longitude=" + str(location["lng"]) +
-        "&current=pm2_5,pm10,us_aqi,aerosol_optical_depth,dust" +
-        "&timezone=auto"
-    )
-    air_response = http.get(air_url, ttl_seconds = 900)
-    if air_response.status_code == 200:
-        air = air_response.json().get("current", {})
-
     alert_active = False
-    alerts_url = NWS_ALERTS_URL + "?point=" + str(location["lat"]) + "," + str(location["lng"]) + "&status=actual&message_type=alert"
-    alerts_response = http.get(
-        alerts_url,
-        headers = {
-            "Accept": "application/geo+json",
-            "User-Agent": "RetroWx Tidbyt weather display",
-        },
-        ttl_seconds = 300,
-    )
-    if alerts_response.status_code == 200:
-        alert_active = has_active_watch_or_warning(alerts_response.json())
 
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
