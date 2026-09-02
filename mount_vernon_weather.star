@@ -417,10 +417,15 @@ def weather_scene(kind, scene_frame = 0):
     width = 33
     if kind in PREVIEW_PRECIP_FRAMES:
         source = PREVIEW_PRECIP_FRAMES[kind][scene_frame % len(PREVIEW_PRECIP_FRAMES[kind])]
-        return render.Image(
-            width = width,
-            height = 32,
-            src = base64.decode(source),
+        # Three blue pixels from the old rain source were accidentally baked
+        # into every precipitation frame. Cover only those fixed coordinates;
+        # all intentional rain and mixed-precipitation pixels remain intact.
+        return render.Stack(
+            children = [
+                render.Image(width = width, height = 32, src = base64.decode(source)),
+                render.Padding(pad = (4, 17, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
+                render.Padding(pad = (22, 16, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
+            ],
         )
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
     if kind in FINAL_PRECIP_FRAMES:
@@ -754,6 +759,23 @@ def wind_direction_text(direction, color = OFF_WHITE):
         render.Box(width = 1, height = 1, color = BLACK),
         render.Text(content = direction[1:2], font = FONT_TINY, color = color),
     ])
+
+def gust_wind_row(wind, gust, wind_suffix, direction, wind_color_value, text_color):
+    # A tightly packed 3x5 row keeps speed, unit, gust and direction on the
+    # same baseline. Each group has exactly one blank pixel between it.
+    return render.Row(
+        cross_align = "start",
+        children = [
+            render.Text(content = wind, font = FONT_TINY, color = wind_color_value),
+            render.Box(width = 1, height = 1, color = BLACK),
+            render.Text(content = wind_suffix, font = FONT_TINY, color = text_color),
+            render.Box(width = 1, height = 1, color = BLACK),
+            render.Text(content = "G" + gust, font = FONT_TINY, color = text_color),
+            render.Box(width = 1, height = 1, color = BLACK),
+            wind_direction_text(direction, text_color),
+        ],
+    )
+
 def metric_row(label, value, value_color = OFF_WHITE):
     return render.Row(
         children = [
@@ -879,18 +901,18 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
                             children = [
                                 high_low_temperature_row(low, high, night),
                                 plain_small_text(humidity + "%", humidity_color),
-                                render.Padding(
+                                gust_wind_row(wind, gust, wind_suffix, direction, wind_speed_color, secondary_color) if show_gust else render.Padding(
                                     pad = (2, 0, 0, 0),
                                     child = render.Row(
                                         # Align the visible bottoms explicitly: the
                                         # 7px number and 5px labels share one baseline.
                                         cross_align = "start",
                                         children = [
-                                            compact_secondary_temperature_text(gust if show_gust else wind, wind_speed_color),
+                                            compact_secondary_temperature_text(wind, wind_speed_color),
                                             render.Padding(pad = (1, 2, 0, 0), child = plain_small_text(wind_suffix, secondary_color)),
                                             render.Padding(
                                                 pad = (1, 2, 0, 0),
-                                                child = plain_small_text("G", secondary_color) if show_gust else wind_direction_text(direction, secondary_color),
+                                                child = wind_direction_text(direction, secondary_color),
                                             ),
                                         ],
                                     ),
@@ -1020,25 +1042,27 @@ def main(config):
     night = int(current["is_day"]) != 1
     forecast_text_color = NIGHT_MUTED if night else MUTED
 
-    # Precipitation artwork preview. Each condition remains visible for five
+    # Precipitation artwork preview. Each condition remains visible for three
     # seconds. Rain alternates between Greg's two position drawings every
-    # 300ms; snow and mixed precipitation use twelve independently phased
-    # opacity steps, completing a full fade cycle every 1.2 seconds.
+    # 300ms. Snow and mixed precipitation hold each independently phased
+    # opacity step for 200ms, producing a gentler 2.4-second fade cycle.
     preview_order = [
         "preview_rain",
         "preview_heavy_rain",
+        "preview_mixed",
         "preview_snow",
         "preview_heavy_snow",
-        "preview_mixed",
     ]
     frames = []
+    preview_gust_delta = number_or(current.get("wind_gusts_10m")) - number_or(current.get("wind_speed_10m"))
+    preview_show_gust = preview_gust_delta >= (6 if wind_suffix == "KT" else 7)
     for preview_kind in preview_order:
         source_count = len(PREVIEW_PRECIP_FRAMES[preview_kind])
-        for i in range(50):
+        for i in range(30):
             if preview_kind == "preview_rain" or preview_kind == "preview_heavy_rain":
                 scene_frame = int(i / 3) % source_count
             else:
-                scene_frame = i % source_count
+                scene_frame = int(i / 2) % source_count
             frames.append(current_screen(
                 current,
                 daily,
@@ -1049,7 +1073,7 @@ def main(config):
                 preview_kind,
                 None,
                 False,
-                False,
+                preview_show_gust,
             ))
     return render.Root(
         delay = 100,
@@ -1071,7 +1095,7 @@ def main(config):
         else:
             scene_frame = 0
         gust_delta = number_or(current.get("wind_gusts_10m")) - number_or(current.get("wind_speed_10m"))
-        show_gust = gust_delta >= (6 if wind_suffix == "KT" else 7) and (int(i / 8) % 2 == 1)
+        show_gust = gust_delta >= (6 if wind_suffix == "KT" else 7)
         current_frames.append(current_screen(
             current,
             daily,
