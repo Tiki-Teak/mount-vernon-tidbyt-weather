@@ -15,6 +15,15 @@ load("encoding/json.star", "json")
 load("http.star", "http")
 load("render.star", "render")
 
+# Static 18x16 forecast precipitation scenes derived from the same retro
+# pencil cloud used by Current Conditions.
+FORECAST_PRECIP_SCENES = {
+    "rain": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAACHklEQVR42q2STUjTcRjHP7/ff1tOpxbMGWpTMhMVU3JQl15UBDt0qS4ZVHTs4MFTl6ioboGdokMgUaNLl4hOvRysDDRIYmhKA2Vuvkxd6tz+8//y67AyW0HCeuCBLw9fvs/zgQdA/WwhxKZ2uktV0+ETqq//iXo5tq6u3gmqurYOBSgppWKLF1Dih0BIibJt9jU1Eei+yLnT7TTsbWQ4YmGuz1K8q4KpiRVuXbvM0vgzABAClMpKQAmpoWyLsqpazl55yJnOAOnVKFW+IoRWyuM30zx/P0HR+jLHjzSyGJ9hoL8PKzG9GaYhxHWUjSYddF24SW9PO4lEjJHQPImVFEOhWSbjis6An8llk8rdfryuPUxlStCjQ1imgRBkgwrcxdR03+bQgRZWTJ2JyShlVfV8+PKNB08HGQ0vEg5HaGutx43O4NtPVNbWYW8ssBQZRwiZRfPVtHCy9z6lbg+PXn/GWk2AYeAtdFBcU41TpYnGFknhRtcdeMvL6WitYGwsxMjAeWzTyAZVn7pL48GjZMLviMzNE4vr7BAWtrMAYRtITQPbJL2WxLnTj9RsSK7iaTiGPveR+KsbCIRQWkk11v5LuAo9+FLDkI5hGDYuh4YADENHIsHhRKgNbJePZFkX5kaSzOg9rLUZ2PoLgGoOKpU7+1vn+iQ5NfsinDuiOajYju+f2709X7dzZf5Yf6Dlg8V/wvqFlg/Wb2j5Yn0HmvdL0wnsL0sAAAAASUVORK5CYII=",
+    "rain_heavy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAACFklEQVR42q2SS0iUYRSGn+/7ZybHa8HMGGoqmYmKKSnUpouKYIs21SaDipYtXLhqExXVLrBVtAgkStq0iWjVZWFloEESoikNKOOM2qiT4+j8+l9Oi1EpWmVz4MDLy+E9PPACyNYqpba1118k9UdPSU/vM3k9tirX7/VLdXObAKK1Fn67BURtCpTWiOtyoL6els7LXDjbSu3+OoYiDvbqLAV7SpiaWObOjassjr8AAKVAJCMBUdpAXIdgWRXnrz3mXHsL6WSUslAeyiji6btpXn6cIG91iZPH6liIz9DX24OTmN4OM1DqJuJiaA8dl27T3dVKIhFjeHSexPIag6OzTMaF9pZyJpdsSveWE/DtY2q9EDM6iGNbKEUmKMdfQGXnXY4camTZNpmYjBIsq+HTt588ej7ASHiBcDhCc1MNfkwG3n+htKoad+MHi5FxlNIZtFBlI6e7H1Lkz+fJ2684yQRYFoFcDwWVFXglTTS2wBp+TNNDoLiYtqYSxsZGGe67iGtbmaCKM/epO3yc9fAHInPzxOImu5SD681BuRbaMMC1Sa+k8O4uRxsupJLk157AnPtM/M0tFEqJUViBc/AKvtx8QmtDkI5hWS4+j4ECLMtEo8HjRckGri9EKtiBvZFifeQBzsoMbPWgoV/+6MW/+prNmX0V3pI09As78f/6Fuj6Ljvw/x9rGy0bWGQJS8gGFiA6W1i/ANGraL9wVLqDAAAAAElFTkSuQmCC",
+    "snow": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAACEUlEQVR42rWRT0jTcRjGP9/vb1tOnRboDDU3MhM3SEmhLv1REezQpbqUUNGxgwdPXaKiugV2ig6BREWXLtGxPwcrAw2SGNoGA2Vuapsu5/783O/Pt8NSOpgG2QMP73N4eHje9wVQ6xRCbGinu1oFj55SQ8PP1eupnLp+75lq6exRgJJSKn7zAkr8EggpUbbNgWCQrv7LDJztpm1/gPGYhZmbx7OnnpnwCnduXGVp+iUACAFKlSSghNRQtkVtYzPnrz3mXG8XhUycRm8FQqvm6btZXn0MU5Fb5uSxAKnkHCPDQ1jp2Y0wDSFuomw06aDv0m0GL3STTieYCC2SXskzFponklT0djURWTZp2NtEjWsfM2tV6PExLNNACEpBZW4P/v67HDnUzoqpE47EqW1s5dO3Hzx6McpkNEU0GqOzoxU3OqPvv9DQ3IJd/M5SbBohZGk1r7+d04MPqXZX8uTtV6xMGgyDmnIHHr8PpyoQT6TI40bXHdTU1dHTUc/UVIiJkYvYplEK8p25T+DwcdaiH4gtLJJI6uwSFrazDGEbSE0D26SwmsW5uwmp2ZDNUNl2An3hM8k3txAIobQqH9bBK7jKK/Hmx6GQwDBsXA4NARiGjkSCw4lQRWyXl2xtH2Yxy9rkA6zVOTbe/6+Q7BC2DMoV1abzT1DbMVdU23q2vNFmDSpc4v82+qsbbdVwHTv2/p8RuQ7I29AwCQAAAABJRU5ErkJggg==",
+    "snow_heavy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAACMklEQVR42p2TTUjTYRzHP8/z35bztcDNUFPJTKaQkoO69OJEsEOX6lJCRccOHjx1iYrqFtgpOgQSFV26RMdqBysDDZIQl8JAmZva1KVu7u/+L0+H5ZgDa/WFL9/fA8/z/b08zwOgtimEyMVOd5VqP35GDQ69VG+nUurmgxeqpSugACWlVOTtBZT4HSCkRNk2h9rb8fddpf98N76DbYxFLMzUAhX7apmdXuPereushF4DgBCgVDYElJAayrbw1Ddz8cZTLvT4Sa9HqfeWIbQqngfnePNpmrLUKqdPtLEcn2d4aBArMZcz0xDiNspGkw56r9xl4FI3iUSM8cklEmubjE4uMBNX9PgbmFk1qdvfQLXrALNblejRUSzTQAiyRiXuCpr67nPsSAdrps70TBRPfSufv//kyasRJsLLhMMRujpbcaMz8uErdc0t2JkfrERCCCGzrXmbOjg78JgqdznP3n/DWk+AYVBd6qCiqRGnShONLbOJG113UF1TQ6CzlqmpScaHL2ObRtao8dxD2o6eZCv8kcjiErG4zh5hYTtLELaB1DSwTdIbSZx7G5CaDcl1yn2n0Be/EH93B4EQSqtsxDp8DVdpOd7NMUjHMAwbl0NDAIahI5HgcCJUBtvlJenpxcwk2Zp4hLUxD/lv4V+Yyqgda0kegqE4xSCVUTsUQBaa5JsVHtjWMpfYodvIlRcMxYtqYxf+eQ6F3C1x7q/9bSaFbeSPIODzQDE3U6j/XVEx+AVKrFs2UoavJwAAAABJRU5ErkJggg==",
+}
+
 # Final 33x28 illustrated scene assets. These remain embedded so Greg's
 # installation continues to require only this single .star file.
 FINAL_SCENES = {
@@ -404,7 +413,16 @@ def forecast_icon(kind, width = 11, height = 11):
 def forecast_scene(kind, width = 21, height = 17):
     # The forecast uses the same illustrated artwork as Current Conditions,
     # scaled to fill its column and held completely still.
-    source = FINAL_FORECAST_SCENES[kind] if kind in FINAL_FORECAST_SCENES else (FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind])
+    if kind == "rain_light" or kind == "rainy":
+        source = FORECAST_PRECIP_SCENES["rain"]
+    elif kind == "rain_heavy":
+        source = FORECAST_PRECIP_SCENES["rain_heavy"]
+    elif kind == "snow_light" or kind == "snow":
+        source = FORECAST_PRECIP_SCENES["snow"]
+    elif kind == "snow_heavy":
+        source = FORECAST_PRECIP_SCENES["snow_heavy"]
+    else:
+        source = FINAL_FORECAST_SCENES[kind] if kind in FINAL_FORECAST_SCENES else (FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind])
     if kind == "sunny":
         source = FINAL_SUN_FRAMES[0]
     elif kind == "partly_cloudy":
