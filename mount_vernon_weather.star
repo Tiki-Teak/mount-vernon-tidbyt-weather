@@ -417,7 +417,7 @@ def weather_scene(kind, scene_frame = 0):
     width = 33
     if kind in PREVIEW_PRECIP_FRAMES:
         source = PREVIEW_PRECIP_FRAMES[kind][scene_frame % len(PREVIEW_PRECIP_FRAMES[kind])]
-        # Six cyan/blue pixels from the old rain source were accidentally baked
+        # Seven cyan/blue pixels from the old rain source were accidentally baked
         # into every precipitation frame. Cover only those fixed coordinates;
         # all intentional rain and mixed-precipitation pixels remain intact.
         return render.Stack(
@@ -425,11 +425,10 @@ def weather_scene(kind, scene_frame = 0):
                 render.Image(width = width, height = 32, src = base64.decode(source)),
                 render.Padding(pad = (26, 2, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
                 render.Padding(pad = (4, 15, 0, 0), child = render.Box(width = 1, height = 3, color = BLACK)),
-                render.Padding(pad = (22, 16, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
-                # Remove the exposed cap of a rain streak whose remaining
-                # pixels sit behind the current-temperature overlay. Without
-                # its continuation, the cap looks like a floating cyan glitch.
-                render.Padding(pad = (23, 14, 0, 0), child = render.Box(width = 3, height = 6, color = BLACK)) if kind == "preview_rain" or kind == "preview_heavy_rain" else render.Box(width = 1, height = 1, color = BLACK),
+                # The x=22 artifact is three pixels tall. Masking only its
+                # lower two pixels left the top pixel looking like a random
+                # cyan dot beside Greg's real third rain column.
+                render.Padding(pad = (22, 15, 0, 0), child = render.Box(width = 1, height = 3, color = BLACK)),
             ],
         )
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
