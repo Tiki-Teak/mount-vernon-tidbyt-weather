@@ -426,6 +426,10 @@ def weather_scene(kind, scene_frame = 0):
                 render.Padding(pad = (26, 2, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
                 render.Padding(pad = (4, 15, 0, 0), child = render.Box(width = 1, height = 3, color = BLACK)),
                 render.Padding(pad = (22, 16, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
+                # Remove the exposed cap of a rain streak whose remaining
+                # pixels sit behind the current-temperature overlay. Without
+                # its continuation, the cap looks like a floating cyan glitch.
+                render.Padding(pad = (23, 14, 0, 0), child = render.Box(width = 3, height = 6, color = BLACK)) if kind == "preview_rain" or kind == "preview_heavy_rain" else render.Box(width = 1, height = 1, color = BLACK),
             ],
         )
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
