@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Download weather app
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Pixlet
         shell: bash
@@ -33,7 +33,18 @@ jobs:
 
       - name: Render current weather
         shell: bash
-        run: ./pixlet render mount_vernon_weather.star
+        run: |
+          for attempt in 1 2 3 4; do
+            if ./pixlet render mount_vernon_weather.star; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 4 ]; then
+              echo "Weather service timed out; retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
+          echo "Render failed after four attempts."
+          exit 1
 
       - name: Update Tidbyt installation
         env:
