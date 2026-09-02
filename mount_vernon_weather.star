@@ -417,13 +417,13 @@ def weather_scene(kind, scene_frame = 0):
     width = 33
     if kind in PREVIEW_PRECIP_FRAMES:
         source = PREVIEW_PRECIP_FRAMES[kind][scene_frame % len(PREVIEW_PRECIP_FRAMES[kind])]
-        # Three blue pixels from the old rain source were accidentally baked
+        # Five blue pixels from the old rain source were accidentally baked
         # into every precipitation frame. Cover only those fixed coordinates;
         # all intentional rain and mixed-precipitation pixels remain intact.
         return render.Stack(
             children = [
                 render.Image(width = width, height = 32, src = base64.decode(source)),
-                render.Padding(pad = (4, 17, 0, 0), child = render.Box(width = 1, height = 1, color = BLACK)),
+                render.Padding(pad = (4, 15, 0, 0), child = render.Box(width = 1, height = 3, color = BLACK)),
                 render.Padding(pad = (22, 16, 0, 0), child = render.Box(width = 1, height = 2, color = BLACK)),
             ],
         )
@@ -770,7 +770,7 @@ def gust_wind_row(wind, gust, wind_suffix, direction, wind_color_value, text_col
             render.Box(width = 1, height = 1, color = BLACK),
             render.Text(content = wind_suffix, font = FONT_TINY, color = text_color),
             render.Box(width = 1, height = 1, color = BLACK),
-            render.Text(content = "G" + gust, font = FONT_TINY, color = text_color),
+            render.Text(content = "G" + gust, font = FONT_TINY, color = wind_color_value),
             render.Box(width = 1, height = 1, color = BLACK),
             wind_direction_text(direction, text_color),
         ],
