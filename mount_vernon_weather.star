@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-09-03-retrowx-v43-restored-agreed-sun
+# Build: 2026-09-03-retrowx-v44-current-temperature-shadow
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -602,45 +602,21 @@ def crisp_double_outlined_text(content, font, color, inner_outline, outer_outlin
         render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = font, color = color)),
     ])
 
-def current_temperature_outlined_text(content, font, color, inner_outline, outer_outline):
-    # Keep the agreed faded-gray edge, but make it continuous around every
-    # corner of the large current-temperature digits. A complete one-pixel
-    # black perimeter sits immediately outside that edge.
+def current_temperature_shadow_text(content, font, color, shadow):
+    # Match the restrained down-right shadow used by the high/low and wind
+    # numbers. This preserves the glyph instead of surrounding it with a halo.
     return render.Stack(children = [
-        render.Padding(pad = (0, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (1, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (0, 2, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (0, 1, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (0, 3, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (0, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (1, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (2, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (2, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (3, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (3, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (4, 0, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (4, 1, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (4, 2, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (4, 3, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (4, 4, 0, 0), child = render.Text(content = content, font = font, color = outer_outline)),
-        render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (2, 1, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (3, 1, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (1, 2, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (3, 2, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (1, 3, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (2, 3, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (3, 3, 0, 0), child = render.Text(content = content, font = font, color = inner_outline)),
-        render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = font, color = color)),
+        render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = font, color = shadow)),
+        render.Text(content = content, font = font, color = color),
     ])
 
 def temperature_text(value, color):
     number = str(round_temp(value))
     degree_x = len(number) * 6 + 2
 
-    # Faded gray directly around the digits, with a crisp black outer trace.
+    # Use the same one-pixel down-right faded shadow as the other numeric rows.
     return render.Stack(children = [
-        render.Padding(pad = (0, 2, 0, 0), child = current_temperature_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
+        render.Padding(pad = (0, 2, 0, 0), child = current_temperature_shadow_text(number, FONT_TEMP, color, TEMPERATURE_EDGE)),
         render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
     ])
 
