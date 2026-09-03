@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-08-31-retrowx-v41-clear-wind-direction
+# Build: 2026-09-03-retrowx-v42-observed-local-wind
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -122,6 +122,7 @@ DEFAULT_LOCATION = """{
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 NWS_ALERTS_URL = "https://api.weather.gov/alerts/active"
+MOUNT_VERNON_OBSERVATION_URL = "https://mesowest.utah.edu/cgi-bin/droman/meso_table_mesodyn.cgi?stn=F7915&unit=0&time=LOCAL&hours=1&past=0&order=1"
 ALERT_INDICATOR_IMAGE = "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAbUExURQAAAKImM+Q7ROSQlf8ARBgUJeRaYuQ2P////2FYtZYAAAABdFJOUwBA5thmAAAAAWJLR0QIht6VegAAAAd0SU1FB+oJARQQAnFE74EAAABwSURBVDjLY2AYBSMNCBCQZ1QkoIDZkYACERf8djCLhAjhd4JrKH47FIEKDPA6wTUUvyNACvA5gtEFqMARrwKXELwKhFxAALcjmERAJrgI47bBBOQGPHYAnQBWoIDbCW5AK5xxO6JMTFBQ0FA8EZcCAOHeEqIRSIXiAAAAAElFTkSuQmCC"
 FONT_TINY = "tom-thumb"
 FONT_TEMP = "6x13"
@@ -346,6 +347,36 @@ def weather_kind(code, is_day = True):
 
 def number_or(value, fallback = 0):
     return fallback if value == None else float(value)
+
+def mesowest_summary_value(body, label, ending):
+    label_parts = body.split("<b>" + label + "</b>")
+    if len(label_parts) < 2:
+        return None
+    value_parts = label_parts[1].split("<b>")
+    if len(value_parts) < 2:
+        return None
+    ending_parts = value_parts[1].split(ending)
+    return ending_parts[0].strip() if len(ending_parts) >= 2 else None
+
+def parse_mount_vernon_wind(body):
+    # MesoWest's server-rendered summary publishes FW7915's latest observed
+    # speed, measured gust, and direction. It normally updates every 15
+    # minutes, substantially more often than the nearby airport METAR.
+    speed_text = mesowest_summary_value(body, "Wind Speed", "&nbsp;mph")
+    gust_text = mesowest_summary_value(body, "Wind Gust", "&nbsp;mph")
+    direction = mesowest_summary_value(body, "Wind Direction", "</b>")
+    if speed_text == None or gust_text == None or direction == None:
+        return None
+
+    valid_directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+    if not speed_text.replace(".", "").isdigit() or not gust_text.replace(".", "").isdigit() or direction not in valid_directions:
+        return None
+
+    speed_mph = float(speed_text)
+    gust_mph = float(gust_text)
+    if speed_mph < 0 or speed_mph > 150 or gust_mph < speed_mph or gust_mph > 200:
+        return None
+    return {"speed_mph": speed_mph, "gust_mph": gust_mph, "direction": direction}
 
 def refined_current_kind(current, air = {}):
     is_day = int(current["is_day"]) == 1
@@ -883,7 +914,7 @@ def current_screen(current, daily, units, text_color, wind_suffix = "KT", scene_
     kind = kind_override if kind_override else weather_kind(current["weather_code"], not night)
     humidity = str(int(current["relative_humidity_2m"]))
     wind = str(round_temp(current["wind_speed_10m"]))
-    direction = wind_direction(current["wind_direction_10m"])
+    direction = current.get("observed_wind_direction", wind_direction(current["wind_direction_10m"]))
     gust = str(round_temp(current.get("wind_gusts_10m", current["wind_speed_10m"])))
     high = str(round_temp(daily["temperature_2m_max"][0]))
     low = str(round_temp(daily["temperature_2m_min"][0]))
@@ -1055,6 +1086,23 @@ def main(config):
     timezone = weather.get("timezone", location.get("timezone", "America/Los_Angeles"))
     current = weather["current"]
     daily = weather["daily"]
+
+    # Prefer the nearby FW7915 Mount Vernon station for current observed wind.
+    # If its summary is unavailable or changes format, retain Open-Meteo's
+    # sustained wind while suppressing the forecast model's gust value.
+    current["wind_gusts_10m"] = current["wind_speed_10m"]
+    wind_response = http.get(MOUNT_VERNON_OBSERVATION_URL, ttl_seconds = 300)
+    if wind_response.status_code == 200:
+        observed_wind = parse_mount_vernon_wind(wind_response.body())
+        if observed_wind != None:
+            observed_speed = float(observed_wind["speed_mph"])
+            observed_gust = float(observed_wind["gust_mph"])
+            if wind_suffix == "KT":
+                observed_speed = observed_speed * 0.868976
+                observed_gust = observed_gust * 0.868976
+            current["wind_speed_10m"] = observed_speed
+            current["wind_gusts_10m"] = observed_gust
+            current["observed_wind_direction"] = observed_wind["direction"]
 
     # Open-Meteo air quality supplies the visibility-obstruction clues missing
     # from WMO weather codes. A failed optional request leaves normal weather
