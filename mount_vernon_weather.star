@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-09-04-retrowx-v45-shaded-windmill-scenes
+# Build: 2026-09-04-retrowx-v45-windmill-preview
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -1083,6 +1083,68 @@ def error_screen():
     )
 
 def main(config):
+    # Standalone preview: no weather or station requests are made. It cycles
+    # the three current wind animations, then holds one forecast page showing
+    # the matching static X-position icons from light through high wind.
+    sample_daily = {
+        "time": ["2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07"],
+        "weather_code": [0, 0, 0, 0],
+        "temperature_2m_max": [70, 68, 66, 64],
+        "temperature_2m_min": [52, 50, 49, 48],
+        "rain_sum": [0, 0, 0, 0],
+        "showers_sum": [0, 0, 0, 0],
+        "snowfall_sum": [0, 0, 0, 0],
+        "wind_speed_10m_max": [0, 16, 22, 30],
+        "wind_gusts_10m_max": [0, 20, 27, 36],
+    }
+    preview_specs = [
+        ("wind_breezy", 16, 20, 8),
+        ("windy", 22, 27, 5),
+        ("wind_high", 30, 36, 3),
+    ]
+    preview_frames = []
+    for kind, wind, gust, cadence in preview_specs:
+        sample_current = {
+            "is_day": 1,
+            "weather_code": 0,
+            "temperature_2m": 61,
+            "relative_humidity_2m": 68,
+            "wind_speed_10m": wind,
+            "wind_direction_10m": 90,
+            "wind_gusts_10m": gust,
+            "observed_wind_direction": "E",
+        }
+        for i in range(40):
+            preview_frames.append(current_screen(
+                sample_current,
+                sample_daily,
+                "Fahrenheit",
+                OFF_WHITE,
+                "KT",
+                int(i / cadence) % 2,
+                kind,
+                None,
+                False,
+                True,
+            ))
+
+    preview_forecast = forecast_screen(
+        sample_daily,
+        "America/Los_Angeles",
+        "Fahrenheit",
+        False,
+        OFF_WHITE,
+    )
+    preview_frames.extend(hold(preview_forecast, 60))
+    return render.Root(
+        delay = 100,
+        max_age = 600,
+        show_full_animation = True,
+        child = render.Animation(children = preview_frames),
+    )
+
+    # The live implementation remains below so this preview retains the same
+    # complete, self-contained artwork set as the production file.
     location = json.decode(config.get("location", DEFAULT_LOCATION))
     units = config.get("units", "Fahrenheit")
     unit_parameter = "celsius" if units == "Celsius" else "fahrenheit"
