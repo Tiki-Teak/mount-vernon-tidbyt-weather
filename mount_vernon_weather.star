@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-09-03-retrowx-v44-current-temperature-shadow
+# Build: 2026-09-04-retrowx-v45-shaded-windmill-scenes
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -127,6 +127,16 @@ ALERT_INDICATOR_IMAGE = "iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgBAMAAABQs2O3AAAAIGNIUk0
 FONT_TINY = "tom-thumb"
 FONT_TEMP = "6x13"
 FONT_FORECAST_TEMP = "tb-8"
+WIND_SCENE_FRAMES = {
+    "wind_breezy": ["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"],
+    "windy": ["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"],
+    "wind_high": ["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"],
+}
+FORECAST_WIND_SCENES = {
+    "wind_breezy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABXUlEQVR42pWSv0tCURTHP4aCBIKC4Hs09aCCHMRBaWhweqOBYA05RRC2WFNBKI8oaKspKaIphH4g1NhfEA0vKqzN9Tn44w9oOE3vYfnU5xcu3HsP53PPOd/rY4xqD4/y/vGJoijsbm/6mES5uCY2pP9+r3IkAIaeFNfESKosykpNIqmyABSXFsWG/ZehJ+ViNS2ukP6zVjJFK5niBrMhp+dXwqQySUuPjEhiffLkfvXICCAm6ZGgqWFO2ftwYgaTNLNMO3G31kbaaehJ+Vlew7JaqKrC9+0l9UbTNW9qFMR4fnMgAPVG05eLa95bM/SkqOEAgAMByOYLEgsFcfsariA1HGDr7vVP+ZbVIhqNUn35IhYKendro7gjwLA1IL8HoNOeZbW4rp55n1E2X3Be7Z9Ru90eiI+tyE46rux7GoXfrZpet8Pc/AIAB4cnzhewW+t1O2TzBXm6v3EM+QXB7JJB24AM3QAAAABJRU5ErkJggg==",
+    "windy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABbUlEQVR42pWSv0tCURTHv0+UJBAUBN9r60FFOYiD0tDQ9LYUBAvSKYKwxZoKQnlEQVtNSVFN8aAfCDY2NUbDCwtrc2h5b/DHH9Bwmu7ladenHrjDPfeez/meHxKGmPFYo/rHJ2RZxu72poRxLBNViUGc/r3yEQGArsVJGBhKlEhOGxRKlAgACosLxGD9pmtxulhNkhDivKtFk9SiSSIYg5yeXxHGNRNJ6mKZKJZzDfY6VU1MzcOurfc0dBqTCOEFZj3pnrG/NDlt0Mr1D/dRLEdMFfOJSnMdp67F6XdpDZZlQ1FkfN9dotpoCuM8bhD9+Z1DAKDaaEqZqCr87xkEUYI+AOAQAEhl8xQJ+CFaDSFICfqwdf/WI9+ybITDYVRevxAJ+Ecf+0ZhhwAMOuLxDwHy8izLxk3lbPQepbJ5ntXZo1ar9e99qCIWdFzeH6kVXpGabqeNmdk5AMDB4QlfAVZat9NGKpunp4dbPpA/H2+cq1zZfgQAAAAASUVORK5CYII=",
+    "wind_high": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABiklEQVR42pWSu0vDYBTFT0pBERwCgaZuBlQ0YKnQ4uDg1ElbKK2C7SSC1KU6KUhL8AFu6mJR1EkCPijUrU6OohCpUt0y6JAMbfMHOFynhLR+9nEhQ86X+/vOvSccOpR6V6LK2ztEUcTG2gqHXiouS2RD3Ppmfo8AQIkEidnIh3IkxlTiQzkCgMz0BNmw1lIiQTpdCBMT4n6XshpJWY1YMBtyeHJO6LU0hMnCLFEg1bbZ63bVNzQOs7TUtNBhDIDHI7RKuP2NraOJMZXmL74cjQIpsl3ZGmu0tnEqkSD9zCzCMEz4/SI+r89QrOrMPo87NTGmkhuiPLw6EAAoVnUuLkvsHfGhHFkvu5w7NXlSgL+cAAAHAgDRZJp83xriskTFqt7kyuOGAIB+PMXNlRNYvXlu0g3DhCAIKDx9wDfY333sy5l1AvDfw46/A9AZzzBMXBaOmN95WGI0mXZude+oVqv9Oe/oyG7az291tQovy43VqGNkdAwAsL1z4PwC9mhWo45oMk33t1dOIL8cf7FdYIVVTAAAAABJRU5ErkJggg==",
+}
 BLACK = "#000000"
 BLUE = "#00B8FF"
 BLUE_GLOW = "#004D80"
@@ -418,10 +428,19 @@ def forecast_weather_kind(daily, index):
     rain = number_or(daily.get("rain_sum", [0, 0, 0, 0])[index]) + number_or(daily.get("showers_sum", [0, 0, 0, 0])[index])
     snow = number_or(daily.get("snowfall_sum", [0, 0, 0, 0])[index])
     gust = number_or(daily.get("wind_gusts_10m_max", [0, 0, 0, 0])[index])
+    wind = number_or(daily.get("wind_speed_10m_max", [0, 0, 0, 0])[index])
     if rain > 0 and snow > 0:
         return "wintry_mix"
     if kind == "snow_heavy" and gust >= 25:
         return "blowing_snow"
+    wet = kind in ["rain_light", "rainy", "rain_heavy", "snow_light", "snow", "snow_heavy", "freezing_rain", "storm", "storm_severe"]
+    if not wet:
+        if gust >= 35 or wind >= 28:
+            return "wind_high"
+        if gust >= 25 or wind >= 20:
+            return "windy"
+        if gust >= 20 or wind >= 15:
+            return "wind_breezy"
     return kind
 
 def current_icon(kind, width = 24, height = 22):
@@ -452,6 +471,8 @@ def forecast_scene(kind, width = 21, height = 17):
         source = FORECAST_PRECIP_SCENES["snow"]
     elif kind == "snow_heavy":
         source = FORECAST_PRECIP_SCENES["snow_heavy"]
+    elif kind in FORECAST_WIND_SCENES:
+        source = FORECAST_WIND_SCENES[kind]
     else:
         source = FINAL_FORECAST_SCENES[kind] if kind in FINAL_FORECAST_SCENES else (FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind])
     if kind == "sunny":
@@ -481,7 +502,9 @@ def weather_scene(kind, scene_frame = 0):
             ],
         )
     source = FINAL_SCENES[kind] if kind in FINAL_SCENES else WEATHER_SCENES[kind]
-    if kind in FINAL_PRECIP_FRAMES:
+    if kind in WIND_SCENE_FRAMES:
+        source = WIND_SCENE_FRAMES[kind][scene_frame % len(WIND_SCENE_FRAMES[kind])]
+    elif kind in FINAL_PRECIP_FRAMES:
         source = FINAL_PRECIP_FRAMES[kind][scene_frame % len(FINAL_PRECIP_FRAMES[kind])]
     elif kind == "sunny":
         source = FINAL_SUN_FRAMES[scene_frame % len(FINAL_SUN_FRAMES)]
@@ -602,21 +625,14 @@ def crisp_double_outlined_text(content, font, color, inner_outline, outer_outlin
         render.Padding(pad = (2, 2, 0, 0), child = render.Text(content = content, font = font, color = color)),
     ])
 
-def current_temperature_shadow_text(content, font, color, shadow):
-    # Match the restrained down-right shadow used by the high/low and wind
-    # numbers. This preserves the glyph instead of surrounding it with a halo.
-    return render.Stack(children = [
-        render.Padding(pad = (1, 1, 0, 0), child = render.Text(content = content, font = font, color = shadow)),
-        render.Text(content = content, font = font, color = color),
-    ])
-
 def temperature_text(value, color):
     number = str(round_temp(value))
     degree_x = len(number) * 6 + 2
 
-    # Use the same one-pixel down-right faded shadow as the other numeric rows.
+    # Colored digits, a subtle faded-gray inner treatment, then a black outer
+    # trace so artwork never touches the temperature color directly.
     return render.Stack(children = [
-        render.Padding(pad = (0, 2, 0, 0), child = current_temperature_shadow_text(number, FONT_TEMP, color, TEMPERATURE_EDGE)),
+        render.Padding(pad = (0, 2, 0, 0), child = crisp_double_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
         render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
     ])
 
@@ -1079,7 +1095,7 @@ def main(config):
         "?latitude=" + str(location["lat"]) +
         "&longitude=" + str(location["lng"]) +
         "&current=temperature_2m,relative_humidity_2m,is_day,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,cloud_cover,precipitation,rain,showers,snowfall,visibility" +
-        "&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_gusts_10m_max,precipitation_probability_max,rain_sum,showers_sum,snowfall_sum" +
+        "&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_gusts_10m_max,precipitation_probability_max,rain_sum,showers_sum,snowfall_sum" +
         "&temperature_unit=" + unit_parameter +
         "&wind_speed_unit=" + wind_parameter +
         "&timezone=auto" +
@@ -1151,6 +1167,12 @@ def main(config):
     for i in range(30):
         if kind in FINAL_PRECIP_FRAMES:
             scene_frame = i % len(FINAL_PRECIP_FRAMES[kind])
+        elif kind == "wind_breezy":
+            scene_frame = int(i / 8) % 2
+        elif kind == "windy":
+            scene_frame = int(i / 5) % 2
+        elif kind == "wind_high":
+            scene_frame = int(i / 3) % 2
         elif kind == "sunny" or kind == "partly_cloudy":
             scene_frame = int(i / 8) % 2
         else:
