@@ -9,7 +9,7 @@ Open-Meteo.
 Author: Greg Worthing
 """
 
-# Build: 2026-09-04-retrowx-v46-windmill-preview
+# Build: 2026-09-04-retrowx-v47-windmill-preview
 load("encoding/base64.star", "base64")
 load("encoding/json.star", "json")
 load("http.star", "http")
@@ -133,9 +133,9 @@ WIND_SCENE_FRAMES = {
     "wind_high": ["iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAACiklEQVR42s1WP2gaURz+XulgaWw8JDR6Qkh6tEEa0FZwOqEEidCh4GBFNztJoFC6tCA3uTsVNzPFJikI6aSUDs0WsDUglEyRDGIzGWiGQim/Ds07zsvz9E4N/U3v3v35ffd93+/jAf9BMbsvHBy26Ou3Fvx+P3yLdxGLhtmkIG7abW5uagT1/FmCTZ2JaipEAHD25CVe5XMjG+zu1+nP9hsAQGbviE2NibX7C1jrvh/rYx/fvgAAPH24YIuJG1Y3A6+3AAAfvnSgqQpZPaupCt3z3tJZODhskX0QySahSIRkkwCgVK5QLBpma8VPDABWfXO6PCLZVn1zAIDt710GALFo2BYQ8MZ6FYnMH6imQtQuxKldiA/sZ4MyZYMyiQDu7tfJGYBLFlAkQoMo3SX9frsQJ01ViEvD19mgTFZmdTS3VjRqqkIPvLcpInso4HbRKK+UyhWbIJJN0r1hZVi3iwBQRPbQJD8kNmYtwlCLsJJ3C8OAVFMhWrzjQsDtws9fv4ealVfvxxkm80Vj0BeaqlA1FdJNyNfDJBl3Ov4xUYtcSbfHj8LABmPYYGxHZoyb77h3oadhZu+IHfcudNM6Z8GcEwYZ+J9UUyHioyh6lY+uURp7GSGSw3BtlmA9kRl4NpnevCKNs4kQ1aUf0CDSVIVy+QKZG5v3eG6IpHFcRgnMDJivOSBRqk7tUJNMb5JHknDaOcG8R4Jo/bledXSeGPtQ45EknPf7wka5fIHmPdLsz4GcfqMPrPZnUtyMxsaivZkedHP5Ahk9AADn/f6AN2o772bridPOCZaWV1ApF5lIKg7sWuQYFlaTyAE7cowKq5l7Yj2RIWMmAMDS8spAVoikmtl0WI2wk/oLMoeMRCMaARwAAAAASUVORK5CYII=", "iVBORw0KGgoAAAANSUhEUgAAACEAAAAcCAYAAADvANYcAAACpElEQVR42rVWQUsbQRT+RixYsM0uRWjMQWJDCcEWYwRPsYdQTPFQCNTKestN/AvBg+ypF0+SW44hqRDwIJhDD6b0INhGGpG0tNnmUGIJEmkjFUp5PSSzjMkszSbZd3nsY3fmm/d935tl6CPWAh5anplAudbE1tsvDAPGiN0PCkdFE8DXi98YRoza2fz9hyIWF4KMd0KsT05O4uXzKINTsZ1MkficXpmlzbCP1gKeG/Xs3gEVjoo0dADZvQOSaYIDsera0ABYLWbVicGBxI4JOhFixySjwE4n7AIZNQHk5hly7apOFJo7sfyoV3fUzn/Y6IBMiDoR8kSr34n67YSVpjqjy1KbYR+9eOLF7qEBq5w9q+HO2C2c/7zGq2d+lGtN+N3jlll7fcJ6nxOxY9oCsDUWQtodxO6hAb97vCtfnfzFp4srzHsUPHrYmhf/y72BaOuilHhKpY91aI+LSCMoXfT+u28AgF/Xf1D6XEe51gQAyzyYLvJyXaRXZmkt4BmaO1p3R26+i7PQXBBYYgxLjGU8jMXXE+aC5VoTyzMTN9wRW92gft0x0jUn9NapFxeCTDxJ1aiAA/G7x7F/WseDe7cBAJGoRoqqdnXB3l3SSYfwXDgq0nYyRfykkahGm2EfcUrEuvi+/Ukpi7YekG91RqRDpgkZHb1f5RI9AGjpQYiqUUGnJvZP62atkw5H/idcior4eoKqRgX+u2emJmKrG6So6g2Qjv1ZKaqKy0YDbw7STHRHLrPDOEjHQVSNCnKZHRZfT5DojkhUo1RSZ4PQ0bt+BeFxJ8hq/UTPPuZ6cCmqKcLLRgNcDy5FNalxTJhVo4Ip7zRSSb1rI9mwcpSOzrZb1R0JcVjxjWU1RzURiWrE9cBnwpR3GqJOZFQ55g4rkP2u/Q/Do7JSS+wSkAAAAABJRU5ErkJggg=="],
 }
 FORECAST_WIND_SCENES = {
-    "wind_breezy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABmElEQVR42p2SMUhbYRSFvz86pGj0PYJUk4BYg0rBYiHgFBcpZCgob9CQbDpJRsEppiAZugkWcWuniFoIFBFaWihtJyE2BUUcUkMGcRBJgoJCh9vpf9T6nn32TD/ce889555f8Q983S3L3vcyoVCI6YmEcutzLKxPjQhAZP4NY6NP7Z7ltdfy8PMKAKmtHzdmfQBYJSEvglUSXRge6MLcXrixoPRqkZ2DM0dFPqySUIwpskpRjCk+iKRmywC8/VIlF48KQC4elf7gAwBa0i+5F3LxqAwG2yQWNiQS8Ism/S9EAn4BJBY27iTxuSWlj97d4ScS8HNx/csOYfPde/GUmrY11NNuJ6RJjk4vWfpWUZ4UpR+H7aFPwec22dHpJQD72We3FLW6Kfp5fsXVk0mKa3k1nkhJp2GytLGqnEhcFRUOT1Th8EQZpglAb98ju/aiMsBw/qM3axq16jFWMiMAzUYdK5kRTe7ZGkCnYdJs1ClurCoAK5mRWvX4/n9oZi4rmuDPt+cb/W2t2aijSdys3Qmn7eOJlKOi3301nMUA+3fGAAAAAElFTkSuQmCC",
-    "windy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABn0lEQVR42pWSP0hbURTGf1c7WFTyHqGISaC0DYkULAoBp7iIkEFoeYMNyaaTZCx0ihEkg1uhRdx0UvwDARFBaUHaTsKzKbQEB5vgEBykJIFAxtNB7sM/79XnN1049/zO991zFffo23FZTn6UCYVCvH2dUl73XAsb0yMCEHm3xvjYqHPnw8qqDBx9BCCz/fNGbxcAli0URbBs0YXh2BPMvfc3Btif5tn/fenqqAvLFkoJRV4pSgnFoUhmtgzAztcahWRUAArJqLwIPgagO7vEg1RIRiUe7JVE2JBIf49oqLcsW5x4txTp7xFAEmHDB+S6iiLp+hVwY3rEcRMP9opewtbugfjamo41NNjnbEhDTi/aLH4/U3cf20XZl2Gn6UtwyoGdXrQB+JWfvOPokZejP387dF69obRSVBOpjAQMk8XNZeUG8XS0Xqmr9UpdGaYJwNNnz53awlmM4eJnf9G0zmtVrHROAFrNBlY6JxruOxpAwDBpNRuUNpcVgJXOyXmtyoM1M5cXDbh+9v1Gt6O1mg00xCva//+qy/SJVMbV0T9xHqiNt6HKCwAAAABJRU5ErkJggg==",
-    "wind_high": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABoUlEQVR42pWTMUhbURSGv5t2iNjQhCCleYHSGlQEwcKDTukSpBkKhTfEkGx1koyCU4wgGdwERbrVSYkWAqUUKhWk7VR4NQVLySAJGUIGhyTgfhzifST6nsZ/unDO/e7/33Ov4g79/F2RPycVIpEI8++SyqvPtbCXmhWA6NIOr1+9dHo2PnyUJ8ebAGQO/g7s9QFg2UJRBMsWXZiZGCP0ZXngAHtrha//zl0d+bBsoWwq8kpRNhWHIpmFCgCfftQpxGMCUIjHZDw8AsCD7Dr3UiEek8nwqJhGUKIBv2iotyxbnHjXFA34BRDTCA4B6VdRJN3sAfdSs46byfCo6CHsf/4mQ01Nx5p6+siZkIZUWxes/TpTNy+7f2pX0bLThrPpKPzWgVVbFwCc5ufk7miHvWjZaUOsdE4AEsmMsz7Nz4kbyEfZHLT5RqmSodTu/6YKhkIAPHv+wimvnk0wU/zuEc1DjXoN7aTbaWOlc6Lh1/XwNtDjYIhup025tK0ArHROGvUa99b7xbxoQP/a/YsMEa3baaMhXtFuf6supyeSGVdHl9Tat7MsVG7QAAAAAElFTkSuQmCC",
+    "wind_breezy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABL0lEQVR42rWSMUvDQBSAv2QKSCSlCEICWqkKBcEhW+lUFAenDFLs1q10cw4VxL9iF8VNUNBBumarSAe1CEqHIhVasODwnE6b2qaN4FvueNz77r53D/47anubEievA+AFwrEIXiDq8MbaAg1/K1RUzNhycdcZC9PwAuHc1b4zVyIAjfo2p7ctAI7qD1o1lxaAx7cPTu5ftVh61Vxa1pNz4tqWOKYhCvancExDAHFtKxKiT2v44ryBYxr0Bp8TGx0JUhoH2WVeegPtML8ays8EKmZsAWi2+1wndwE407M0232AX78ZGQrmFSoCUCr7EhuiAKo4KvczRxFRKvvy3u1iJRI8t54AuLmsxZshdXN+Zz+kqNZYaqPQ0f1UNa9QkWGdpdQKAMOaMylO0lCa4171BR1Jj5jk1CGHAAAAAElFTkSuQmCC",
+    "windy": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABNklEQVR42rWSMUvDQBiGn+tUqIWW4CApiFKsFASHbNJJFAenDBLazU36F0qH0r9iBxU3QUEHyZpBqEiHanEoHUTqUHD8HORCGpO0GXyXOz7ue+973jv4b/VOdiVNPQOA7QldEWxP9OGdrVX6rYO5pkbVlJvnj0gzhe0J15byK3ciAH33kMvHEQAdd6jatbIAvH5+c/4yVqnw2rWyVIycWGZBSvmsaLN42Z74eCGV8lkBxDILS5gE1RVxxuJnpaepGDmJC/o3owSs7bUVAOoXT0qbDCYzOu5QRb9aSI2q6TfdG8cAXGX2GExmAH9eM1HazHaaAnB61pLUJtpANyfVFmakp/iaTikUi7yP3gB4uO2l+0P65v2j+hyiXlOhhU3D+4VottOUIM76xiYAQcylEOMwNGbUVD/ClaF4/xMVtAAAAABJRU5ErkJggg==",
+    "wind_high": "iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAABPklEQVR42rWSMUvDUBSFv3Qq1EJKcJAURClWCoJDN+kkioNTBgnt5ib5C6VD6V+xg4qbYEEHyZpBqEiH1uJQOojUoeB4HeoLaU3SZvAs73F597z7nffgv9U+25ck9RQAlie0RLA8UYf3dtbp1o/mmmolU+5ePkLNNCxPuC1rfqUjAtB1j7l+GgLQdPtao1IQgMHnN5evIy0RXqNSkKKRkbKpSz6bFmUWLcsTH29B+WxaACmb+gomQbVE7JH4WalpikZGooKeZRSDtbuxBkD16llTJr3xlKbb1+Jf7RetVjL9pgfjFICb1AG98RTgz2uGo3VmaMrMsh0BOL+oS7RJXHS2I6o5rrY0IzXF12SCnsvxPnwD4PG+newPqZsPT6pziGpNhLZourhfimbZjgRxNre2AQhiroQYhaEww6b6AUd2sKibB03IAAAAAElFTkSuQmCC",
 }
 BLACK = "#000000"
 BLUE = "#00B8FF"
@@ -629,10 +629,27 @@ def temperature_text(value, color):
     number = str(round_temp(value))
     degree_x = len(number) * 6 + 2
 
-    # Colored digits, a subtle faded-gray inner treatment, then a black outer
-    # trace so artwork never touches the temperature color directly.
+    # True layered treatment: the colored number sits on a one-pixel
+    # down-right gray shadow, and black traces the outside of both layers.
+    # This keeps a black gap between the temperature and nearby artwork.
+    layers = []
+    for y in range(4):
+        for x in range(4):
+            if x == 0 or x == 3 or y == 0 or y == 3:
+                layers.append(render.Padding(
+                    pad = (x, y, 0, 0),
+                    child = render.Text(content = number, font = FONT_TEMP, color = BLACK),
+                ))
+    layers.append(render.Padding(
+        pad = (2, 2, 0, 0),
+        child = render.Text(content = number, font = FONT_TEMP, color = TEMPERATURE_EDGE),
+    ))
+    layers.append(render.Padding(
+        pad = (1, 1, 0, 0),
+        child = render.Text(content = number, font = FONT_TEMP, color = color),
+    ))
     return render.Stack(children = [
-        render.Padding(pad = (0, 2, 0, 0), child = crisp_double_outlined_text(number, FONT_TEMP, color, TEMPERATURE_EDGE, BLACK)),
+        render.Padding(pad = (0, 2, 0, 0), child = render.Stack(children = layers)),
         render.Padding(pad = (degree_x, 2, 0, 0), child = tiny_degree(color)),
     ])
 
